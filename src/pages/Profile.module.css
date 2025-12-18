@@ -123,15 +123,15 @@
 }
 
 .statsCard {
-  composes: cardBase;
+  color-scheme: cardBase;
 }
 
 .authCard {
-  composes: cardBase;
+  color-scheme: cardBase;
 }
 
 .faqCard {
-  composes: cardBase;
+  color-scheme: cardBase;
 }
 
 .statsCard h2,
