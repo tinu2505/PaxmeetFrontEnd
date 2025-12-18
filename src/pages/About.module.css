@@ -1,0 +1,229 @@
+.page {
+  min-height: 100vh;
+  padding: 96px 0 72px;
+  background: #f5efe6;
+}
+
+/* Hero */
+.hero {
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  padding: 0 1rem;
+}
+
+.heroText {
+  max-width: 720px;
+}
+
+.kicker {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #7c6a58;
+  margin-bottom: 0.25rem;
+}
+
+.title {
+  font-size: clamp(2rem, 3.4vw, 2.7rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #1f2933;
+}
+
+.subtitle {
+  margin-top: 0.7rem;
+  font-size: 1rem;
+  color: #5b4a3a;
+}
+
+/* Mission */
+.missionSection {
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .missionSection {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.missionCard {
+  background: #fdfbf7;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 135, 114, 0.25);
+  padding: 1rem 1.1rem 1.2rem;
+  box-shadow: 0 10px 26px rgba(44, 34, 20, 0.12);
+}
+
+.missionCard h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2b2925;
+  margin-bottom: 0.35rem;
+}
+
+.missionCard p {
+  font-size: 0.92rem;
+  color: #6b5b4b;
+}
+
+/* Timeline */
+.timelineSection {
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  padding: 0 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2933;
+  margin-bottom: 1.3rem;
+}
+
+.timelineWrapper {
+  position: relative;
+  padding: 0.5rem 0 0.5rem;
+}
+
+.timelineLine {
+  position: absolute;
+  left: 50%;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background: linear-gradient(#d3c3b2, #b09574);
+  transform: translateX(-50%);
+}
+
+.timelineGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+}
+
+.timelineItem {
+  position: relative;
+}
+
+.timelineDot {
+  position: absolute;
+  left: 50%;
+  top: 0.4rem;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #fdfbf7;
+  border: 2px solid #b2563d;
+}
+
+.timelineCard {
+  margin-top: 0.3rem;
+  margin-left: 2.5rem;
+  background: #fdfbf7;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 135, 114, 0.25);
+  padding: 0.8rem 0.9rem;
+  box-shadow: 0 10px 26px rgba(44, 34, 20, 0.12);
+}
+
+.timelineMeta {
+  font-size: 0.78rem;
+  color: #7c6a58;
+  margin-bottom: 0.15rem;
+}
+
+.timelineCard h3 {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #2b2925;
+  margin-bottom: 0.2rem;
+}
+
+.timelineCard p {
+  font-size: 0.9rem;
+  color: #6b5b4b;
+}
+
+/* Desktop zig-zag */
+@media (min-width: 768px) {
+  .timelineGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .timelineItem.left .timelineCard {
+    margin-left: 0;
+    margin-right: 2.5rem;
+    text-align: right;
+  }
+
+  .timelineItem.right .timelineCard {
+    margin-left: 2.5rem;
+    text-align: left;
+  }
+
+  .timelineItem.left .timelineDot {
+    left: 100%;
+    transform: translateX(-50%);
+  }
+
+  .timelineItem.right .timelineDot {
+    left: 0;
+    transform: translateX(-50%);
+  }
+}
+
+/* Values */
+.valuesSection {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .valuesGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.valueCard {
+  background: #fdfbf7;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 135, 114, 0.25);
+  padding: 0.9rem 1rem 1.1rem;
+  box-shadow: 0 10px 26px rgba(44, 34, 20, 0.12);
+}
+
+.valueCard h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2b2925;
+  margin-bottom: 0.25rem;
+}
+
+.valueCard p {
+  font-size: 0.9rem;
+  color: #6b5b4b;
+}
+
+/* Large padding */
+@media (min-width: 1024px) {
+  .hero,
+  .missionSection,
+  .timelineSection,
+  .valuesSection {
+    padding: 0 2rem;
+  }
+}
