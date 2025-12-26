@@ -1,0 +1,130 @@
+.header {
+  max-width: 1100px;
+  margin: 0 auto 28px;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.userMain {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex: 1;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #b2563d, #c46f4e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fdf8f1;
+  font-size: 1.4rem;
+  font-weight: 700;
+  box-shadow: 0 12px 28px rgba(178, 86, 61, 0.35);
+  flex-shrink: 0;
+}
+
+.userText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2933;
+  margin: 0;
+}
+
+.handle {
+  font-size: 0.9rem;
+  color: #7c6a58;
+  margin: 0;
+}
+
+.bio {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #5b4a3a;
+  line-height: 1.4;
+}
+
+.logoutBtn {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 135, 114, 0.6);
+  background: #f5efe6;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5b4a3a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logoutBtn:hover {
+  background: #ede0cf;
+  transform: translateY(-1px);
+}
+
+.statsSection {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem 0;
+}
+
+.statCard {
+  background: #fdfbf7;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 135, 114, 0.25);
+  padding: 1rem 0.9rem;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(44, 34, 20, 0.1);
+}
+
+.statNumber {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #2b2925;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.8rem;
+  color: #7c6a58;
+  margin-top: 0.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .userMain {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header,
+  .statsSection {
+    padding: 0 2rem;
+  }
+}

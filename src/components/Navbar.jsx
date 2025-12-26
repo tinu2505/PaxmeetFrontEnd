@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 const Navbar = () => {
+  const { user, isAuthenticated, logout } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleProfile = () => setProfileOpen(!profileOpen);
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
@@ -39,17 +42,23 @@ const Navbar = () => {
           </button></Link>
           
           {profileOpen && (
-            <div className={styles.profileDropdown}>
-              <Link to="/login" className={styles.dropdownItem}>Login</Link>
-              <Link to="/signup" className={styles.dropdownItem}>Signup</Link>
-              <hr className={styles.divider} />
-              <Link to="/profile" className={styles.dropdownItem}>Profile</Link>
-              <Link to="/faq" className={styles.dropdownItem}>FAQ</Link>
-              <Link to="/logout" className={styles.dropdownItem}>Logout</Link>
-            </div>
+            <ul className={styles.profileDropdown}>
+              {isAuthenticated ? (
+                <>
+                  <li><Link to="/profile" className={styles.dropdownItem}>Profile</Link></li>
+                  <li><button onClick={logout} className={styles.dropdownItem}>Logout</button></li>
+                </>
+              ) : (
+                <>
+                  <li><Link to="/profile" className={styles.dropdownItem}>Login</Link></li>
+                  <li><Link to="/profile" className={styles.dropdownItem}>Signup</Link></li>
+                </>
+              )}
+              <li><Link to="/faq" className={styles.dropdownItem}>FAQ</Link></li>
+            </ul>
           )}
         </div>
-
+         
         {/* Mobile Menu Button */}
         <button className={styles.mobileMenuBtn} onClick={toggleMobileMenu}>
           <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.active : ''}`}></span>

@@ -21,7 +21,6 @@ body{
 
 main{
   flex: 1;
-  padding-bottom: 120px;
 }
 
 @media (max-width: 767px) {

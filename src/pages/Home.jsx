@@ -7,37 +7,57 @@ const mockEvents = [
     id: 1,
     title: 'Sunset Beach Trek',
     location: 'North Goa',
-    date: 'Sat · 21 Dec · 5:00 PM',
+    date: '21 Dec · 5:00 PM',
+    day: 'Sat',
     price: 0,
     category: 'Trek',
+    tags: ['chill vibe, happening'],
     img: '/api/placeholder/420/260',
+    views: 11000,
+    likes: 10000,
+    joined: 50,
   },
   {
     id: 2,
     title: 'Creators Meetup',
     location: 'Panaji',
-    date: 'Sun · 22 Dec · 4:00 PM',
+    date: '22 Dec · 4:00 PM',
+    day: 'Sat',
     price: 199,
     category: 'Meetup',
+    tags: ['chill vibe, happening'],
     img: '/api/placeholder/420/260',
+    views: 11000,
+    likes: 10000,
+    joined: 50,
   },
   {
     id: 3,
     title: 'Photography Walk',
     location: 'Old Goa',
-    date: 'Sat · 28 Dec · 7:00 AM',
+    date: '28 Dec · 7:00 AM',
+    day: 'Sun',
     price: 299,
     category: 'Workshop',
+    tags: ['chill vibe, happening'],
     img: '/api/placeholder/420/260',
+    views: 11000,
+    likes: 10000,
+    joined: 50,
   },
   {
     id: 4,
     title: 'Open Mic Night',
     location: 'Vasco',
-    date: 'Fri · 27 Dec · 8:00 PM',
+    date: '27 Dec · 8:00 PM',
+    day: 'Sun',
     price: 149,
     category: 'Show',
+    tags: ['chill vibe, happening'],
     img: '/api/placeholder/420/260',
+    views: 11000,
+    likes: 10000,
+    joined: 50,
   },
 ];
 
@@ -54,6 +74,69 @@ const whyChooseUs = [
   { title: 'Local Events', desc: 'Discover events happening in your city this weekend.', icon: '📍' },
   { title: 'Trusted Hosts', desc: 'Every organizer is verified for quality experiences.', icon: '✅' },
 ];
+
+function EventCard({ event }){
+  return (
+    <motion.div
+      className={styles.eventCard}
+      initial={{ opacity: 0, scale: 0.9, x: 40 }}
+      whileInView={{ opacity: 1, scale: 1, x: 0 }}
+      whileHover={{ y: -10, scale: 1.03 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.15 }}
+    >
+      {/* Top image */}
+      <div
+        className={styles.eventImage}
+        style={{ backgroundImage: `url(${event.img})` }}
+      />
+
+      {/* Stats strip */}
+      <div className={styles.eventStatsBar}>
+        <div className={styles.eventStatItem}>
+          <span className={styles.eventStatIcon}>👁️</span>
+          <span>{event.views} viewed</span>
+        </div>
+        <div className={styles.eventStatItem}>
+          <span className={styles.eventStatIcon}>❤️</span>
+          <span>{event.likes} liked</span>
+        </div>
+        <div className={styles.eventStatItem}>
+          <span className={styles.eventStatIcon}>👥</span>
+          <span>{event.joined} going</span>
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div className={styles.eventContent}>
+        <div className={styles.eventHeaderRow}>
+          <span className={styles.eventTag}>{event.category}</span>
+          <span className={styles.eventPrice}>
+            ₹{event.price === 0 ? 0 : event.price}
+          </span>
+        </div>
+
+        <h3 className={styles.eventTitle}>{event.title}</h3>
+
+        <p className={styles.eventLocation}>{event.location}</p>
+
+        <div className={styles.eventFooterRow}>
+          <div className={styles.eventDateBlock}>
+            <span className={styles.eventDay}>{event.day}</span>
+            <span className={styles.eventDate}>{event.date}</span>
+          </div>
+          <div className={styles.eventChipRow}>
+            {event.tags?.map((tag) => (
+              <span key={tag} className={styles.eventChip}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Home() {
   return (
@@ -104,30 +187,8 @@ export default function Home() {
           transition={{ duration: 0.6 }}
         >
           <div className={styles.eventsList}>
-            {mockEvents.map((event, index) => (
-              <motion.div
-                key={event.id}
-                className={styles.eventCard}
-                initial={{ opacity: 0, scale: 0.85, x: 40 }}
-                whileInView={{ opacity: 1, scale: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.1, delay: index * 0.01 }}
-                whileHover={{ y: -10, scale: 1.03 }}
-              >
-                <div className={styles.eventImage}
-                  style={{ backgroundImage: `url(${event.img})` }}
-                />
-                <div className={styles.eventContent}>
-                  <div className={styles.eventMeta}>
-                    <span className={styles.eventTag}>{event.category}</span>
-                    <span className={styles.eventPrice}>
-                      {event.price === 0 ? 'Free' : `₹${event.price}`}
-                    </span>
-                  </div>
-                  <h3 className={styles.eventTitle}>{event.title}</h3>
-                  <p className={styles.eventSubtitle}>{event.location} · {event.date}</p>
-                </div>
-              </motion.div>
+            {mockEvents.map((event) => (
+              <EventCard key={event.id} event={event} />
             ))}
           </div>
         </motion.div>
@@ -159,8 +220,8 @@ export default function Home() {
                   className={styles.categoryCard}
                   initial={{ opacity: 0, scale: 0.8, x: 50 }}
                   whileInView={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{ duration: 0.1, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -10 }}
+                  transition={{ duration: 0.12, delay: index * 0.08 }}
+                  whileHover={{ scale: 1.03, y: -8 }}
                   viewport={{ once: true }}
                 >
                   <div className={styles.categoryImage} style={{ backgroundImage: `url(${category.img})` }}></div>
@@ -176,7 +237,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us - Dark */}
-      <section className={styles.story}>
+      <section className={`${styles.story} ${styles.darkSection}`}>
         <div className={styles["story-wrap"]}>
           {/* Left image column */}
           <div className={`${styles["story-col"]} ${styles["story-col--left"]}`}>
@@ -237,6 +298,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
             Go Premium
           </motion.h2>
@@ -248,6 +310,7 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               viewport={{ once: true }}
             >
+              <span className={styles.premiumBadge}>Most popular</span>
               <h3>Pro Plan</h3>
               <div className={styles.price}>₹499<span>/month</span></div>
               <ul>
@@ -300,13 +363,14 @@ export default function Home() {
       </section>
 
       {/* Contact Form - Light */}
-      <section className={`${styles.contactSection} ${styles.lightSection}`}>
+      <section className={`${styles.contactSection} ${styles.darkSection}`}>
         <div className={styles.container}>
           <motion.h2 
             className={styles.sectionTitle}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
             Get In Touch
           </motion.h2>
@@ -315,6 +379,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
           >
             <input type="text" placeholder="Your Name" required />
             <input type="email" placeholder="Your Email" required />
