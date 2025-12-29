@@ -1,72 +1,129 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styles from './Home.module.css';
+import EventCard from "./EventCard";
 
 const mockEvents = [
   {
     id: 1,
-    title: 'Sunset Beach Trek',
-    location: 'North Goa',
-    date: '21 Dec · 5:00 PM',
-    day: 'Sat',
-    price: 0,
-    category: 'Trek',
-    tags: ['chill vibe, happening'],
-    img: '/api/placeholder/420/260',
-    views: 11000,
-    likes: 10000,
-    joined: 50,
+    title: "Travis Scott",
+    city: "Delhi",
+    location: "Chandni Chowk, Delhi",
+    date: "30 SEP",
+    day: "Friday",
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    distance: "200 meters",
+    distanceSub: "from your location",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
   {
     id: 2,
-    title: 'Creators Meetup',
-    location: 'Panaji',
-    date: '22 Dec · 4:00 PM',
-    day: 'Sat',
-    price: 199,
-    category: 'Meetup',
-    tags: ['chill vibe, happening'],
-    img: '/api/placeholder/420/260',
-    views: 11000,
-    likes: 10000,
-    joined: 50,
+    title: "Travis Scott",
+    city: "Delhi",
+    location: "Chandni Chowk, Delhi",
+    date: "30 SEP",
+    day: "Friday",
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    distance: "200 meters",
+    distanceSub: "from your location",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
   {
     id: 3,
-    title: 'Photography Walk',
-    location: 'Old Goa',
-    date: '28 Dec · 7:00 AM',
-    day: 'Sun',
-    price: 299,
-    category: 'Workshop',
-    tags: ['chill vibe, happening'],
-    img: '/api/placeholder/420/260',
-    views: 11000,
-    likes: 10000,
-    joined: 50,
+    title: "Travis Scott",
+    city: "Delhi",
+    location: "Chandni Chowk, Delhi",
+    date: "30 SEP",
+    day: "Friday",
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    distance: "200 meters",
+    distanceSub: "from your location",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
   {
     id: 4,
-    title: 'Open Mic Night',
-    location: 'Vasco',
-    date: '27 Dec · 8:00 PM',
-    day: 'Sun',
-    price: 149,
-    category: 'Show',
-    tags: ['chill vibe, happening'],
-    img: '/api/placeholder/420/260',
-    views: 11000,
-    likes: 10000,
-    joined: 50,
+    title: "Travis Scott",
+    city: "Delhi",
+    location: "Chandni Chowk, Delhi",
+    date: "30 SEP",
+    day: "Friday",
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    distance: "200 meters",
+    distanceSub: "from your location",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
+  },
+  {
+    id: 5,
+    title: "Travis Scott",
+    city: "Delhi",
+    location: "Chandni Chowk, Delhi",
+    date: "30 SEP",
+    day: "Friday",
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    distance: "200 meters",
+    distanceSub: "from your location",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
+  },
+  {
+    id: 6,
+    title: "Travis Scott",
+    city: "Delhi",
+    location: "Chandni Chowk, Delhi",
+    date: "30 SEP",
+    day: "Friday",
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    distance: "200 meters",
+    distanceSub: "from your location",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
 ];
 
 const mockCategories = [
-  { id: 1, title: 'Treks', subtitle: 'Adventure awaits', img: '/api/placeholder/400/250' },
-  { id: 2, title: 'Meetups', subtitle: 'Connect locally', img: '/api/placeholder/400/250' },
-  { id: 3, title: 'Workshops', subtitle: 'Learn skills', img: '/api/placeholder/400/250' },
-  { id: 4, title: 'Concerts', subtitle: 'Live music', img: '/api/placeholder/400/250' },
-  { id: 5, title: 'Sports', subtitle: 'Play together', img: '/api/placeholder/400/250' },
+  { id: 1, title: 'Treks', subtitle: 'Adventure awaits', img: 'src/assets/images/category.png' },
+  { id: 2, title: 'Meetups', subtitle: 'Connect locally', img: 'src/assets/images/category.png' },
+  { id: 3, title: 'Workshops', subtitle: 'Learn skills', img: 'src/assets/images/category.png' },
+  { id: 4, title: 'Concerts', subtitle: 'Live music', img: 'src/assets/images/category.png' },
+  { id: 5, title: 'Sports', subtitle: 'Play together', img: 'src/assets/images/category.png' },
+  { id: 6, title: 'Kids', subtitle: 'Play together', img: 'src/assets/images/category.png' },
+  { id: 7, title: 'Music', subtitle: 'Play together', img: 'src/assets/images/category.png' },
+  { id: 8, title: 'Movies', subtitle: 'Play together', img: 'src/assets/images/category.png' },
+  { id: 9, title: 'Hangout', subtitle: 'Play together', img: 'src/assets/images/category.png' },
 ];
 
 const whyChooseUs = [
@@ -74,69 +131,6 @@ const whyChooseUs = [
   { title: 'Local Events', desc: 'Discover events happening in your city this weekend.', icon: '📍' },
   { title: 'Trusted Hosts', desc: 'Every organizer is verified for quality experiences.', icon: '✅' },
 ];
-
-function EventCard({ event }){
-  return (
-    <motion.div
-      className={styles.eventCard}
-      initial={{ opacity: 0, scale: 0.9, x: 40 }}
-      whileInView={{ opacity: 1, scale: 1, x: 0 }}
-      whileHover={{ y: -10, scale: 1.03 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.15 }}
-    >
-      {/* Top image */}
-      <div
-        className={styles.eventImage}
-        style={{ backgroundImage: `url(${event.img})` }}
-      />
-
-      {/* Stats strip */}
-      <div className={styles.eventStatsBar}>
-        <div className={styles.eventStatItem}>
-          <span className={styles.eventStatIcon}>👁️</span>
-          <span>{event.views} viewed</span>
-        </div>
-        <div className={styles.eventStatItem}>
-          <span className={styles.eventStatIcon}>❤️</span>
-          <span>{event.likes} liked</span>
-        </div>
-        <div className={styles.eventStatItem}>
-          <span className={styles.eventStatIcon}>👥</span>
-          <span>{event.joined} going</span>
-        </div>
-      </div>
-
-      {/* Main content */}
-      <div className={styles.eventContent}>
-        <div className={styles.eventHeaderRow}>
-          <span className={styles.eventTag}>{event.category}</span>
-          <span className={styles.eventPrice}>
-            ₹{event.price === 0 ? 0 : event.price}
-          </span>
-        </div>
-
-        <h3 className={styles.eventTitle}>{event.title}</h3>
-
-        <p className={styles.eventLocation}>{event.location}</p>
-
-        <div className={styles.eventFooterRow}>
-          <div className={styles.eventDateBlock}>
-            <span className={styles.eventDay}>{event.day}</span>
-            <span className={styles.eventDate}>{event.date}</span>
-          </div>
-          <div className={styles.eventChipRow}>
-            {event.tags?.map((tag) => (
-              <span key={tag} className={styles.eventChip}>
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 export default function Home() {
   return (
@@ -338,56 +332,58 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      <section className={styles.downloadContactMerge}>
+        {/* Download Promoter - Dark */}
+        <section className={`${styles.downloadSection} ${styles.darkSection}`}>
+          <div className={styles.container}>
+            <motion.div 
+              className={styles.downloadContent}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className={styles.sectionTitle}>Download Paxmeet App</h2>
+              <p className={styles.downloadSubtitle}>Get tickets, notifications, and exclusive events on the go.</p>
+              <div className={styles.downloadButtons}>
+                <Link to="/download" className={`${styles.primaryBtn} ${styles.largeBtn}`}>
+                  📱 Android App
+                </Link>
+                <Link to="/download" className={`${styles.primaryBtn} ${styles.largeBtn} ${styles.iosBtn}`}>
+                  💻 iOS App
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </section>
 
-      {/* Download Promoter - Dark */}
-      <section className={`${styles.downloadSection} ${styles.darkSection}`}>
-        <div className={styles.container}>
-          <motion.div 
-            className={styles.downloadContent}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className={styles.sectionTitle}>Download Paxmeet App</h2>
-            <p className={styles.downloadSubtitle}>Get tickets, notifications, and exclusive events on the go.</p>
-            <div className={styles.downloadButtons}>
-              <Link to="/download" className={`${styles.primaryBtn} ${styles.largeBtn}`}>
-                📱 Android App
-              </Link>
-              <Link to="/download" className={`${styles.primaryBtn} ${styles.largeBtn} ${styles.iosBtn}`}>
-                💻 iOS App
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Contact Form - Light */}
-      <section className={`${styles.contactSection} ${styles.darkSection}`}>
-        <div className={styles.container}>
-          <motion.h2 
-            className={styles.sectionTitle}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Get In Touch
-          </motion.h2>
-          <motion.form 
-            className={styles.contactForm}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <input type="text" placeholder="Your Name" required />
-            <input type="email" placeholder="Your Email" required />
-            <input type="text" placeholder="Topic" required />
-            <textarea placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit" className={styles.primaryBtn}>Send Message</button>
-          </motion.form>
-        </div>
+        {/* Contact Form - Light */}
+        <section className={`${styles.contactSection} ${styles.darkSection}`}>
+          <div className={styles.container}>
+            <motion.h2 
+              className={styles.sectionTitle}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              Get In Touch
+            </motion.h2>
+            <motion.form 
+              className={styles.contactForm}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <input type="text" placeholder="Your Name" required />
+              <input type="email" placeholder="Your Email" required />
+              <input type="text" placeholder="Topic" required />
+              <textarea placeholder="Your Message" rows="5" required></textarea>
+              <button type="submit" className={styles.primaryBtn}>Send Message</button>
+            </motion.form>
+          </div>
+        </section>
       </section>
     </>
   );

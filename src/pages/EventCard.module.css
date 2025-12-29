@@ -1,0 +1,377 @@
+/* Container */
+.eventCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 353px;
+  flex: 0 0 300px; /* fixed card width so adding more cards only scrolls */
+  background: #16161a;
+  border-radius: 12px;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  cursor: pointer;
+}
+
+/* Desktop: allow a bit larger */
+@media (min-width: 768px) {
+  .eventCard {
+    max-width: 380px;
+  }
+}
+
+/* Image / header */
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 353 / 366; /* keeps proportions and is responsive */
+  overflow: visible;
+}
+
+.eventCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(2,6,23,0.75), 0 6px 30px rgba(115,50,214,0.06);
+}
+
+.eventCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(124,63,224,0.02), rgba(0,0,0,0));
+  mix-blend-mode: screen;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Like / view pill */
+.likeView {
+  position: absolute;
+  bottom: 5px;
+  left: 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+
+  background: #c4c4c4;
+  border-radius: 12px;
+  backdrop-filter: blur(8.3px);
+}
+
+.likeBlock,
+.viewBlock {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.likeBlock {
+  padding-right: 4px;
+  border-right: 0.2px solid #ffffff;
+}
+
+.iconHeart,
+.iconEye {
+  width: 20px;
+  height: 20px;
+}
+
+/* place SVG icons or background-images here */
+.iconHeart {
+  background: url("src/assets/images/likesCount.png") center/contain no-repeat;
+}
+
+.iconEye {
+  background: url("src/assets/images/eye.png") center/contain no-repeat;
+}
+
+.countText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 9px;
+  line-height: 14px;
+  color: #4c4c4c;
+}
+
+/* Distance pill */
+.distance {
+  position: absolute;
+  top: 16px;
+  right: 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 6px;
+
+  width: auto;
+  min-width: 109px;
+  height: 32px;
+
+  background: linear-gradient(
+      0deg,
+      rgba(115, 50, 214, 0.37),
+      rgba(115, 50, 214, 0.37)
+    ),
+    rgba(24, 24, 28, 0.02);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.2);
+  border-radius: 23px;
+  backdrop-filter: blur(5px);
+}
+
+.iconRoute {
+  width: 16px;
+  height: 16px;
+  background: url("src/assets/images/routing.png") center/contain no-repeat;
+}
+
+.distanceText {
+  display: flex;
+  flex-direction: column;
+}
+
+.distanceMain {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #ffffff;
+  margin-top: -2px;
+}
+
+.distanceSub {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 8px;
+  line-height: 12px;
+  color: #ffffff;
+}
+
+/* Attendees small stack */
+.attendees {
+  position: absolute;
+  right: 12px;
+  bottom: -30px;
+
+  width: 48px;
+  height: 47px;
+}
+
+.avatar {
+  position: absolute;
+  width: 26px;
+  height: 28px;
+  border-radius: 5px;
+  background-size: cover;
+  background-position: center;
+}
+
+.avatar1 {
+  top: 0;
+  left: 0;
+  transform: rotate(-11.8deg);
+  background-image: url("/images/avatar1.png");
+}
+
+.avatar2 {
+  top: 2px;
+  left: 16px;
+  transform: rotate(11deg);
+  background-image: url("/images/avatar2.png");
+}
+
+.attendeeText {
+  position: absolute;
+  left: 2px;
+  bottom: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 9px;
+  line-height: 14px;
+  color: #c7c7c7;
+}
+
+/* Content section */
+.content {
+  padding: 4px 13px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Top row: details + price */
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+/* Mobile: stack price below details */
+@media (max-width: 480px) {
+  .headerRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 70%;
+}
+
+.title {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #ffffff;
+  text-align: left;
+}
+
+.locationRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.iconLocation {
+  width: 16px;
+  height: 16px;
+  background: url("src/assets/images/location.png") center/contain no-repeat;
+}
+
+.city {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+  color: #ffffff;
+}
+
+.addressRow {
+  display: inline-flex;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 9px;
+  line-height: 14px;
+  color: #c7c7c7;
+  margin-left: 6px;
+  min-width: 0; /* allow truncation inside flex */
+  max-width: 160px;
+}
+
+.address {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 100%;
+  display: inline-block;
+}
+
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dateMain {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.iconCalendar {
+  width: 16px;
+  height: 16px;
+  background: url("src/assets/images/calendar-2.png") center/contain no-repeat;
+}
+
+.dateText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #ffffff;
+}
+
+.dayText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: #7c3fe0;
+}
+
+/* Price + arrow */
+.priceBlock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.priceText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  color: #ffffff;
+  text-align: right;
+}
+
+.arrowButton {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.arrowIcon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  background: url("src/assets/images/arrow-square-left.png") center/contain no-repeat;
+}
+
+/* Tags row */
+.tagsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px;
+
+  border: 1px solid #2a2a31;
+  border-radius: 13px;
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: #c7c7c7;
+}

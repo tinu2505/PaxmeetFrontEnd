@@ -8,7 +8,7 @@
 .footer {
     background: rgba(15, 15, 30, 0.95);
     backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 107, 157, 0.3);
+    border-top: 1px solid var(--color-primary);
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -75,16 +75,18 @@
 }
 
 .logo {
-    font-size: 2rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #f7931e 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-decoration: none;
-    text-shadow: 0 0 30px rgba(255, 107, 157, 0.6);
+    height: 55px;
+    width: auto;
     display: block;
+    object-fit: contain;
     margin-bottom: 1rem;
+}
+
+.logo img {
+  height: 55px;
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
 
 .description {

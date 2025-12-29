@@ -10,7 +10,7 @@ export default function Footer() {
                     {/* brand and description */}
                     <div className={styles.brandSection}>
                         <Link to="/" className={styles.logo}>
-                            Paxmeet
+                            <img src="src/assets/images/logo.png" alt="" />
                         </Link>
                         <p className={styles.description}>
                             Discover amazing events, treks, workshops, and meetups near you. 

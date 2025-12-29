@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
+import logoSrc from '../assets/images/logo.png';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const Navbar = () => {
@@ -15,9 +16,16 @@ const Navbar = () => {
   return (
     <nav className={styles.navbar}>
       <div className={styles.container}>
+        {/* Mobile Menu Button */}
+        <button className={styles.mobileMenuBtn} onClick={toggleMobileMenu}>
+          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.active : ''}`}></span>
+          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.active : ''}`}></span>
+          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.active : ''}`}></span>
+        </button>
+        
         {/* Logo */}
         <Link to="/" className={styles.logo}>
-          Paxmeet
+          <img src={logoSrc} alt="Paxmeet logo" />
         </Link>
 
         {/* Desktop Nav Links */}
@@ -38,7 +46,6 @@ const Navbar = () => {
           
           {/* Profile Dropdown */}
           <Link to='/profile'><button className={styles.profileBtn} onClick={toggleProfile}>
-            👤
           </button></Link>
           
           {profileOpen && (
@@ -58,13 +65,6 @@ const Navbar = () => {
             </ul>
           )}
         </div>
-         
-        {/* Mobile Menu Button */}
-        <button className={styles.mobileMenuBtn} onClick={toggleMobileMenu}>
-          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.active : ''}`}></span>
-          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.active : ''}`}></span>
-          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.active : ''}`}></span>
-        </button>
       </div>
     </nav>
   );

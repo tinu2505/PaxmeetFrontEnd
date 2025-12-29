@@ -1,72 +1,141 @@
 import { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { distance, motion } from 'framer-motion';
 import styles from './Events.module.css';
+import EventCard from './EventCard';
+import { div } from 'framer-motion/client';
 
 const MOCK_EVENTS = [
   {
     id: 1,
-    title: 'Sunset Beach Trek',
-    description: 'Easy coastal trek with a golden-hour view and chai at the top.',
-    date: 'Sat, 21 Dec · 5:00 PM',
-    location: 'North Goa',
-    city: 'Goa',
+    title: "Travis Scott",
+    description: "Easy coastal trek with a golden-hour view and chai at the top.",
+    city: "Delhi",
+    location: "Chandni Chowk",
+    date: "30 SEP",
+    day: "Friday",
     distanceKm: 8,
+    distance: "200 meters",
+    distanceSub: "from your location",
     gender: 'mixed',
-    price: 0,
     category: 'Trek',
-    tags: ['Beginner friendly', 'Outdoors', 'Free'],
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
   {
     id: 2,
-    title: 'Creators Meetup',
-    description: 'Meet local creators, share ideas, and plan collabs for 2025.',
-    date: 'Sun, 22 Dec · 4:00 PM',
-    location: 'Panaji cowork',
-    city: 'Goa',
-    distanceKm: 3,
-    gender: 'mixed',
-    price: 199,
-    category: 'Meetup',
-    tags: ['Networking', 'Content', 'Paid'],
+    title: "Travis Scott",
+    description: "Easy coastal trek with a golden-hour view and chai at the top.",
+    city: "Goa",
+    location: "Chandni Chowk",
+    date: "30 SEP",
+    day: "Friday",
+    distanceKm: 12,
+    distance: "12 KM",
+    distanceSub: "from your location",
+    gender: 'female',
+    category: 'Music',
+    price: 'Free',
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
   {
     id: 3,
-    title: 'Photography Walk – Old Goa',
-    description: 'Street and heritage photography session with live feedback.',
-    date: 'Sat, 28 Dec · 7:00 AM',
-    location: 'Old Goa',
-    city: 'Goa',
-    distanceKm: 15,
-    gender: 'mixed',
-    price: 299,
+    title: "Travis Scott",
+    description: "Easy coastal trek with a golden-hour view and chai at the top.",
+    city: "Delhi",
+    location: "Chandni Chowk",
+    date: "30 SEP",
+    day: "Friday",
+    distanceKm: 21,
+    distance: "21 KM",
+    distanceSub: "from your location",
+    gender: 'female',
     category: 'Workshop',
-    tags: ['Camera', 'Learning', 'Outdoors'],
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
   {
     id: 4,
-    title: 'Women’s Morning Run Club',
-    description: 'Weekly 5K run with guided warm-up and cooldown.',
-    date: 'Every Sun · 6:30 AM',
-    location: 'Miramar',
-    city: 'Goa',
-    distanceKm: 5,
-    gender: 'female',
-    price: 0,
-    category: 'Fitness',
-    tags: ['Women only', 'Routine', 'Free'],
+    title: "Travis Scott",
+    description: "Easy coastal trek with a golden-hour view and chai at the top.",
+    city: "Mumbai",
+    location: "Chandni Chowk",
+    date: "30 SEP",
+    day: "Friday",
+    distanceKm: 15,
+    distance: "15 KM",
+    distanceSub: "from your location",
+    gender: 'mixed',
+    category: 'Social',
+    price: 'free',
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
   {
     id: 5,
-    title: 'Board Games & Chai Night',
-    description: 'Casual board game evening with snacks included.',
-    date: 'Fri, 27 Dec · 8:00 PM',
-    location: 'Panaji café',
-    city: 'Goa',
-    distanceKm: 2,
+    title: "Travis Scott",
+    description: "Easy coastal trek with a golden-hour view and chai at the top.",
+    city: "Bangalore",
+    location: "Chandni Chowk",
+    date: "30 SEP",
+    day: "Friday",
+    distanceKm: 8,
+    distance: "200 meters",
+    distanceSub: "from your location",
     gender: 'mixed',
-    price: 149,
-    category: 'Social',
-    tags: ['Indoors', 'Games', 'Paid'],
+    category: 'Fitness',
+    price: 1200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
+  },
+  {
+    id: 6,
+    title: "Travis Scott",
+    description: "Easy coastal trek with a golden-hour view and chai at the top.",
+    city: "Delhi",
+    location: "Chandni Chowk, Delhi",
+    date: "30 SEP",
+    day: "Friday",
+    distanceKm: 8,
+    distance: "200 meters",
+    distanceSub: "from your location",
+    gender: 'mixed',
+    category: 'Meetup',
+    price: 200,
+    image: "src/assets/images/--eventcardimage.png",
+    avatar1: "src/assets/images/avatar1.png",
+    avatar2: "src/assets/images/avatar2.png",
+    goingText: "56 going",
+    likes: "11k",
+    views: "121k",
+    tags: ["Music Event", "Chill vibe", "Chill vibe"],
   },
 ];
 
@@ -258,39 +327,16 @@ export default function Events() {
         ) : (
           <div className={styles.grid}>
             {filteredEvents.map((event, index) => (
-              <motion.article
+              <motion.div
                 key={event.id}
-                className={styles.card}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 whileHover={{ y: -6, scale: 1.01 }}
               >
-                <div className={styles.cardHeader}>
-                  <span className={styles.cardCategory}>{event.category}</span>
-                  <span className={styles.cardPrice}>
-                    {event.price === 0 ? 'Free' : `₹${event.price}`}
-                  </span>
-                </div>
-                <h3 className={styles.cardTitle}>{event.title}</h3>
-                <p className={styles.cardDescription}>{event.description}</p>
-                <div className={styles.cardMeta}>
-                  <span>{event.date}</span>
-                  <span>·</span>
-                  <span>{event.location}</span>
-                </div>
-                <div className={styles.cardTags}>
-                  {event.tags.map((tag) => (
-                    <span key={tag} className={styles.tag}>
-                      {tag}
-                    </span>
-                  ))}
-                  </div>
-                <button type="button" className={styles.viewBtn}>
-                  View details
-                </button>
-              </motion.article>
+                <EventCard event={event} />
+              </motion.div>
             ))}
           </div>
         )}
