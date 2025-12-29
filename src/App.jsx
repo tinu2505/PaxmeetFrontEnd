@@ -5,6 +5,7 @@ import Lenis from 'lenis';
 
 import './App.css';
 
+import ScrollToTop from './components/ScrollToTop';
 import Navbar from './components/Navbar';
 import Footer from './components/Foooter';
 
@@ -34,6 +35,7 @@ function App() {
   return (
     <Router>
       <div className="app-root">
+        <ScrollToTop />
         <Navbar />
         <main>
           <Routes>
