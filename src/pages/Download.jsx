@@ -20,7 +20,6 @@ export default function Download() {
 
           <div className={styles.buttonsRow}>
             <a href="#" className={`${styles.storeBtn} ${styles.androidBtn}`}>
-              <span className={styles.storeIcon}>📱</span>
               <span className={styles.storeText}>
                 <span className={styles.storeLabel}>Get it on</span>
                 <span className={styles.storeName}>Google Play</span>
@@ -28,7 +27,6 @@ export default function Download() {
             </a>
 
             <a href="#" className={`${styles.storeBtn} ${styles.iosBtn}`}>
-              <span className={styles.storeIcon}>🍏</span>
               <span className={styles.storeText}>
                 <span className={styles.storeLabel}>Download on the</span>
                 <span className={styles.storeName}>App Store</span>
@@ -37,6 +35,14 @@ export default function Download() {
           </div>
 
           <p className={styles.helperText}>Or scan the QR code to open your store directly.</p>
+          {/* QR placeholder */}
+          <div className={styles.qrBlock}>
+            <div className={styles.qrBox}>
+              {/* Replace with real <img src="/qr.png" /> later */}
+              <div className={styles.qrPattern} />
+            </div>
+            <p className={styles.qrText}>Scan to download</p>
+          </div>
         </motion.div>
 
         <motion.div
@@ -67,15 +73,6 @@ export default function Download() {
                 <p>Miramar · Every Sun</p>
               </div>
             </div>
-          </div>
-
-          {/* QR placeholder */}
-          <div className={styles.qrBlock}>
-            <div className={styles.qrBox}>
-              {/* Replace with real <img src="/qr.png" /> later */}
-              <div className={styles.qrPattern} />
-            </div>
-            <p className={styles.qrText}>Scan to download</p>
           </div>
         </motion.div>
       </div>

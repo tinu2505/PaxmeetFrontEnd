@@ -60,9 +60,6 @@ export default function Premium() {
             Choose a plan that matches how often you host. You can switch or cancel anytime.
           </p>
         </div>
-        <div className={styles.heroBadge}>
-          <span>For Hosts & Communities</span>
-        </div>
       </div>
 
       {/* Plans grid */}
@@ -131,7 +128,7 @@ export default function Premium() {
         </div>
         <div className={styles.downloadButtons}>
           <a href="/download" className={styles.appBtn}>
-            📱 Get the app
+            Get the app
           </a>
         </div>
       </div>

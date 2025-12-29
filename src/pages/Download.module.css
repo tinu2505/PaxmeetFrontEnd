@@ -1,7 +1,8 @@
 .page {
   min-height: 100vh;
   padding: 96px 0 72px;
-  background: #f5efe6;
+  background: var(--color-bg);
+  color: #ffffff;
 }
 
 /* Hero layout */
@@ -29,20 +30,22 @@
   font-size: clamp(2rem, 3.4vw, 2.7rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #1f2933;
 }
 
 .subtitle {
   margin-top: 0.6rem;
   font-size: 1rem;
-  color: #5b4a3a;
+  color: #8D8D8D;
 }
 
 .buttonsRow {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
-  margin: 1.4rem 0 0.6rem;
+  margin: 1.4rem auto;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .storeBtn {
@@ -52,22 +55,16 @@
   border-radius: 999px;
   padding: 0.55rem 1.1rem;
   text-decoration: none;
-  color: #fdf8f1;
   font-size: 0.86rem;
   box-shadow: 0 10px 26px rgba(44, 34, 20, 0.18);
-  border: none;
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
 }
 
-.androidBtn {
-  background: linear-gradient(135deg, #1f7a7a, #1ba57a);
-}
-
-.iosBtn {
-  background: linear-gradient(135deg, #4b5ea9, #2f3e7a);
-}
-
-.storeIcon {
-  font-size: 1.1rem;
+.storeBtn:hover{
+  background: var(--color-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 45px rgba(129, 140, 248, 0.8);
 }
 
 .storeText {
@@ -88,7 +85,40 @@
 
 .helperText {
   font-size: 0.82rem;
-  color: #7c6a58;
+}
+
+/* QR block */
+.qrBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 1rem;
+}
+
+.qrBox {
+  width: 90px;
+  height: 90px;
+  border-radius: 12px;
+  background: #fdfbf7;
+  border: 1px solid var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qrPattern {
+  width: 70px;
+  height: 70px;
+  background-image:
+    linear-gradient(90deg, #1f2933 1px, transparent 1px),
+    linear-gradient(#1f2933 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+.qrText {
+  font-size: 0.8rem;
+  color: #8D8D8D;
 }
 
 .heroVisual {
@@ -133,11 +163,10 @@
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: #f97316;
+  background: var(--color-primary);
 }
 
 .screenTitle {
-  color: #e5e7eb;
   font-size: 0.8rem;
   font-weight: 600;
 }
@@ -182,39 +211,6 @@
   margin-top: 0.3rem;
 }
 
-/* QR block */
-.qrBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.qrBox {
-  width: 90px;
-  height: 90px;
-  border-radius: 12px;
-  background: #fdfbf7;
-  border: 1px solid rgba(148, 135, 114, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.qrPattern {
-  width: 70px;
-  height: 70px;
-  background-image:
-    linear-gradient(90deg, #1f2933 1px, transparent 1px),
-    linear-gradient(#1f2933 1px, transparent 1px);
-  background-size: 10px 10px;
-}
-
-.qrText {
-  font-size: 0.8rem;
-  color: #7c6a58;
-}
-
 /* Reasons section */
 .reasonsSection {
   max-width: 1100px;
@@ -225,7 +221,6 @@
 .reasonsTitle {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #1f2933;
   margin-bottom: 1.2rem;
 }
 
@@ -233,6 +228,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+  margin-top: 2rem
 }
 
 @media (min-width: 640px) {
@@ -242,11 +238,10 @@
 }
 
 .reasonCard {
-  background: #fdfbf7;
+  background: var(--color-bg);
   border-radius: 16px;
-  border: 1px solid rgba(148, 135, 114, 0.25);
+  border: 1px solid var(--color-primary);
   padding: 0.9rem 0.9rem 1rem;
-  box-shadow: 0 10px 26px rgba(44, 34, 20, 0.12);
 }
 
 .reasonIcon {
@@ -257,13 +252,12 @@
 .reasonCard h3 {
   font-size: 0.98rem;
   font-weight: 600;
-  color: #2b2925;
   margin-bottom: 0.25rem;
 }
 
 .reasonCard p {
   font-size: 0.9rem;
-  color: #6b5b4b;
+  color: #8D8D8D;
 }
 
 /* Wider padding on large screens */

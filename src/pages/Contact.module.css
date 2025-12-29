@@ -1,7 +1,8 @@
 .page {
   min-height: 100vh;
   padding: 96px 0 72px;
-  background: #f5efe6;
+  background: var(--color-bg);
+  color: #ffffff;
 }
 
 /* Hero */
@@ -29,7 +30,7 @@
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #7c6a58;
+  color: var(--color-primary);
   margin-bottom: 0.25rem;
 }
 
@@ -37,20 +38,18 @@
   font-size: clamp(2rem, 3.4vw, 2.6rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #1f2933;
 }
 
 .subtitle {
   margin-top: 0.7rem;
   font-size: 1rem;
-  color: #5b4a3a;
+  color: #8d8d8d;
 }
 
 /* Info card */
 .infoCard {
-  background: #fdfbf7;
   border-radius: 18px;
-  border: 1px solid rgba(148, 135, 114, 0.25);
+  border: 1px solid var(--color-primary);
   padding: 1rem 1rem 1.1rem;
   box-shadow: 0 10px 26px rgba(44, 34, 20, 0.12);
 }
@@ -58,7 +57,6 @@
 .infoCard h2 {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #2b2925;
   margin-bottom: 0.4rem;
 }
 
@@ -73,17 +71,16 @@
 
 .infoCard li {
   font-size: 0.9rem;
-  color: #6b5b4b;
+  color: var(--color-primary);
 }
 
 .infoCard li span {
   font-weight: 600;
-  color: #4e3f30;
+  color: #8d8d8d;
 }
 
 .link {
   font-size: 0.9rem;
-  color: #b2563d;
   text-decoration: none;
 }
 
@@ -99,9 +96,8 @@
 }
 
 .form {
-  background: #fdfbf7;
   border-radius: 20px;
-  border: 1px solid rgba(148, 135, 114, 0.25);
+  border: 1px solid var(--color-primary);
   padding: 1.3rem 1.2rem 1.5rem;
   box-shadow: 0 12px 32px rgba(44, 34, 20, 0.12);
 }
@@ -109,8 +105,8 @@
 .row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.9rem;
-  margin-bottom: 0.9rem;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 @media (min-width: 768px) {
@@ -128,18 +124,17 @@
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: #7c6a58;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.6rem;
 }
 
 .input,
 .textarea {
   border-radius: 14px;
-  border: 1px solid rgba(148, 135, 114, 0.45);
-  background: #ffffff;
+  border: 1px solid #ffffff;
+  background: #16161A;
   padding: 0.75rem 0.9rem;
   font-size: 0.94rem;
-  color: #2b2925;
+  color: #8D8D8D;
   outline: none;
   resize: vertical;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -151,35 +146,34 @@
 
 .input:focus,
 .textarea:focus {
-  border-color: #b2563d;
-  box-shadow: 0 0 0 2px rgba(178, 86, 61, 0.2);
-  background: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary);
+  background: var(--color-bg);
 }
 
 /* Button */
 .primaryBtn {
-  margin-top: 0.6rem;
+  margin-top: 1rem;
   border-radius: 999px;
-  border: none;
+  border: var(--color-primary);
   padding: 0.6rem 1.4rem;
   font-size: 0.92rem;
   font-weight: 600;
   cursor: pointer;
-  background: linear-gradient(135deg, #b2563d, #c46f4e);
-  color: #fdf8f1;
-  box-shadow: 0 8px 20px rgba(178, 86, 61, 0.35);
+  background: var(--color-primary);;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .primaryBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 11px 26px rgba(178, 86, 61, 0.45);
+  background: var(--color-bg);
+  box-shadow: 0 5px 26px var(--color-primary);
 }
 
 .helper {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   font-size: 0.8rem;
-  color: #7c6a58;
+  color: #8d8d8d;
 }
 
 /* Large padding */

@@ -1,25 +1,31 @@
 .page {
   min-height: 100vh;
   padding: 96px 0 72px;
-  background: #f5efe6;
+  background: var(--color-bg);
+  color: #ffffff;
 }
 
 /* Hero */
 .hero {
   max-width: 1100px;
-  margin: 0 auto 32px;
+  margin: 0 auto 40px;
   padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .heroText {
   max-width: 720px;
+  margin: 0 auto;
 }
 
 .kicker {
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #7c6a58;
+  color: var(--color-primary);
   margin-bottom: 0.25rem;
 }
 
@@ -27,13 +33,12 @@
   font-size: clamp(2rem, 3.4vw, 2.7rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #1f2933;
 }
 
 .subtitle {
   margin-top: 0.7rem;
   font-size: 1rem;
-  color: #5b4a3a;
+  color: #8D8D8D;
 }
 
 /* Mission */
@@ -53,9 +58,9 @@
 }
 
 .missionCard {
-  background: #fdfbf7;
+  background: var(--color-bg);
   border-radius: 18px;
-  border: 1px solid rgba(148, 135, 114, 0.25);
+  border: 1px solid var(--color-primary);
   padding: 1rem 1.1rem 1.2rem;
   box-shadow: 0 10px 26px rgba(44, 34, 20, 0.12);
 }
@@ -63,13 +68,12 @@
 .missionCard h2 {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #2b2925;
   margin-bottom: 0.35rem;
 }
 
 .missionCard p {
   font-size: 0.92rem;
-  color: #6b5b4b;
+  color: #8D8D8D;
 }
 
 /* Timeline */
@@ -82,7 +86,6 @@
 .sectionTitle {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #1f2933;
   margin-bottom: 1.3rem;
 }
 
@@ -97,7 +100,7 @@
   top: 0.5rem;
   bottom: 0.5rem;
   width: 2px;
-  background: linear-gradient(#d3c3b2, #b09574);
+  background: var(--color-primary);
   transform: translateX(-50%);
 }
 
@@ -119,36 +122,35 @@
   width: 12px;
   height: 12px;
   border-radius: 999px;
-  background: #fdfbf7;
-  border: 2px solid #b2563d;
+  background: #ffffff;
+  border: 2px solid var(--color-primary);
 }
 
 .timelineCard {
   margin-top: 0.3rem;
   margin-left: 2.5rem;
-  background: #fdfbf7;
+  background: var(--color-bg);
   border-radius: 16px;
-  border: 1px solid rgba(148, 135, 114, 0.25);
+  border: 1px solid var(--color-primary);
   padding: 0.8rem 0.9rem;
   box-shadow: 0 10px 26px rgba(44, 34, 20, 0.12);
 }
 
 .timelineMeta {
   font-size: 0.78rem;
-  color: #7c6a58;
+  color: #8D8D8D;
   margin-bottom: 0.15rem;
 }
 
 .timelineCard h3 {
   font-size: 0.98rem;
   font-weight: 600;
-  color: #2b2925;
   margin-bottom: 0.2rem;
 }
 
 .timelineCard p {
   font-size: 0.9rem;
-  color: #6b5b4b;
+  color: #8D8D8D;
 }
 
 /* Desktop zig-zag */
@@ -199,9 +201,9 @@
 }
 
 .valueCard {
-  background: #fdfbf7;
+  background: var(--color-bg);
   border-radius: 18px;
-  border: 1px solid rgba(148, 135, 114, 0.25);
+  border: 1px solid var(--color-primary);
   padding: 0.9rem 1rem 1.1rem;
   box-shadow: 0 10px 26px rgba(44, 34, 20, 0.12);
 }
@@ -209,13 +211,12 @@
 .valueCard h3 {
   font-size: 1rem;
   font-weight: 600;
-  color: #2b2925;
   margin-bottom: 0.25rem;
 }
 
 .valueCard p {
   font-size: 0.9rem;
-  color: #6b5b4b;
+  color: #8D8D8D;
 }
 
 /* Large padding */
