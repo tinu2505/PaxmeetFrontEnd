@@ -2,7 +2,6 @@
   min-height: 100vh;
   padding: 96px 0 64px; /* under sticky navbar */
   background: var(--color-bg);
-  color: var(--color-primary);
 }
 
 .heroStrip {
@@ -33,9 +32,8 @@
 /* Filters */
 .filtersWrapper {
   border-radius: 18px;
-  border: 1px solid var(--color-primary);
-  box-shadow: 0 5px 15px var(--color-primary);
   padding: 1.5rem 1.25rem 1.25rem;
+  background: #1a1a1ae6;
 }
 
 .filterRowPrimary {
@@ -80,7 +78,7 @@
 .input,
 .select {
   border-radius: 999px;
-  border: 1px solid rgba(148, 135, 114, 0.4);
+  border: 1px solid var(--color-primary);
   background: #16161A;
   padding: 0.7rem 0.9rem;
   font-size: 0.92rem;

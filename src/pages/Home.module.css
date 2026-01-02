@@ -120,12 +120,11 @@
   align-items: center;
   gap: 0.5rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 16px 40px rgba(115, 50, 214, 0.55);
 }
 
 .primaryBtn:hover, .heroPrimaryCTA:hover {
   transform: translateY(-2px);
-  box-shadow: 0 20px 50px rgba(124, 63, 224, 0.75);
+  box-shadow: 0 5px 25px rgba(124, 63, 224, 0.75);
   color: #ffffff;
 }
 
@@ -202,7 +201,7 @@
   flex-wrap: nowrap; /* prevent wrapping so cards keep fixed size and container scrolls */
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background: var(--color-bg);
+  background: #1A1A1AE6;
 }
 
 .eventsList::-webkit-scrollbar {
@@ -256,6 +255,7 @@
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  background: #1A1A1AE6;
 }
 
 .categoriesList::-webkit-scrollbar {
@@ -270,7 +270,7 @@
   height: 150px;
   border-radius: 20px;
   overflow: hidden;
-  background: var(--color-primary);
+  background: var(--color-bg);
   color: #f9fafb;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
   cursor: pointer;
@@ -322,7 +322,6 @@
 .story {
   position: relative;
   padding: 80px 0;
-  background: var(--color-primary);
   color: #f9fafb;
   border-bottom: 1px solid black;
 }
@@ -392,7 +391,7 @@
   text-transform: uppercase;
   font-size: 1rem;
   margin-bottom: 0.75rem;
-  color: var(--color-bg);
+  color: var(--color-primary);
 }
 
 .story-title {
@@ -416,7 +415,7 @@
   border-radius: 999px;
   border: 1px solid rgba(129, 140, 248, 0.8);
   cursor: pointer;
-  background: var(--color-bg);
+  background: var(--color-primary);
   color: #f9fafb;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -426,7 +425,7 @@
 
 .story-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 18px 45px rgba(129, 140, 248, 0.8);
+  box-shadow: 0 5px 25px rgba(129, 140, 248, 0.8);
 }
 
 /* side image blocks scroll normally */
@@ -491,28 +490,13 @@
 
 .premiumCard {
   position: relative;
-  background: var(--color-primary);
+  background: #1A1A1AE6;
   padding: 2.2rem 2rem;
   border-radius: 24px;
   text-align: left;
   color: #f9fafb;
-  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.85);
-  border: 1px solid rgba(148, 163, 184, 0.45);
+  border: 1px solid var(--border-primary);
   transition: all 0.3s ease;
-}
-
-.premiumCard::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at top right,
-    rgba(168, 85, 247, 0.45),
-    transparent 55%
-  );
-  mix-blend-mode: screen;
-  opacity: 0.7;
-  pointer-events: none;
 }
 
 .premiumCard.featured {
@@ -535,9 +519,9 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  background: rgba(22, 163, 74, 0.12);
-  border: 1px solid rgba(74, 222, 128, 0.7);
-  color: #bbf7d0;
+  background: var(--color-bg);
+  border: 1px solid var(--color-primary);
+  color: #ffffff;
   margin-bottom: 0.75rem;
 }
 
@@ -566,15 +550,14 @@
   font-size: 0.9rem;
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  color: #e5e7eb;
+  gap: 0.55rem;;
   opacity: 0.9;
 }
 
 .premiumCard li::before {
   content: "✓";
   font-size: 0.8rem;
-  color: #4ade80;
+  color: var(--color-primary);
 }
 
 .premiumCard .primaryBtn {
@@ -583,7 +566,7 @@
   justify-content: center;
   padding: 0.85rem 1.9rem;
   border: 1px solid rgba(129, 140, 248, 0.9);
-  background: var(--color-bg);
+  background: var(--color-primary);
   color: #f9fafb;
   font-size: 0.9rem;
   font-weight: 600;
@@ -593,7 +576,7 @@
 
 .premiumCard .primaryBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 18px 45px rgba(129, 140, 248, 0.8);
+  box-shadow: 0 5px 25px rgba(129, 140, 248, 0.8);
 }
 
 .downloadContactMerge{
@@ -678,31 +661,34 @@
   margin: 0 auto;
   display: grid;
   gap: 1rem;
-  padding: 2.4rem 2.2rem 2.6rem;
+  padding: 0 2.2rem 2.6rem;
 }
 
 .contactForm input,
 .contactForm textarea {
   width: 100%;
-  padding: 0.9rem 1rem;
-  border: 1px solid rgba(148, 163, 184, 0.7);
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(148, 135, 114, 0.4);
   border-radius: 14px;
-  color: #f9fafb;
+  color: #8d8d8d;
   font-size: 0.95rem;
+  opacity: 100%;
+  background: #16161A;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .contactForm input:focus,
 .contactForm textarea:focus {
   outline: none;
-  border-color: rgba(129, 140, 248, 0.95);
-  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.4);
-  background: rgba(15, 23, 42, 0.95);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary);
+  background: var(--color-bg);
+  color: #ffffff;
 }
 
 .contactForm input::placeholder,
 .contactForm textarea::placeholder {
-  color: #9ca3af;
+  color: #8d8d8d;
 }
 
 .contactForm button {

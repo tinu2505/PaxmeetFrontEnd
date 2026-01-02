@@ -212,9 +212,9 @@ export default function Home() {
                 <motion.div
                   key={category.id}
                   className={styles.categoryCard}
-                  initial={{ opacity: 0, scale: 0.8, x: 50 }}
+                  initial={{ opacity: 0, x: 50 }}
                   whileInView={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{ duration: 0.12, delay: index * 0.08 }}
+                  transition={{ duration: 0.6, delay: index * 0.08 }}
                   whileHover={{ scale: 1.03, y: -8 }}
                   viewport={{ once: true }}
                 >
@@ -308,9 +308,9 @@ export default function Home() {
               <h3>Pro Plan</h3>
               <div className={styles.price}>₹499<span>/month</span></div>
               <ul>
-                <li>✅ Unlimited events</li>
-                <li>✅ Priority listing</li>
-                <li>✅ Advanced filters</li>
+                <li>Unlimited events</li>
+                <li>Priority listing</li>
+                <li>Advanced filters</li>
               </ul>
               <Link to="/premium" className={styles.primaryBtn}>Choose Pro</Link>
             </motion.div>
@@ -324,8 +324,8 @@ export default function Home() {
               <h3>Basic</h3>
               <div className={styles.price}>Free</div>
               <ul>
-                <li>✅ 5 events/month</li>
-                <li>✅ Basic filters</li>
+                <li>5 events/month</li>
+                <li>Basic filters</li>
               </ul>
               <Link to="/premium" className={styles.primaryBtn}>Get Started</Link>
             </motion.div>
