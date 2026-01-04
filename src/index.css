@@ -77,8 +77,8 @@ h1, h2, h3, h4, h5, h6, p, li, span, div, button, a, input, textarea, select{
 
 .primaryBtn, .heroPrimaryCTA, .story-btn, button {
   
-  color: #ffffff !important;
-  border: none !important;
+  color: #ffffff ;
+  border: none ;
 }
 
 .primaryBtn:hover, .heroPrimaryCTAhover, .story-btn:hover {

@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
-import styles from './AuthForms.module.css';  // REUSE OUR STYLES
+import styles from './Profile.module.css';  // REUSE OUR STYLES
 
 export default function Profile() {
   const { user, isAuthenticated, loading, logout } = useAuth();

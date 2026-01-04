@@ -135,7 +135,7 @@ const whyChooseUs = [
 export default function Home() {
   return (
     <>
-      {/* Hero Section - Dark */}
+      {/* Hero Section - Dark 
       <section className={`${styles.heroSection} `}>
         <div className={styles.container}>
           <motion.div 
@@ -160,7 +160,166 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </section>*/}
+
+      {/* New Figma hero */}
+      <motion.section className={styles.figmaHeroSection}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.75 }}
+      >
+        <div className={styles.figmaHeroInner}>
+          {/* Left text block */}
+          <motion.div className={styles.figmaHeroTextBlock}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <motion.div className={styles.figmaHeroBadgeRow}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}  
+            >
+              <span className={styles.figmaHeroBadgeDot} />
+              <span className={styles.figmaHeroBadgeLabel}>PAXMEET</span>
+            </motion.div>
+
+            <motion.h1 className={styles.figmaHeroTitleHang}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Hang <span className={styles.figmaHeroTitleBorder}>out</span>
+            </motion.h1>
+
+            <motion.h1 className={styles.figmaHeroTitleMore}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              MORE
+            </motion.h1>
+
+            <motion.div className={styles.figmaHeroSwipeRow}
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.45 }}
+            >
+              <span className={styles.figmaHeroSwipe}>SWIPE</span>
+              <span className={styles.figmaHeroLess}>LESS</span>
+            </motion.div>
+
+            <motion.p className={styles.figmaHeroSubtitle}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              Discover real events, real people, and real memories – not endless profiles.
+            </motion.p>
+
+            <motion.div className={styles.figmaHeroCTAGroup}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.75 }}
+            >
+              <motion.button className={styles.figmaHeroPrimaryBtn}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Explore events
+              </motion.button>
+              <motion.button className={styles.figmaHeroSecondaryBtn}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Become a host
+              </motion.button>
+            </motion.div>
+          </motion.div>
+
+          {/* Right cards column */}
+          <motion.div className={styles.figmaHeroCardsColumn}
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <div className={styles.figmaHeroCardsTrack}>
+              <motion.div className={`${styles.figmaHeroCard} ${styles.figmaHeroCardTop}`}
+                whileHover={{ scale: 1.05, y: -8 }}
+              >
+                <div className={styles.figmaHeroCardImage} />
+                <div className={styles.figmaHeroCardMeta}>
+                  <span className={styles.figmaHeroCardTag}>Liquor tasting</span>
+                  <span className={styles.figmaHeroCardLocation}>Mumbai • Tonight</span>
+                </div>
+              </motion.div>
+
+              <motion.div className={styles.figmaHeroCard}
+                whileHover={{ scale: 1.05, y: -8 }}
+              >
+                <div className={styles.figmaHeroCardImageParty} />
+                <div className={styles.figmaHeroCardMeta}>
+                  <span className={styles.figmaHeroCardTag}>House party</span>
+                  <span className={styles.figmaHeroCardLocation}>Bangalore • Friday</span>
+                </div>
+              </motion.div>
+
+              <motion.div className={styles.figmaHeroCard}
+                whileHover={{ scale: 1.05, y: -8 }}
+              >
+                <div className={styles.figmaHeroCardImagePicnic} />
+                <div className={styles.figmaHeroCardMeta}>
+                  <span className={styles.figmaHeroCardTag}>Picnic</span>
+                  <span className={styles.figmaHeroCardLocation}>Delhi • Sunday</span>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className={`${styles.figmaHeroCard} ${styles.figmaHeroCardTop}`}
+                whileHover={{ scale: 1.05, y: -8 }}
+              >
+                <div className={styles.figmaHeroCardImage} />
+                <div className={styles.figmaHeroCardMeta}>
+                  <span className={styles.figmaHeroCardTag}>Liquor tasting</span>
+                  <span className={styles.figmaHeroCardLocation}>Mumbai • Tonight</span>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className={styles.figmaHeroCard}
+                whileHover={{ scale: 1.05, y: -8 }}
+              >
+                <div className={styles.figmaHeroCardImageParty} />
+                <div className={styles.figmaHeroCardMeta}>
+                  <span className={styles.figmaHeroCardTag}>House party</span>
+                  <span className={styles.figmaHeroCardLocation}>Bangalore • Friday</span>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className={styles.figmaHeroCard}
+                whileHover={{ scale: 1.05, y: -8 }}
+              >
+                <div className={styles.figmaHeroCardImagePicnic} />
+                <div className={styles.figmaHeroCardMeta}>
+                  <span className={styles.figmaHeroCardTag}>Picnic</span>
+                  <span className={styles.figmaHeroCardLocation}>Delhi • Sunday</span>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.section>
+
 
       <section className={`${styles.eventsShowcaseSection} ${styles.lightSection}`}>
         <div className={styles.container}>
