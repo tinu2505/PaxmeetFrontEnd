@@ -1,23 +1,28 @@
-// src/pages/Login.jsx
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext.jsx';
-import styles from './AuthForms.module.css';  // NEW IMPORT
+// src/pages/Login.jsx - BULLETPROOF VERSION
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx"; // adjust path if needed
+import styles from "./AuthForms.module.css"; // adjust path if needed
 
 export default function Login() {
-  const { login } = useAuth();
+  const auth = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ identifier: '', password: '' });
-  const [error, setError] = useState('');
+  const [form, setForm] = useState({ identifier: "", password: "" });
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
+
     try {
-      await login({ identifier: form.identifier, password: form.password });
-      navigate('/profile');
+      await auth.login(form);
+      navigate("/profile");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -26,75 +31,64 @@ export default function Login() {
   };
 
   return (
-    <section className={styles.page}>
+    <div className={styles.page}>
       <div className={styles.container}>
         <div className={styles.card}>
           <h1 className={styles.title}>Welcome Back</h1>
-          
-          {error && (
-            <div className={styles.error}>
-              {error}
-            </div>
-          )}
-          
-          <form onSubmit={handleSubmit} className={styles.form}>
+          {error && <div className={styles.error}>{error}</div>}
+          <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.field}>
               <label className={styles.label}>Email or Username</label>
               <input
+                name="identifier"
                 type="text"
-                placeholder="Enter your email or username"
                 value={form.identifier}
-                onChange={(e) => setForm({ ...form, identifier: e.target.value })}
+                onChange={handleChange}
                 className={styles.input}
+                placeholder="you@example.com"
                 required
                 disabled={loading}
               />
             </div>
-            
             <div className={styles.field}>
               <label className={styles.label}>Password</label>
               <input
+                name="password"
                 type="password"
-                placeholder="Enter your password"
                 value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                onChange={handleChange}
                 className={styles.input}
+                placeholder="••••••••"
                 required
                 disabled={loading}
               />
             </div>
-            
-            <button 
-              type="submit" 
-              disabled={loading}
-              className={styles.submitBtn}
-            >
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? (
                 <>
-                  <span className={styles.loadingSpinner}></span>
-                  Signing In...
+                  <span className={styles.loadingSpinner} />
+                  Signing in...
                 </>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </button>
           </form>
-          
           <div className={styles.links}>
             <p>
               <Link to="/forgot-password" className={styles.link}>
-                Forgot password?
+                Forgot Password?
               </Link>
             </p>
             <p>
-              Don't have an account?{' '}
+              New to PaxMeet?{" "}
               <Link to="/signup" className={styles.link}>
-                Create one now
+                Create Account
               </Link>
             </p>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

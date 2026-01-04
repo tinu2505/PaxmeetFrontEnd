@@ -1,82 +1,103 @@
-/* src/pages/AuthForms.module.css - PaxMeet Auth Pages */
+/* src/pages/AuthForms.module.css - COMPLETE for Login/Signup/ForgotPassword */
+
 .page {
   min-height: 100vh;
-  background: var(--color-bg);
+  background: linear-gradient(135deg, #fff7ed 0%, #f5e8ff 50%, #e8f5ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   position: relative;
   overflow: hidden;
-  color: #ffffff;
 }
 
 .page::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  animation: float 20s ease-in-out infinite;
+  background: radial-gradient(circle at 20% 80%, rgba(115, 50, 214, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(143, 79, 225, 0.1) 0%, transparent 50%);
+  pointer-events: none;
   z-index: 0;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
 }
 
 .container {
   position: relative;
   z-index: 1;
-  animation: fadeInUp 0.8s ease-out;
   max-width: 420px;
   width: 100%;
+  animation: slideUp 0.6s ease-out;
 }
 
 .card {
-  background: var(--color-primary);
-  backdrop-filter: blur(30px);
-  border: 1px solid var(--border-primary);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(115, 50, 214, 0.2);
   border-radius: 24px;
   padding: 3rem 2.5rem;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 25px 50px rgba(115, 50, 214, 0.15);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
 .card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 4px;
-  background: var(--color-bg);
+  background: linear-gradient(90deg, #7332d6, #8f4fe1, #7332d6);
+  border-radius: 24px 24px 0 0;
 }
 
 .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 40px 80px rgba(115, 50, 214, 0.3);
+  box-shadow: 0 40px 80px rgba(115, 50, 214, 0.25);
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 800;
+  background: linear-gradient(135deg, #7332d6, #8f4fe1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   background-clip: text;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   line-height: 1.1;
 }
 
+.stepIndicator {
+  text-align: center;
+  background: rgba(115, 50, 214, 0.1);
+  color: #7332d6;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
 .error {
-  background: rgb(215, 61, 61);
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 16px;
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
-  animation: fadeInUp 0.5s ease-out;
+  color: white;
+  font-weight: 500;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 
 .form {
@@ -91,61 +112,93 @@
 
 .label {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #5d28ac;
   margin-bottom: 0.75rem;
+  letter-spacing: 0.025em;
 }
 
 .input {
   width: 100%;
   padding: 1.25rem 1.5rem;
-  background: #16161a;
+  background: rgba(22, 22, 26, 0.6);
   border: 2px solid transparent;
   border-radius: 20px;
-  color: #8d8d8d;
+  color: #ffffff;
   font-size: 1rem;
   font-weight: 500;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--primary-main);
-  background: var(--color-bg);
-  box-shadow: 0 0 0 4px rgba(115, 50, 214, 0.15);
+  border-color: #7332d6;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(115, 50, 214, 0.2);
   transform: translateY(-2px);
-  color: #ffffff;
+  color: black;
 }
 
-.input::placeholder {
-  color: #8d8d8d;
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* select styling */
+select.input {
+  background: rgba(22, 22, 26, 0.8);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  padding-right: 3rem;
+}
+
+.fieldGroup {
+  display: flex;
+  gap: 1rem;
+}
+
+.fieldGroup .field {
+  flex: 1;
 }
 
 .submitBtn {
-  background: #16161a;
+  background: linear-gradient(135deg, #7332d6, #8f4fe1);
   border: none;
   padding: 1.5rem;
   border-radius: 20px;
   font-size: 1.125rem;
   font-weight: 700;
+  color: white;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 25px rgba(115, 50, 214, 0.4);
+  position: relative;
+  overflow: hidden;
 }
 
 .submitBtn:hover:not(:disabled) {
   transform: translateY(-4px);
-  box-shadow: 0 25px 50px rgba(115, 50, 214, 0.4);
-  background: var(--color-bg);
+  box-shadow: 0 25px 50px rgba(115, 50, 214, 0.6);
+  background: linear-gradient(135deg, #5d28ac, #7332d6);
 }
 
 .submitBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .loadingSpinner {
@@ -157,74 +210,94 @@
   border-top-color: white;
   animation: spin 1s ease-in-out infinite;
   margin-right: 0.75rem;
+  vertical-align: middle;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
+.secondaryButton {
+  background: transparent;
+  border: 2px solid #7332d6;
+  border-radius: 999px;
+  padding: 1rem 1.75rem;
+  color: #7332d6;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: rgba(115, 50, 214, 0.1);
+  transform: translateY(-1px);
+}
+
+.secondaryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stepActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
 .links {
   text-align: center;
   margin-top: 2rem;
   padding-top: 2rem;
+  border-top: 1px solid rgba(115, 50, 214, 0.2);
 }
 
 .link {
+  color: #7332d6;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 
 .link:hover {
-  color: var(--color-bg);
+  text-decoration: underline;
+  color: #5d28ac;
 }
 
-/* ADD to end of AuthForms.module.css for Profile */
-.fieldGroup {
-  display: flex;
-  gap: 1rem;
+/* animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.fieldGroup .input,
-.fieldGroup > div {
-  flex: 1;
-}
-
-.profileStats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-
-.statCard {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-primary);
-  border-radius: 20px;
-  padding: 2rem 1.5rem;
-  text-align: center;
-  transition: all 0.4s ease;
-  backdrop-filter: blur(10px);
-}
-
-.statCard:hover {
-  transform: translateY(-8px);
-  background: rgba(115, 50, 214, 0.15);
-  border-color: var(--primary-main);
-}
-
-.statNumber {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 800;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
-}
-
-.statLabel {
-  color: var(--text-secondary);
-  font-weight: 600;
-  font-size: 0.95rem;
+/* responsive */
+@media (max-width: 480px) {
+  .page {
+    padding: 1rem;
+  }
+  
+  .card {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+  
+  .fieldGroup {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .stepActions {
+    flex-direction: column;
+  }
+  
+  .secondaryButton {
+    order: 2;
+  }
 }
