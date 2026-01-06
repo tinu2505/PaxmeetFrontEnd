@@ -177,16 +177,6 @@ export default function Home() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <motion.div className={styles.figmaHeroBadgeRow}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}  
-            >
-              <span className={styles.figmaHeroBadgeDot} />
-              <span className={styles.figmaHeroBadgeLabel}>PAXMEET</span>
-            </motion.div>
-
             <motion.h1 className={styles.figmaHeroTitleHang}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -231,13 +221,11 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.75 }}
             >
               <motion.button className={styles.figmaHeroPrimaryBtn}
-                whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
                 Explore events
               </motion.button>
               <motion.button className={styles.figmaHeroSecondaryBtn}
-                whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
                 Become a host
@@ -253,68 +241,58 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <div className={styles.figmaHeroCardsTrack}>
-              <motion.div className={`${styles.figmaHeroCard} ${styles.figmaHeroCardTop}`}
-                whileHover={{ scale: 1.05, y: -8 }}
-              >
-                <div className={styles.figmaHeroCardImage} />
-                <div className={styles.figmaHeroCardMeta}>
-                  <span className={styles.figmaHeroCardTag}>Liquor tasting</span>
-                  <span className={styles.figmaHeroCardLocation}>Mumbai • Tonight</span>
-                </div>
-              </motion.div>
+              <div className={styles.figmaHeroCardsList}>
+                <motion.div className={`${styles.figmaHeroCard} ${styles.figmaHeroCardTop}`}>
+                  <div className={styles.figmaHeroCardImage} />
+                  <div className={styles.figmaHeroCardMeta}>
+                    <span className={styles.figmaHeroCardTag}>Liquor tasting</span>
+                    <span className={styles.figmaHeroCardLocation}>Mumbai • Tonight</span>
+                  </div>
+                </motion.div>
 
-              <motion.div className={styles.figmaHeroCard}
-                whileHover={{ scale: 1.05, y: -8 }}
-              >
-                <div className={styles.figmaHeroCardImageParty} />
-                <div className={styles.figmaHeroCardMeta}>
-                  <span className={styles.figmaHeroCardTag}>House party</span>
-                  <span className={styles.figmaHeroCardLocation}>Bangalore • Friday</span>
-                </div>
-              </motion.div>
+                <motion.div className={styles.figmaHeroCard}>
+                  <div className={styles.figmaHeroCardImageParty} />
+                  <div className={styles.figmaHeroCardMeta}>
+                    <span className={styles.figmaHeroCardTag}>House party</span>
+                    <span className={styles.figmaHeroCardLocation}>Bangalore • Friday</span>
+                  </div>
+                </motion.div>
 
-              <motion.div className={styles.figmaHeroCard}
-                whileHover={{ scale: 1.05, y: -8 }}
-              >
-                <div className={styles.figmaHeroCardImagePicnic} />
-                <div className={styles.figmaHeroCardMeta}>
-                  <span className={styles.figmaHeroCardTag}>Picnic</span>
-                  <span className={styles.figmaHeroCardLocation}>Delhi • Sunday</span>
-                </div>
-              </motion.div>
-              
-              <motion.div 
-                className={`${styles.figmaHeroCard} ${styles.figmaHeroCardTop}`}
-                whileHover={{ scale: 1.05, y: -8 }}
-              >
-                <div className={styles.figmaHeroCardImage} />
-                <div className={styles.figmaHeroCardMeta}>
-                  <span className={styles.figmaHeroCardTag}>Liquor tasting</span>
-                  <span className={styles.figmaHeroCardLocation}>Mumbai • Tonight</span>
-                </div>
-              </motion.div>
+                <motion.div className={styles.figmaHeroCard}>
+                  <div className={styles.figmaHeroCardImagePicnic} />
+                  <div className={styles.figmaHeroCardMeta}>
+                    <span className={styles.figmaHeroCardTag}>Picnic</span>
+                    <span className={styles.figmaHeroCardLocation}>Delhi • Sunday</span>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className={`${styles.figmaHeroCard} ${styles.figmaHeroCardTop}`}>
+                  <div className={styles.figmaHeroCardImage} />
+                  <div className={styles.figmaHeroCardMeta}>
+                    <span className={styles.figmaHeroCardTag}>Liquor tasting</span>
+                    <span className={styles.figmaHeroCardLocation}>Mumbai • Tonight</span>
+                  </div>
+                </motion.div>
 
-              <motion.div 
-                className={styles.figmaHeroCard}
-                whileHover={{ scale: 1.05, y: -8 }}
-              >
-                <div className={styles.figmaHeroCardImageParty} />
-                <div className={styles.figmaHeroCardMeta}>
-                  <span className={styles.figmaHeroCardTag}>House party</span>
-                  <span className={styles.figmaHeroCardLocation}>Bangalore • Friday</span>
-                </div>
-              </motion.div>
+                <motion.div 
+                  className={styles.figmaHeroCard}>
+                  <div className={styles.figmaHeroCardImageParty} />
+                  <div className={styles.figmaHeroCardMeta}>
+                    <span className={styles.figmaHeroCardTag}>House party</span>
+                    <span className={styles.figmaHeroCardLocation}>Bangalore • Friday</span>
+                  </div>
+                </motion.div>
 
-              <motion.div 
-                className={styles.figmaHeroCard}
-                whileHover={{ scale: 1.05, y: -8 }}
-              >
-                <div className={styles.figmaHeroCardImagePicnic} />
-                <div className={styles.figmaHeroCardMeta}>
-                  <span className={styles.figmaHeroCardTag}>Picnic</span>
-                  <span className={styles.figmaHeroCardLocation}>Delhi • Sunday</span>
-                </div>
-              </motion.div>
+                <motion.div 
+                  className={styles.figmaHeroCard}>
+                  <div className={styles.figmaHeroCardImagePicnic} />
+                  <div className={styles.figmaHeroCardMeta}>
+                    <span className={styles.figmaHeroCardTag}>Picnic</span>
+                    <span className={styles.figmaHeroCardLocation}>Delhi • Sunday</span>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </motion.div>
         </div>

@@ -338,86 +338,103 @@
   max-height: 720px; 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   overflow: hidden;
 }
 
 .figmaHeroCardsTrack {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.6rem;
   height: 200%;
+  overflow: hidden;
+  position: relative;
+  mask: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+.figmaHeroCardsTrack::before,
+.figmaHeroCardsTrack::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  will-change: transform;
-  animation: scrollUp 5s infinite;
+  height: 100%;
+  pointer-events: none;
 }
 
-.figmaHeroCardsTrack:hover {
-  animation-play-state: paused; /* Pause on hover for interaction */
+.figmaHeroCardsList {
+  display: flex;
+  flex-direction: column;
+  animation: scrollVertical 10s linear infinite; /* Speed: lower = slower */
+  height: max-content; /* Auto height */
+  gap: 1.6rem;
 }
 
-/* Scroll animation keyframes */
-@keyframes scrollUp {
+@keyframes scrollVertical {
   0% {
     transform: translateY(0);
   }
   100% {
-    transform: translateY(-50%); /* Half height = 3 cards up */
+    transform: translateY(-50%); /* Moves exactly half container height */
   }
 }
 
-/* Smooth perf on desktop */
-@media (prefers-reduced-motion: no-preference) {
-  .figmaHeroCardsTrack {
-    animation-timing-function: cubic-bezier(.42,.01,.5,1);
-  }
+.figmaHeroCardsTrack:hover .figmaHeroCardsList {
+  animation-play-state: paused;
 }
 
-/* Responsive: horizontal scroll on mobile */
-@media (max-width: 960px) {
+@media (max-width: 768px) {
   .figmaHeroCardsColumn {
-    height: auto;
-    max-height: none;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    padding: 1rem 0 1.5rem;
-    gap: 1.5rem;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    flex-direction: row !important;
+    height: auto !important;
+    max-height: 400px !important;
+    overflow: hidden;
   }
 
   .figmaHeroCardsTrack {
-    flex-direction: row;
-    height: auto;
-    width: max-content;
-    will-change: transform;
-    animation: scrollLeft 7s linear infinite;
-    gap: 1.5rem;
-    padding: 10px;
-    margin-bottom: 40px;
+    flex-direction: row !important;
+    height: auto !important;
+    width: 100% !important;
+    mask: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    gap: 1rem;
   }
 
-  @keyframes scrollLeft {
+  .figmaHeroCardsList {
+    display: flex !important;
+    flex-direction: row !important;
+    animation: scrollHorizontal 20s linear infinite;
+    height: auto !important;
+    gap: 1rem;
+  }
+
+  .figmaHeroCard,
+  .figmaHeroCardTop {
+    flex: 0 0 280px !important; /* Fixed width for mobile cards */
+    height: 360px !important; /* Taller portrait cards */
+    transform: none !important;
+  }
+
+  @keyframes scrollHorizontal {
     0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); } /* move left by one copy width */
+    100% { transform: translateX(-50%); }
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-  .figmaHeroCardsTrack { animation-timing-function: cubic-bezier(.42,.01,.5,1) }
-  }
-
-  .figmaHeroCardsColumn::-webkit-scrollbar {
-    display: none;
-  }
-
-  .figmaHeroCard, .figmaHeroCardTop {
-    flex: 0 0 260px;
-    scroll-snap-align: start;
-    width: 260px;
-    height: 200px;
+  .figmaHeroCardsTrack:hover .figmaHeroCardsList,
+  .figmaHeroCardsTrack:active .figmaHeroCardsList {
+    animation-play-state: paused;
   }
 }
 
