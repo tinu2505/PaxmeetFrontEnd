@@ -139,8 +139,10 @@ export function AuthProvider({ children }) {
     }
 
     const data = await res.json(); // { accessToken, refreshToken, user }
-    saveTokens(data.accessToken, data.refreshToken);
-    setUser(data.user);
+    const accessToken = data.token?.access;
+    const refreshToken = data.token?.refresh;
+    if (!accessToken) throw new Error('No access token received');
+    saveTokens(accessToken, refreshToken);
     return data.user;
   };
 
@@ -238,11 +240,12 @@ export function AuthProvider({ children }) {
     }
 
     const data = await res.json();
-    if (data.accessToken && data.refreshToken) {
-      saveTokens(data.accessToken, data.refreshToken);
-      setUser(data.user);
-    }
-    return data;
+    const accessToken = data.token?.access;
+    const refreshToken = data.token?.refresh;
+    if (!accessToken) throw new Error('Signup succeeded but no tokens received');
+    saveTokens(accessToken, refreshToken);
+    setUser(data.user || { email: payload.email, username: payload.username });  // Fallback
+    return data.user || { email: payload.email };
   };
 
   // ---- forgot password APIs ----
