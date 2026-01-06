@@ -352,7 +352,6 @@ export default function Home() {
                   initial={{ opacity: 0, x: 50 }}
                   whileInView={{ opacity: 1, scale: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.08 }}
-                  whileHover={{ scale: 1.03, y: -8 }}
                   viewport={{ once: true }}
                 >
                   <div className={styles.categoryImage} style={{ backgroundImage: `url(${category.img})` }}></div>
