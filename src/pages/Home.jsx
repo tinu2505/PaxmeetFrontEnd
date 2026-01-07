@@ -3,6 +3,18 @@ import { motion } from 'framer-motion';
 import styles from './Home.module.css';
 import EventCard from "./EventCard";
 
+import heroImg1 from '../assets/images/heroImg1.png';
+import heroImg2 from '../assets/images/heroImg2.png';
+import heroImg3 from '../assets/images/heroImg3.png';
+import heroImg4 from '../assets/images/heroImg4.png';
+
+const heroImg = [
+  { image: heroImg1 },
+  { image: heroImg2 },
+  { image: heroImg3 },
+  { image: heroImg4 },
+];
+
 const mockEvents = [
   {
     id: 1,
@@ -240,58 +252,18 @@ export default function Home() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <div className={styles.figmaHeroCardsTrack}>
-              <div className={styles.figmaHeroCardsList}>
-                <motion.div className={`${styles.figmaHeroCard} ${styles.figmaHeroCardTop}`}>
-                  <div className={styles.figmaHeroCardImage} />
-                  <div className={styles.figmaHeroCardMeta}>
-                    <span className={styles.figmaHeroCardTag}>Liquor tasting</span>
-                    <span className={styles.figmaHeroCardLocation}>Mumbai • Tonight</span>
+            <div className={styles.scrollContainer}>
+              <div className={styles.scrollTrack}>
+                {heroImg.map((item, index) => (
+                  <div className={styles.heroImg} key={`a-${index}`}>
+                    <img src={item.image} alt={`hero-${index}`} className={styles.heroImage} />
                   </div>
-                </motion.div>
-
-                <motion.div className={styles.figmaHeroCard}>
-                  <div className={styles.figmaHeroCardImageParty} />
-                  <div className={styles.figmaHeroCardMeta}>
-                    <span className={styles.figmaHeroCardTag}>House party</span>
-                    <span className={styles.figmaHeroCardLocation}>Bangalore • Friday</span>
+                ))}
+                {heroImg.map((item, index) => (
+                  <div className={styles.heroImg} key={`b-${index}`}>
+                    <img src={item.image} alt={`hero-copy-${index}`} className={styles.heroImage} />
                   </div>
-                </motion.div>
-
-                <motion.div className={styles.figmaHeroCard}>
-                  <div className={styles.figmaHeroCardImagePicnic} />
-                  <div className={styles.figmaHeroCardMeta}>
-                    <span className={styles.figmaHeroCardTag}>Picnic</span>
-                    <span className={styles.figmaHeroCardLocation}>Delhi • Sunday</span>
-                  </div>
-                </motion.div>
-                
-                <motion.div 
-                  className={`${styles.figmaHeroCard} ${styles.figmaHeroCardTop}`}>
-                  <div className={styles.figmaHeroCardImage} />
-                  <div className={styles.figmaHeroCardMeta}>
-                    <span className={styles.figmaHeroCardTag}>Liquor tasting</span>
-                    <span className={styles.figmaHeroCardLocation}>Mumbai • Tonight</span>
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  className={styles.figmaHeroCard}>
-                  <div className={styles.figmaHeroCardImageParty} />
-                  <div className={styles.figmaHeroCardMeta}>
-                    <span className={styles.figmaHeroCardTag}>House party</span>
-                    <span className={styles.figmaHeroCardLocation}>Bangalore • Friday</span>
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  className={styles.figmaHeroCard}>
-                  <div className={styles.figmaHeroCardImagePicnic} />
-                  <div className={styles.figmaHeroCardMeta}>
-                    <span className={styles.figmaHeroCardTag}>Picnic</span>
-                    <span className={styles.figmaHeroCardLocation}>Delhi • Sunday</span>
-                  </div>
-                </motion.div>
+                ))}
               </div>
             </div>
           </motion.div>
@@ -521,6 +493,7 @@ export default function Home() {
           </div>
         </section>
       </section>
+      
     </>
   );
 }

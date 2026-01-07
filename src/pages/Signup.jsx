@@ -119,14 +119,13 @@ export default function Signup() {
     setLoading(true);
     try {
       await signup({
-        email: form.email,
-        password: form.password,
+        phone: form.mobile.replace(/\s+/g, '').replace(/^91/, '+91'),  // Normalize to +91xxxxxxxxx,                 
         username: form.username,
-        firstName: form.firstName,
-        lastName: form.lastName,
-        mobile: form.mobile,
-        gender: form.gender,
+        first_name: form.firstName,        
+        last_name: form.lastName,
+        gender: form.gender,           
         dob: form.dob,
+        // invite_code: form.inviteCode
       });
       navigate("/profile");
     } catch (err) {
@@ -372,7 +371,6 @@ export default function Signup() {
                   <option value="">Select</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
-                  <option value="nonbinary">Non-binary</option>
                   <option value="other">Other</option>
                 </select>
               </div>

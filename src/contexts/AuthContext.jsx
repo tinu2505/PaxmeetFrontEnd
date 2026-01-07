@@ -209,7 +209,20 @@ export function AuthProvider({ children }) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.message || "Cannot save password");
     }
-    return await res.json();
+    const data = await res.json();
+    const accessToken = data.access;
+    const refreshToken = data.refresh;
+
+    console.log("create_user/email tokens:", { accessToken: !!accessToken, refreshToken: !!refreshToken });
+
+
+    if (accessToken) {
+      saveTokens(accessToken, refreshToken);
+    }
+    else{
+      console.warn("No tokens in create_user/email response:", data);
+    }
+    return data;
   };
 
   const checkUsername = async (username) => {
@@ -228,24 +241,31 @@ export function AuthProvider({ children }) {
 
   // final signup – creates account + logs in
   const signup = async (payload) => {
-    const res = await fetch(`${HOST}/accounts/register_user/email`, {
+    const res = await apiCall(`/accounts/register_user/email`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload), // { email, password, username, firstName, lastName, mobile, gender, dob }
+      body: JSON.stringify(payload), // { username, firstName, lastName, mobile, gender, dob }
     });
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || "Signup failed");
+      const text = await res.text();
+      console.error("Signup error raw:", text);
+      let errJson;
+      try {
+        errJson = JSON.parse(text);
+      } catch {
+        errJson = null;
+      }
+      throw new Error(errJson?.message || text || "Signup failed");
     }
 
     const data = await res.json();
     const accessToken = data.token?.access;
     const refreshToken = data.token?.refresh;
-    if (!accessToken) throw new Error('Signup succeeded but no tokens received');
-    saveTokens(accessToken, refreshToken);
-    setUser(data.user || { email: payload.email, username: payload.username });  // Fallback
-    return data.user || { email: payload.email };
+    if (accessToken) {
+      saveTokens(accessToken, refreshToken);
+    }
+    setUser(data.user || { username: payload.username });  // Fallback
+    return data;
   };
 
   // ---- forgot password APIs ----

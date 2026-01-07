@@ -148,6 +148,7 @@
   color: #ffffff;
 }
 */
+
 .primaryBtn, .heroPrimaryCTA {
   background: #7332d6;
   color: #ffffff;
@@ -172,7 +173,7 @@
 .figmaHeroSection {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: calc(100vh - 64px);
   background: #fff7ed; /* FFF7ED from Figma */
   display: flex;
   align-items: center;
@@ -335,105 +336,112 @@
 .figmaHeroCardsColumn {
   position: relative;
   height: 100%;
-  max-height: 720px; 
-  display: flex;
-  flex-direction: column;
+  max-height: 1024px; 
   align-items: center;
   overflow: hidden;
 }
 
-.figmaHeroCardsTrack {
-  display: flex;
-  flex-direction: column;
-  height: 200%;
+.scrollContainer {
   overflow: hidden;
-  position: relative;
-  mask: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
-  -webkit-mask: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
+  border-radius: 12px;
+  height: 1024px;
+  /* container holds a single track; spacing is managed by the track items */
+  gap: 0;
 }
 
-.figmaHeroCardsTrack::before,
-.figmaHeroCardsTrack::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.figmaHeroCardsList {
+.scrollTrack {
   display: flex;
   flex-direction: column;
-  animation: scrollVertical 10s linear infinite; /* Speed: lower = slower */
-  height: max-content; /* Auto height */
+  align-items: center;
+  animation: scrollUp 8s linear infinite;
+  /* use a single gap value so spacing is consistent between all items */
   gap: 1.6rem;
 }
 
-@keyframes scrollVertical {
-  0% {
+.heroImg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* enforce fixed card size so duplicated track loops align */
+  width: 291px;
+  height: 377px;
+  flex: 0 0 291px;
+}
+
+.heroImg img{
+  width: 100%;
+  height: 100%;
+  display: block; /* remove inline whitespace/gap issues */
+  margin: 0; /* ensure no default margins affect spacing */
+  box-sizing: border-box;
+  object-fit: cover;
+}
+
+@keyframes scrollUp {
+  from {
     transform: translateY(0);
   }
-  100% {
-    transform: translateY(-50%); /* Moves exactly half container height */
+  to {
+    transform: translateY(-50%);
   }
 }
 
-.figmaHeroCardsTrack:hover .figmaHeroCardsList {
+/* Optional: pause on hover */
+.scrollContainer:hover .scrollTrack {
   animation-play-state: paused;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 920px) {
   .figmaHeroCardsColumn {
     flex-direction: row !important;
     height: auto !important;
     max-height: 400px !important;
     overflow: hidden;
   }
+}
 
-  .figmaHeroCardsTrack {
-    flex-direction: row !important;
-    height: auto !important;
-    width: 100% !important;
-    mask: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-    gap: 1rem;
+
+/* Mobile: horizontal hero image scroll */
+@keyframes scrollLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (max-width: 920px) {
+  .scrollContainer {
+    height: 260px; /* short strip for horizontal cards */
+    overflow: hidden;
+    border-radius: 12px;
   }
 
-  .figmaHeroCardsList {
-    display: flex !important;
-    flex-direction: row !important;
-    animation: scrollHorizontal 20s linear infinite;
-    height: auto !important;
-    gap: 1rem;
+  .scrollTrack {
+    flex-direction: row; /* lay out items horizontally */
+    align-items: center;
+    gap: 0.75rem;
+    width: max-content;
+    animation: scrollLeft 8s linear infinite;
   }
 
-  .figmaHeroCard,
-  .figmaHeroCardTop {
-    flex: 0 0 280px !important; /* Fixed width for mobile cards */
-    height: 360px !important; /* Taller portrait cards */
-    transform: none !important;
+  .heroImg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    width: 180px;
+    height: 240px;
+    flex: 0 0 180px;
   }
 
-  @keyframes scrollHorizontal {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+  .heroImg img {
+    width: 172px;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+    align-items:self-start;
   }
 
-  .figmaHeroCardsTrack:hover .figmaHeroCardsList,
-  .figmaHeroCardsTrack:active .figmaHeroCardsList {
+  /* keep pause-on-hover behavior on mobile when applicable */
+  .scrollContainer:hover .scrollTrack {
     animation-play-state: paused;
   }
 }
@@ -549,7 +557,6 @@
     justify-content: center;
   }
 }
-
 
 /*event section*/
 .eventsShowcaseSection {
