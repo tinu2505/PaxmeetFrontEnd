@@ -277,12 +277,22 @@
 }
 
 .address {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 9px; /* Base size */
+  line-height: 14px;
+  color: #c7c7c7;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-width: 0;
-  max-width: 100%;
   display: inline-block;
+  max-width: 100%;
+}
+
+.locationFirstWord {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .dateRow {

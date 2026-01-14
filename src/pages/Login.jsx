@@ -22,7 +22,13 @@ export default function Login() {
 
     try {
       await auth.login(form);
-      navigate("/profile");
+      await new Promise(resolve => setTimeout(resolve, 500));
+      if (auth.isAuthenticated) {
+        navigate('/profile');
+      } else {
+        setError('Auth sync failed, refreshing...');
+        window.location.href = '/profile';  // Force reload
+      }
     } catch (err) {
       setError(err.message);
     } finally {

@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { distance, motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import styles from './Events.module.css';
 import EventCard from './EventCard';
+import { useAuth } from '../contexts/AuthContext';
 import { div } from 'framer-motion/client';
 
 const MOCK_EVENTS = [
@@ -142,6 +144,23 @@ const MOCK_EVENTS = [
 const CATEGORIES = ['All', 'Trek', 'Meetup', 'Workshop', 'Fitness', 'Social'];
 
 export default function Events() {
+  const navigate = useNavigate();
+  const motionProps = {
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.4 },
+    whileHover: { y: -6, scale: 1.01 }
+  };
+
+  const { isAuthenticated, apiCall, loading: authLoading } = useAuth();
+
+  const [events, setEvents] = useState([]);
+  const [categories, setCategories] = useState(['All']);
+  const [loading, setLoading] = useState(true);
+
+  const accessToken = localStorage.getItem('accessToken');
+  
   const [searchText, setSearchText] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -150,40 +169,79 @@ export default function Events() {
   const [priceFilter, setPriceFilter] = useState('any');
   const [dateFilter, setDateFilter] = useState('any');
 
+  useEffect(() => {
+    // If no token, redirect to login or show popup
+    if (authLoading) return;
+
+    // 4. Use context boolean to check login status
+    if (!isAuthenticated) {
+      alert("Please login to view events.");
+      navigate('/login');
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const catRes = await apiCall('/events/get_categories_types', { method: 'GET' });
+        const catData = await catRes.json();
+
+        if (catData.success&& Array.isArray(catData.categories)) {
+          const categoryNames = catData.categories.map(cat => cat.name);
+          setCategories(['All', ...categoryNames]);
+        }
+        else if (Array.isArray(catData)) {
+          // Fallback if the API returns the array directly
+          const categoryNames = catData.map(cat => cat.name);
+          setCategories(['All', ...categoryNames]);
+        }
+
+        const eventRes = await apiCall('/events/fetch_events?lat=24.7874167&lng=73.0537217', { method: 'GET' });
+        const eventData = await eventRes.json();
+        console.log(eventData)
+        
+        if (eventData.results && Array.isArray(eventData.results)) {
+          setEvents(eventData.results);
+        } else {
+          console.warn("API success but results array not found:", eventData);
+          setEvents([]);
+        }
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [isAuthenticated, authLoading, navigate, apiCall]);
+
   const filteredEvents = useMemo(() => {
-    return MOCK_EVENTS.filter((event) => {
+    if (!Array.isArray(events)) return [];
+
+    return events.filter((event) => {
       const text = searchText.toLowerCase().trim();
 
       if (text) {
-        const haystack = `${event.title} ${event.description} ${event.location} ${event.category}`
-        .toLowerCase();
+        const haystack = `${event.name || ''} ${event.location?.formatted_address || ''}`.toLowerCase();
         if (!haystack.includes(text)) return false;
       }
 
-      if (locationFilter) {
-        if (!event.city.toLowerCase().includes(locationFilter.toLowerCase())) return false;
-      }
+      if (categoryFilter !== 'All' && event.category !== categoryFilter) return false;
 
-      if (categoryFilter !== 'All' && event.category !== categoryFilter) {
-        return false;
-      }
-
-      if (distanceFilter !== 'any') {
-        const limit = Number(distanceFilter);
-        if (event.distanceKm > limit) return false;
-      }
-
-      if (genderFilter !== 'any' && event.gender !== genderFilter) {
-        return false;
-      }
-
-      if (priceFilter === 'free' && event.price > 0) return false;
-      if (priceFilter === 'paid' && event.price === 0) return false;
-
-      // dateFilter is placeholder; hook real dates later
       return true;
     });
-  }, [searchText, locationFilter, categoryFilter, distanceFilter, genderFilter, priceFilter, dateFilter]);
+  }, [events, searchText, categoryFilter]);
+  
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { day: '2-digit', month: 'short' }).toUpperCase();
+  };
+
+  if (loading) return <div className={styles.emptyState}>Loading events...</div>;
 
   return(
     <section className={styles.page}>
@@ -279,7 +337,7 @@ export default function Events() {
 
           {/* Category pill group */}
           <div className={styles.categoriesRow}>
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 type="button"
@@ -304,42 +362,32 @@ export default function Events() {
           </p>
         </div>
 
-        {filteredEvents.length === 0 ? (
-          <div className={styles.emptyState}>
-            <h3>No events match these filters yet</h3>
-            <p>Try clearing some filters or changing your location.</p>
-            <button
-              type="button"
-              className={styles.clearBtn}
-              onClick={() => {
-                setSearchText('');
-                setLocationFilter('');
-                setCategoryFilter('All');
-                setDistanceFilter('any');
-                setGenderFilter('any');
-                setPriceFilter('any');
-                setDateFilter('any');
+        {filteredEvents.map((event, index) => (
+          <motion.div
+            key={event.unique_id}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.05 }}
+            whileHover={{ y: -6, scale: 1.01 }}
+          >
+            <EventCard
+              event={{
+                ...event,
+                id: event.unique_id,
+                title: event.name,
+                image: event.images?.[0]?.image|| 'src/assets/images/--eventcardimage.png',
+                location: event.location?.formatted_address,
+                views: event.stats?.views_count || 0,
+                likes: event.stats?.likes_count || 0,
+                goingText: `${event.stats?.audience_count || 0} going`,
+                tags: event.category ? [event.category] : [],
+                date: formatDate(event.start_datetime),
+                day: new Date(event.start_datetime).toLocaleDateString('en-US', { weekday: 'long' })
               }}
-            >
-              Clear all filters
-            </button>
-          </div>
-        ) : (
-          <div className={styles.grid}>
-            {filteredEvents.map((event, index) => (
-              <motion.div
-                key={event.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                whileHover={{ y: -6, scale: 1.01 }}
-              >
-                <EventCard event={event} />
-              </motion.div>
-            ))}
-          </div>
-        )}
+            />
+          </motion.div>
+        ))}
       </div>
     </section>
   );

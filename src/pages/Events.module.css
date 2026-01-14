@@ -95,30 +95,49 @@
   background: var(--color-bg);
 }
 
-/* Category pills */
 .categoriesRow {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex-wrap: nowrap;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding: 10px 0; /* Vertical padding so pills aren't cut off */
+  min-height: 50px; /* Ensure container doesn't collapse */
+}
+
+.categoriesRow::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+@media (min-width: 768px) {
+  .categoriesRow {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
 }
 
 .categoryPill {
+  white-space: nowrap;
   border-radius: 999px;
-  border: 1px solid var(--color-primary);
-  background: var(--color-bg);
-  padding: 0.35rem 0.85rem;
-  font-size: 0.82rem;
+  border: 1px solid rgba(198, 167, 245, 0.3);
+  background: rgba(255, 255, 255, 0.1); /* Increased opacity */
+  color: #ffffff; /* Forced pure white for visibility */
+  padding: 0.6rem 1.2rem; /* Slightly larger padding */
+  font-size: 0.85rem;
+  font-weight: 600; /* Bolder text */
   cursor: pointer;
-  transition: all 0.2s ease;
+  display: inline-block; /* Ensure it respects dimensions */
 }
 
 .categoryPill:hover {
-  background: var(--color-primary);
+  background: rgba(198, 167, 245, 0.15);
+  border-color: var(--color-primary);
 }
 
 .categoryPillActive {
   background: var(--color-primary);
+  color: #000; /* Contrast text against purple */
   border-color: transparent;
+  box-shadow: 0 4px 12px rgba(198, 167, 245, 0.3);
 }
 
 /* Results */

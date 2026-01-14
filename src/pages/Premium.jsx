@@ -1,55 +1,50 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styles from './Premium.module.css';
 
-const PLANS = [
-  {
-    id: 'free',
-    name: 'Free',
-    priceLabel: 'Free',
-    highlight: 'Start hosting & joining',
-    features: [
-      'Host up to 3 events / month',
-      'Basic discovery in your city',
-      'Standard attendee limits',
-      'Basic host profile',
-    ],
-    ctaLabel: 'Continue with Free',
-    recommended: false,
-  },
-  {
-    id: 'plus',
-    name: 'Plus',
-    priceLabel: '₹199 / month',
-    highlight: 'For active hosts',
-    features: [
-      'Host up to 10 events / month',
-      'Boosted visibility in search',
-      'Access to advanced filters',
-      'Priority support chat',
-    ],
-    ctaLabel: 'Start Plus',
-    recommended: true,
-  },
-  {
-    id: 'pro',
-    name: 'Pro',
-    priceLabel: '₹499 / month',
-    highlight: 'For communities & brands',
-    features: [
-      'Unlimited public events',
-      'Featured spot in city carousels',
-      'Deeper analytics & insights',
-      'Co‑host management tools',
-    ],
-    ctaLabel: 'Talk to us',
-    recommended: false,
-  },
-];
-
 export default function Premium() {
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('https://api.paxmeet.com/payments/subscriptions');
+        if (!response.ok) throw new Error('Failed to fetch subscription plans');
+        
+        const data = await response.json();
+        setPlans(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <p>Loading premium plans...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>Error: {error}</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
+  }
+
   return (
     <section className={styles.page}>
-      {/* Hero */}
       <div className={styles.hero}>
         <div className={styles.heroText}>
           <h1 className={styles.heroTitle}>Upgrade to Paxmeet Premium</h1>
@@ -73,50 +68,45 @@ export default function Premium() {
         </div>
 
         <div className={styles.grid}>
-          {PLANS.map((plan, index) => (
-            <motion.article
-              key={plan.id}
-              className={`${styles.card} ${plan.recommended ? styles.cardRecommended : ''}`}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              whileHover={{ y: -8, scale: 1.01 }}
-            >
-              {plan.recommended && (
-                <div className={styles.ribbon}>
-                  <span>Most Popular</span>
-                </div>
-              )}
-
-              <header className={styles.cardHeader}>
-                <h2 className={styles.planName}>{plan.name}</h2>
-                <p className={styles.planHighlight}>{plan.highlight}</p>
-                <p className={styles.planPrice}>{plan.priceLabel}</p>
-              </header>
-
-              <ul className={styles.features}>
-                {plan.features.map((f) => (
-                  <li key={f}>{f}</li>
-                ))}
-              </ul>
-
-              <button
-                type="button"
-                className={styles.primaryBtn}
-                onClick={() => {
-                  // later: route to /download or /login with plan context
-                  window.location.href = '/download';
-                }}
+          {plans.map((plan, index) => {
+            const monthlyPrice = plan.pricing?.find(p => p.duration === 'monthly');
+            const currency = monthlyPrice?.currency === 'INR' ? '₹' : monthlyPrice?.currency;
+            
+            return (
+              <motion.article
+                key={plan.plan_id}
+                className={`${styles.card} ${plan.title === 'pro' ? styles.cardRecommended : ''}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                {plan.ctaLabel}
-              </button>
+                {plan.title === 'pro' && <div className={styles.ribbon}><span>Most Popular</span></div>}
 
-              <p className={styles.cardFooterNote}>
-                Requires Paxmeet app for ticketing & payments.
-              </p>
-            </motion.article>
-          ))}
+                <header className={styles.cardHeader}>
+                  <h2 className={styles.planName}>{plan.plan_name}</h2>
+                  <p className={styles.planHighlight}>{plan.description}</p>
+                  <div className={styles.priceContainer}>
+                    <span className={styles.currency}>{currency}</span>
+                    <span className={styles.amount}>{monthlyPrice?.amount || '0'}</span>
+                    <span className={styles.interval}>/month</span>
+                  </div>
+                </header>
+
+                <ul className={styles.features}>
+                  {plan.features?.slice(0, 6).map((feat, i) => (
+                    <li key={i} className={feat.coming_soon ? styles.comingSoon : ''}>
+                      {feat.feature}
+                      {feat.coming_soon && <span className={styles.tag}>Soon</span>}
+                    </li>
+                  ))}
+                </ul>
+
+                <button className={styles.primaryBtn} onClick={() => window.location.href = '/download'}>
+                  Get Started
+                </button>
+              </motion.article>
+            );
+          })}
         </div>
       </div>
 

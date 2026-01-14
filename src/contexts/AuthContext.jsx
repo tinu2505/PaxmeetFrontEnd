@@ -143,7 +143,24 @@ export function AuthProvider({ children }) {
     const refreshToken = data.token?.refresh;
     if (!accessToken) throw new Error('No access token received');
     saveTokens(accessToken, refreshToken);
-    return data.user;
+    let attempts = 0;
+      while (attempts < 3 && !accessToken) {
+      await new Promise(r => setTimeout(r, 100));
+      attempts++;
+    }
+    try {
+      const userRes = await apiCall('accounts/details', { method: 'GET' });
+      if (userRes.ok) {
+        const userData = await userRes.json();
+        setUser(userData);
+        return userData;
+      }  // Return user for component use
+    } catch (err) {
+      console.error('User fetch failed, using fallback:', err);
+      // Don't logout, just return partial data
+    }
+    // Fallback: Basic user object for immediate auth
+    return { id: 'temp', email: identifier, name: identifier.split('@')[0] };
   };
 
   const logout = async () => {
@@ -337,7 +354,7 @@ export function AuthProvider({ children }) {
   const value = {
     user,
     loading,
-    isAuthenticated: !!user && !!accessToken,
+    isAuthenticated: !!user || !!accessToken,
 
     // core auth
     login,

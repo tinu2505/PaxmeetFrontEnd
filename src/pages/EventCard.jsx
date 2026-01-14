@@ -1,6 +1,10 @@
 import styles from "./EventCard.module.css";
 
 function EventCard({ event }) {
+  const locationStr = event.location || "";
+  const [firstWord, ...rest] = locationStr.split(' ');
+  const restOfLocation = rest.join(' ');
+
   return (
     <article className={styles.eventCard}>
       {/* Image / header area */}
@@ -9,6 +13,7 @@ function EventCard({ event }) {
           src={event.image}
           alt={event.title}
           className={styles.image}
+          onError={(e) => { e.target.src = 'src/assets/images/--eventcardimage.png'; }}
         />
 
         {/* Likes / views pill */}
@@ -28,7 +33,7 @@ function EventCard({ event }) {
           <span className={styles.iconRoute} aria-hidden="true" />
           <div className={styles.distanceText}>
             <span className={styles.distanceMain}>{event.distance}</span>
-            <span className={styles.distanceSub}>{event.distanceSub}</span>
+            <span className={styles.distanceSub}>From your location</span>
           </div>
         </div>
 
@@ -56,7 +61,9 @@ function EventCard({ event }) {
               <span className={styles.iconLocation} aria-hidden="true" />
               <span className={styles.city}>{event.city}</span>
               <span className={styles.addressRow}>
-                <span className={styles.address}>{event.location}</span>
+                <span className={styles.address}>
+                  <span className={styles.locationFirstWord}>{firstWord}</span> {restOfLocation}
+                </span>
               </span>
             </div>
 
@@ -81,8 +88,8 @@ function EventCard({ event }) {
         </div>
 
         <div className={styles.tagsRow}>
-          {event.tags.map((tag) => (
-            <span key={tag} className={styles.tag}>
+          {(event.tags || []).map((tag, i) => (
+            <span key={i} className={styles.tag}>
               {tag}
             </span>
           ))}
