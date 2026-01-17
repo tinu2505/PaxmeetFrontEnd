@@ -15,6 +15,7 @@ export default function Premium() {
         if (!response.ok) throw new Error('Failed to fetch subscription plans');
         
         const data = await response.json();
+        console.log('Fetched plans:', data);
         setPlans(data);
       } catch (err) {
         setError(err.message);
@@ -85,18 +86,34 @@ export default function Premium() {
                 <header className={styles.cardHeader}>
                   <h2 className={styles.planName}>{plan.plan_name}</h2>
                   <p className={styles.planHighlight}>{plan.description}</p>
-                  <div className={styles.priceContainer}>
-                    <span className={styles.currency}>{currency}</span>
-                    <span className={styles.amount}>{monthlyPrice?.amount || '0'}</span>
-                    <span className={styles.interval}>/month</span>
-                  </div>
                 </header>
 
+                <div className={styles.pricingList}>
+                  {plan.pricing && plan.pricing.length > 0 ? (
+                    plan.pricing.map((price) => (
+                      <div key={price.pricing_id} className={styles.priceRow}>
+                        <span className={styles.priceDuration}>{price.duration}</span>
+                        <div className={styles.priceValue}>
+                          <span className={styles.currency}>{price.currency === 'INR' ? '₹' : price.currency}</span>
+                          <span className={styles.amount}>{price.amount}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className={styles.freeBadge}>Free Forever</div>
+                  )}
+                </div>
+
                 <ul className={styles.features}>
-                  {plan.features?.slice(0, 6).map((feat, i) => (
+                  {plan.features?.map((feat, i) => (
                     <li key={i} className={feat.coming_soon ? styles.comingSoon : ''}>
-                      {feat.feature}
-                      {feat.coming_soon && <span className={styles.tag}>Soon</span>}
+                      <div className={styles.featureContent}>
+                        <span className={styles.featureTitle}>
+                          {feat.feature}
+                          {feat.coming_soon && <span className={styles.tag}>Soon</span>}
+                        </span>
+                        {feat.description && <p className={styles.featureDesc}>{feat.description}</p>}
+                      </div>
                     </li>
                   ))}
                 </ul>

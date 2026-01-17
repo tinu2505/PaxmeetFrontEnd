@@ -125,6 +125,33 @@ export function AuthProvider({ children }) {
     init();
   }, [apiCall]);
 
+  const loginWithGoogle = async (credential) => {
+    const res = await fetch(`${HOST}/accounts/google/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: credential }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || "Google Login failed");
+    }
+
+    const data = await res.json();
+    const accessToken = data.token?.access;
+    const refreshToken = data.token?.refresh;
+
+    if (!accessToken) throw new Error('No access token received');
+
+    saveTokens(accessToken, refreshToken);
+    const userRes = await apiCall('/accounts/details', { method: 'GET' });
+    if (userRes.ok) {
+      const userData = await userRes.json();
+      setUser(userData);
+      return userData;
+    }
+  };
+
   // ---- core auth functions ----
   const login = async ({ identifier, password }) => {
     const res = await fetch(`${HOST}/accounts/login`, {
@@ -360,6 +387,8 @@ export function AuthProvider({ children }) {
     login,
     signup,
     logout,
+    
+    loginWithGoogle,
 
     // signup steps
     checkEmail,

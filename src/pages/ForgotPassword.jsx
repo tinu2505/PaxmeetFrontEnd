@@ -24,7 +24,11 @@ export default function ForgotPassword() {
   });
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    let value = e.target.value;
+    if (e.target.name === "email") {
+      value = value.toLowerCase();
+    }
+    setForm((prev) => ({ ...prev, [e.target.name]: value }));
     setError("");
   };
 

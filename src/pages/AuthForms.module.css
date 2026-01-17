@@ -1,4 +1,8 @@
-/* src/pages/AuthForms.module.css - COMPLETE for Login/Signup/ForgotPassword */
+input[name="email"],
+input[name="username"],
+input[name="identifier"] {
+  text-transform: lowercase;
+}
 
 .page {
   min-height: 100vh;

@@ -1,12 +1,18 @@
+import { useNavigate } from 'react-router-dom';
 import styles from "./EventCard.module.css";
 
 function EventCard({ event }) {
+  const navigate = useNavigate();
   const locationStr = event.location || "";
   const [firstWord, ...rest] = locationStr.split(' ');
   const restOfLocation = rest.join(' ');
 
+  const handleCardClick = () => {
+    navigate(`/events/${event.unique_id || event.id}`);
+  }
+
   return (
-    <article className={styles.eventCard}>
+    <article className={styles.eventCard} onClick={handleCardClick}>
       {/* Image / header area */}
       <div className={styles.imageWrapper}>
         <img

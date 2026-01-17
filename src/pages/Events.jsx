@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Events.module.css';
 import EventCard from './EventCard';
 import { useAuth } from '../contexts/AuthContext';
-import { div } from 'framer-motion/client';
+import { getBrowserLocation } from '../utils/location';
 
 const MOCK_EVENTS = [
   {
@@ -183,6 +183,19 @@ export default function Events() {
     const fetchData = async () => {
       setLoading(true);
       try {
+
+        let lat = 24.7874167; 
+        let lng = 73.0537217;
+
+        try {
+          const coords = await getBrowserLocation();
+          lat = coords.lat;
+          lng = coords.lng;
+          console.log("Using browser location:", lat, lng);
+        } catch (locError) {
+        console.warn("Location access denied or failed, using fallbacks:", locError.message);
+        }
+
         const catRes = await apiCall('/events/get_categories_types', { method: 'GET' });
         const catData = await catRes.json();
 
@@ -196,7 +209,7 @@ export default function Events() {
           setCategories(['All', ...categoryNames]);
         }
 
-        const eventRes = await apiCall('/events/fetch_events?lat=24.7874167&lng=73.0537217', { method: 'GET' });
+        const eventRes = await apiCall(`/events/fetch_events?lat=${lat}&lng=${lng}`, { method: 'GET' });
         const eventData = await eventRes.json();
         console.log(eventData)
         

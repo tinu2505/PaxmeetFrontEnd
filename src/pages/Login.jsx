@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx"; // adjust path if needed
+import { GoogleLogin } from '@react-oauth/google';
 import styles from "./AuthForms.module.css"; // adjust path if needed
 
 export default function Login() {
@@ -10,9 +11,14 @@ export default function Login() {
   const [form, setForm] = useState({ identifier: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { loginWithGoogle, isAuthenticated } = useAuth();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    let value = e.target.value;
+    if (e.target.name === "identifier") {
+      value = value.toLowerCase();
+    }
+    setForm({ ...form, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -35,6 +41,10 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    
+  }
 
   return (
     <div className={styles.page}>

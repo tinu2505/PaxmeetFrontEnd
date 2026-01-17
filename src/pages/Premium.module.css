@@ -134,17 +134,51 @@
   transform: scale(1.05);
 }
 
-.priceContainer {
-  margin: 1.5rem 0;
+.pricingList {
   display: flex;
-  align-items: baseline;
-  gap: 0.2rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
 }
 
-.amount {
-  font-size: 3rem;
-  font-weight: 800;
-  color: #ffffff;
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.priceRow:last-child {
+  border-bottom: none;
+}
+
+.priceDuration {
+  text-transform: capitalize;
+  font-size: 0.9rem;
+  color: #8D8D8D;
+}
+
+.priceValue {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.priceValue .amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.freeBadge {
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-primary);
+  padding: 0.5rem;
 }
 
 .currency, .interval {
@@ -195,13 +229,26 @@
   flex-grow: 1; /* Pushes button to bottom */
 }
 
-.features li {
-  font-size: 0.95rem;
-  margin-bottom: 0.8rem;
-  color: #e0e0e0;
+.featureContent {
   display: flex;
-  align-items: flex-start;
-  gap: 0.8rem;
+  flex-direction: column;
+}
+
+.featureTitle {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.featureDesc {
+  font-size: 0.8rem;
+  color: #8D8D8D;
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+.features li {
+  margin-bottom: 1.2rem; /* More space for descriptions */
 }
 
 .features li::before {
