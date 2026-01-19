@@ -243,6 +243,35 @@ select.input {
   cursor: not-allowed;
 }
 
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: #8D8D8D;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #2a2a31;
+}
+
+.divider:not(:empty)::before {
+  margin-right: .75em;
+}
+
+.divider:not(:empty)::after {
+  margin-left: .75em;
+}
+
+.googleWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .stepActions {
   display: flex;
   justify-content: space-between;

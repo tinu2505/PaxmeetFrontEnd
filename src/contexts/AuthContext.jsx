@@ -10,7 +10,7 @@ import {
 const AuthContext = createContext();
 
 // Base API URL - update to your real backend or Postman mock
-const HOST = import.meta.env.VITE_API_URL ?? "https://api.paxmeet.com";
+const HOST = import.meta.env.VITE_API_URL;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -126,7 +126,7 @@ export function AuthProvider({ children }) {
   }, [apiCall]);
 
   const loginWithGoogle = async (credential) => {
-    const res = await fetch(`${HOST}/accounts/google/login`, {
+    const res = await fetch(`${HOST}/accounts/oauth/google`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token: credential }),

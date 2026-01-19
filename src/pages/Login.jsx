@@ -43,8 +43,17 @@ export default function Login() {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    
-  }
+    setLoading(true);
+    setError("");
+    try {
+      await loginWithGoogle(credentialResponse.credential);
+      navigate('/profile');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -90,6 +99,20 @@ export default function Login() {
               )}
             </button>
           </form>
+
+          <div className={styles.divider}>
+            <span>OR</span>
+          </div>
+          
+          <div className={styles.googleWrapper}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError("Google Login Failed")}
+              theme="filled_black"
+              shape="pill"
+              text="continue_with"
+            />
+          </div>
           <div className={styles.links}>
             <p>
               <Link to="/forgot-password" className={styles.link}>
