@@ -45,11 +45,16 @@ export default function Login() {
   const handleGoogleSuccess = async (credentialResponse) => {
     setLoading(true);
     setError("");
+    console.log("ID Token for Postman:", credentialResponse.credential);
     try {
       await loginWithGoogle(credentialResponse.credential);
       navigate('/profile');
     } catch (err) {
-      setError(err.message);
+      if (err.message.includes("already exists")) {
+        setError("This email is registered with a password. Please sign in manually above.");
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { GoogleLogin } from '@react-oauth/google';
 import styles from './AuthForms.module.css';  // NEW IMPORT
 
 const HOST = 'https://api.paxmeet.com';
@@ -9,7 +10,7 @@ const HOST = 'https://api.paxmeet.com';
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
 
 export default function Signup() {
-  const { signup, checkEmail, sendSignupOtp, verifySignupOtp, setSignupPassword, checkUsername, } = useAuth();
+  const { signup, checkEmail, sendSignupOtp, verifySignupOtp, setSignupPassword, checkUsername, loginWithGoogle, } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [checking, setChecking] = useState(false);
@@ -27,6 +28,20 @@ export default function Signup() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    setError("");
+    try {
+      // loginWithGoogle sends the idToken to /accounts/oauth/google
+      await loginWithGoogle(credentialResponse.credential);
+      navigate('/profile'); 
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     let value = e.target.value;
@@ -183,6 +198,20 @@ export default function Signup() {
                   "Continue"
                 )}
               </button>
+
+              <div className={styles.divider}>
+                <span>OR</span>
+              </div>
+
+              <div className={styles.googleWrapper}>
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => setError("Google Signup Failed")}
+                  theme="filled_black"
+                  shape="pill"
+                  text="signup_with"
+                />
+              </div>
             </div>
           )}
 

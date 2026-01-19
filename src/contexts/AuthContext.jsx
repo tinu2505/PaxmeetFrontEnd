@@ -129,7 +129,7 @@ export function AuthProvider({ children }) {
     const res = await fetch(`${HOST}/accounts/oauth/google`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: credential }),
+      body: JSON.stringify({ idToken: credential }),
     });
 
     if (!res.ok) {
