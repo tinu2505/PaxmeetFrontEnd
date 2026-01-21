@@ -101,7 +101,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const init = async () => {
       const saved = loadTokens();
-      if (!saved) {
+      if (!saved || !saved.accessToken) {
         setLoading(false);
         return;
       }
@@ -114,9 +114,15 @@ export function AuthProvider({ children }) {
         if (res.ok) {
           const data = await res.json();
           setUser(data);
+        } else if (res.status === 401) {
+          clearTokens();
+          setUser(null);
         }
       } catch (e) {
-        console.error("Auth init failed:", e);
+        console.error("Auth init failed:", e.message);
+        if (e.message === "Session expired") {
+          clearTokens();
+        }
       } finally {
         setLoading(false);
       }
@@ -138,18 +144,29 @@ export function AuthProvider({ children }) {
     }
 
     const data = await res.json();
-    const accessToken = data.token?.access;
-    const refreshToken = data.token?.refresh;
+    const access = data.token?.access;
+    const refresh = data.token?.refresh;
 
-    if (!accessToken) throw new Error('No access token received');
+    if (!access) throw new Error('No access token received');
 
-    saveTokens(accessToken, refreshToken);
-    const userRes = await apiCall('/accounts/details', { method: 'GET' });
+    saveTokens(access, refresh);
+
+    const userRes = await fetch(`${HOST}/accounts/details`, { 
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${access}`
+      }
+    });
+
     if (userRes.ok) {
       const userData = await userRes.json();
       setUser(userData);
-      return userData;
+      return { ...userData, is_new_user: data.is_new_user };
     }
+
+    throw new Error("Failed to fetch user details after Google login");
+
   };
 
   // ---- core auth functions ----

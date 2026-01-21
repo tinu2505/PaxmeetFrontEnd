@@ -34,8 +34,13 @@ export default function Signup() {
     setError("");
     try {
       // loginWithGoogle sends the idToken to /accounts/oauth/google
-      await loginWithGoogle(credentialResponse.credential);
-      navigate('/profile'); 
+      const data = await loginWithGoogle(credentialResponse.credential);
+
+      if (data.is_new_user) {
+        setStep(4);
+      } else {
+        navigate('/profile');
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -318,7 +323,7 @@ export default function Signup() {
                 <button
                   type="button"
                   className={styles.secondaryButton}
-                  onClick={() => setStep(3)}
+                  onClick={() => form.email && !form.password ? setStep(1) : setStep(3)}
                   disabled={checking || loading}
                 >
                   Back
