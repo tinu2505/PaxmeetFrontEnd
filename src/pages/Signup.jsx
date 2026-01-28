@@ -30,17 +30,13 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
+    console.log("Google Token Received:", credentialResponse.credential);
     setError("");
+    setLoading(true);
     try {
-      // loginWithGoogle sends the idToken to /accounts/oauth/google
-      const data = await loginWithGoogle(credentialResponse.credential);
-
-      if (data.is_new_user) {
-        setStep(4);
-      } else {
-        navigate('/profile');
-      }
+      // credentialResponse.credential is the JWT idToken from Google
+      const result = await loginWithGoogle(credentialResponse.credential);
+      navigate("/profile");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -211,10 +207,10 @@ export default function Signup() {
               <div className={styles.googleWrapper}>
                 <GoogleLogin
                   onSuccess={handleGoogleSuccess}
-                  onError={() => setError("Google Signup Failed")}
+                  onError={() => setError("Google login failed")}
+                  useOneTap={false}
                   theme="filled_black"
                   shape="pill"
-                  text="signup_with"
                 />
               </div>
             </div>

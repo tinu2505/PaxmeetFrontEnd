@@ -131,44 +131,6 @@ export function AuthProvider({ children }) {
     init();
   }, [apiCall]);
 
-  const loginWithGoogle = async (credential) => {
-    const res = await fetch(`${HOST}/accounts/oauth/google`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idToken: credential }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || "Google Login failed");
-    }
-
-    const data = await res.json();
-    const access = data.token?.access;
-    const refresh = data.token?.refresh;
-
-    if (!access) throw new Error('No access token received');
-
-    saveTokens(access, refresh);
-
-    const userRes = await fetch(`${HOST}/accounts/details`, { 
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${access}`
-      }
-    });
-
-    if (userRes.ok) {
-      const userData = await userRes.json();
-      setUser(userData);
-      return { ...userData, is_new_user: data.is_new_user };
-    }
-
-    throw new Error("Failed to fetch user details after Google login");
-
-  };
-
   // ---- core auth functions ----
   const login = async ({ identifier, password }) => {
     const res = await fetch(`${HOST}/accounts/login`, {
@@ -206,6 +168,29 @@ export function AuthProvider({ children }) {
     // Fallback: Basic user object for immediate auth
     return { id: 'temp', email: identifier, name: identifier.split('@')[0] };
   };
+
+  const loginWithGoogle = async (idToken) => {
+    const res = await fetch(`${HOST}/accounts/oauth/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || "Google Authentication failed");
+    }
+
+    const data = await res.json();
+    const accessToken = data.token?.access;
+    const refreshToken = data.token?.refresh;
+
+    if (accessToken) {
+      saveTokens(accessToken, refreshToken);
+      setUser(data.user);
+      return data;
+    }
+  }
 
   const logout = async () => {
     try {
@@ -404,7 +389,7 @@ export function AuthProvider({ children }) {
     login,
     signup,
     logout,
-    
+
     loginWithGoogle,
 
     // signup steps

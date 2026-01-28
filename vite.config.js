@@ -7,8 +7,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     headers: {
+      // Allows Google popup to communicate with localhost
       "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
-      "Cross-Origin-Embedder-Policy": "require-corp",
+      "Cross-Origin-Embedder-Policy": "require-corp", // Required for external scripts like Google's
     },
   },
 })

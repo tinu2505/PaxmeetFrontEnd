@@ -43,18 +43,14 @@ export default function Login() {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
     setError("");
-    console.log("ID Token for Postman:", credentialResponse.credential);
+    setLoading(true);
     try {
-      await loginWithGoogle(credentialResponse.credential);
-      navigate('/profile');
+      // credentialResponse.credential is the JWT idToken from Google
+      const result = await loginWithGoogle(credentialResponse.credential);
+      navigate("/profile");
     } catch (err) {
-      if (err.message.includes("already exists")) {
-        setError("This email is registered with a password. Please sign in manually above.");
-      } else {
-        setError(err.message);
-      }
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -112,10 +108,10 @@ export default function Login() {
           <div className={styles.googleWrapper}>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => setError("Google Login Failed")}
+              onError={() => setError("Google login failed")}
+              useOneTap={false}
               theme="filled_black"
               shape="pill"
-              text="continue_with"
             />
           </div>
           <div className={styles.links}>
