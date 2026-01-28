@@ -30,13 +30,16 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    console.log("Google Token Received:", credentialResponse.credential);
     setError("");
     setLoading(true);
     try {
       // credentialResponse.credential is the JWT idToken from Google
       const result = await loginWithGoogle(credentialResponse.credential);
-      navigate("/profile");
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      if (result) {
+        navigate("/profile");
+      }
     } catch (err) {
       setError(err.message);
     } finally {

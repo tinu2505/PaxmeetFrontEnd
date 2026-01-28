@@ -119,10 +119,10 @@ export function AuthProvider({ children }) {
           setUser(null);
         }
       } catch (e) {
-        console.error("Auth init failed:", e.message);
-        if (e.message === "Session expired") {
-          clearTokens();
+        if (e.message === "Not authenticated") {
+          console.error("Auth init failed:", e.message);
         }
+        clearTokens();
       } finally {
         setLoading(false);
       }

@@ -8,8 +8,8 @@ export default defineConfig({
   server: {
     headers: {
       // Allows Google popup to communicate with localhost
-      "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
-      "Cross-Origin-Embedder-Policy": "require-corp", // Required for external scripts like Google's
+      "Cross-Origin-Opener-Policy": "unsafe-none",
+      "Cross-Origin-Embedder-Policy": "unsafe-none", // Required for external scripts like Google's
     },
   },
 })
