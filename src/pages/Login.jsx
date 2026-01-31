@@ -1,8 +1,8 @@
 // src/pages/Login.jsx - BULLETPROOF VERSION
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext.jsx"; // adjust path if needed
 import { GoogleLogin } from '@react-oauth/google';
+import { useAuth } from "../contexts/AuthContext.jsx"; // adjust path if needed
 import styles from "./AuthForms.module.css"; // adjust path if needed
 
 export default function Login() {
@@ -11,14 +11,9 @@ export default function Login() {
   const [form, setForm] = useState({ identifier: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { loginWithGoogle, isAuthenticated } = useAuth();
 
   const handleChange = (e) => {
-    let value = e.target.value;
-    if (e.target.name === "identifier") {
-      value = value.toLowerCase();
-    }
-    setForm({ ...form, [e.target.name]: value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -27,14 +22,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await auth.login(form);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      if (auth.isAuthenticated) {
+      const user = await auth.login(form);
+      if (user) {
         navigate('/profile');
-      } else {
-        setError('Auth sync failed, refreshing...');
-        window.location.href = '/profile';  // Force reload
-      }
+      } 
     } catch (err) {
       setError(err.message);
     } finally {
@@ -43,18 +34,16 @@ export default function Login() {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    setError("");
+  try {
     setLoading(true);
-    try {
-      // credentialResponse.credential is the JWT idToken from Google
-      const result = await loginWithGoogle(credentialResponse.credential);
-      navigate("/profile");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    await auth.loginWithGoogle(credentialResponse.credential);
+    navigate('/profile');
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};  
 
   return (
     <div className={styles.page}>
@@ -104,7 +93,7 @@ export default function Login() {
           <div className={styles.divider}>
             <span>OR</span>
           </div>
-          
+
           <div className={styles.googleWrapper}>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
@@ -114,6 +103,7 @@ export default function Login() {
               shape="pill"
             />
           </div>
+
           <div className={styles.links}>
             <p>
               <Link to="/forgot-password" className={styles.link}>

@@ -10,7 +10,7 @@ import {
 const AuthContext = createContext();
 
 // Base API URL - update to your real backend or Postman mock
-const HOST = import.meta.env.VITE_API_URL;
+const HOST = import.meta.env.VITE_API_URL ?? "https://api.paxmeet.com";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -21,11 +21,25 @@ export function AuthProvider({ children }) {
   // ---- token management ----
   const saveTokens = (access, refresh) => {
     setAccessToken(access);
-    setRefreshToken(refresh);
-    localStorage.setItem(
-      "paxmeet_tokens",
-      JSON.stringify({ accessToken: access, refreshToken: refresh })
-    );
+    // If a refresh token is available, persist both tokens to localStorage
+    if (refresh !== undefined && refresh !== null) {
+      setRefreshToken(refresh);
+      localStorage.setItem(
+        "paxmeet_tokens",
+        JSON.stringify({ accessToken: access, refreshToken: refresh })
+      );
+      // remove any transient session token
+      sessionStorage.removeItem("paxmeet_tokens_session");
+    } else {
+      // No refresh token -> treat access token as transient and store in sessionStorage
+      setRefreshToken(null);
+      sessionStorage.setItem(
+        "paxmeet_tokens_session",
+        JSON.stringify({ accessToken: access })
+      );
+      // ensure persistent tokens are not present (avoids init trying to refresh)
+      localStorage.removeItem("paxmeet_tokens");
+    }
   };
 
   const loadTokens = () => {
@@ -38,41 +52,71 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const loadSessionTokens = () => {
+    const raw = sessionStorage.getItem("paxmeet_tokens_session");
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  };
+
   const clearTokens = () => {
     setAccessToken(null);
     setRefreshToken(null);
     localStorage.removeItem("paxmeet_tokens");
+    sessionStorage.removeItem("paxmeet_tokens_session");
   };
 
   // ---- token refresh ----
-  const refreshAccessToken = useCallback(async () => {
-    if (!refreshToken) return null;
-
-    const res = await fetch(`${HOST}/accounts/refresh_token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refreshToken }),
-    });
-
-    if (!res.ok) {
-      clearTokens();
-      setUser(null);
+  const refreshAccessToken = useCallback(async (manualRefreshToken = null) => {
+    // prefer provided manual refresh token, then state, then what's in localStorage
+    const tokenToUse = manualRefreshToken || refreshToken || loadTokens()?.refreshToken;
+    if (!tokenToUse) {
+      console.warn('No refresh token available for refreshAccessToken');
       return null;
     }
 
-    const data = await res.json();
-    saveTokens(data.accessToken, data.refreshToken || refreshToken);
-    return data.accessToken;
+    try {
+      const res = await fetch(`${HOST}/accounts/refresh_token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh: tokenToUse }),
+      });
+
+      if (!res.ok) throw new Error("Refresh failed");
+
+      const data = await res.json();
+      const newAccess = data.token?.access || data.access || data.accessToken;
+      const newRefresh = data.token?.refresh || data.refresh || data.refreshToken || tokenToUse;
+
+      if (!newAccess) {
+        console.error("Backend response missing access token:", data);
+        throw new Error("No new access token");
+      }
+
+      saveTokens(newAccess, newRefresh);
+      return newAccess;
+    } catch (err) {
+      if (err.message !== "Failed to fetch") {
+        clearTokens();
+        setUser(null);
+      }
+      return null;
+    }
   }, [refreshToken]);
 
   // ---- authenticated API calls ----
   const apiCall = useCallback(
-    async (path, options = {}) => {
-      let token = accessToken;
-      if (!token) {
-        token = await refreshAccessToken();
-        if (!token) throw new Error("Not authenticated");
+    async (path, options = {}, manualToken = null, manualRefresh = null) => {
+      // prefer explicit manualToken, then in-memory accessToken, then session-stored access token
+      let token = manualToken || accessToken || loadSessionTokens()?.accessToken;
+      // attempt refresh if we don't have an access token
+      if (!token && (manualRefresh || refreshToken || loadTokens()?.refreshToken)) {
+        token = await refreshAccessToken(manualRefresh);
       }
+      if (!token) throw new Error("Not authenticated");
 
       const makeReq = async (bearer) =>
         fetch(`${HOST}${path}`, {
@@ -80,28 +124,34 @@ export function AuthProvider({ children }) {
           headers: {
             "Content-Type": "application/json",
             ...(options.headers || {}),
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${bearer}`,
           },
         });
 
       let res = await makeReq(token);
 
       if (res.status === 401) {
-        const newToken = await refreshAccessToken();
-        if (!newToken) throw new Error("Session expired");
+        if (user?.isRegistrationIncomplete) {
+          console.warn("401 suppressed: User is completing registration.");
+          return res;
+        }
+        const newToken = await refreshAccessToken(manualRefresh);
+        if (!newToken) {
+          // No refresh possible — return the 401 response so callers can handle fallbacks
+          return res;
+        }
         res = await makeReq(newToken);
       }
-
       return res;
     },
-    [accessToken, refreshAccessToken]
+    [accessToken, refreshToken, refreshAccessToken, user]
   );
 
   // ---- initial auth check ----
   useEffect(() => {
     const init = async () => {
       const saved = loadTokens();
-      if (!saved || !saved.accessToken) {
+      if (!saved) {
         setLoading(false);
         return;
       }
@@ -110,19 +160,21 @@ export function AuthProvider({ children }) {
       setRefreshToken(saved.refreshToken);
 
       try {
-        const res = await apiCall("/accounts/details", { method: "GET" });
+        const res = await apiCall("/accounts/details", { method: "GET" }, saved.accessToken, saved.refreshToken);
         if (res.ok) {
           const data = await res.json();
           setUser(data);
         } else if (res.status === 401) {
+          // Details endpoint refused the token and refresh wasn't possible — clear stored tokens
+          console.warn('Auth init: /accounts/details returned 401; clearing stored tokens');
           clearTokens();
           setUser(null);
         }
       } catch (e) {
-        if (e.message === "Not authenticated") {
-          console.error("Auth init failed:", e.message);
-        }
+        console.error("Auth init failed:", e);
+        // clear tokens/user when init fails to avoid stuck state
         clearTokens();
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -149,48 +201,19 @@ export function AuthProvider({ children }) {
     const refreshToken = data.token?.refresh;
     if (!accessToken) throw new Error('No access token received');
     saveTokens(accessToken, refreshToken);
-    let attempts = 0;
-      while (attempts < 3 && !accessToken) {
-      await new Promise(r => setTimeout(r, 100));
-      attempts++;
-    }
+
     try {
-      const userRes = await apiCall('accounts/details', { method: 'GET' });
+      const userRes = await apiCall('/accounts/details', { method: 'GET' }, accessToken);
       if (userRes.ok) {
         const userData = await userRes.json();
         setUser(userData);
         return userData;
-      }  // Return user for component use
+      }
     } catch (err) {
-      console.error('User fetch failed, using fallback:', err);
-      // Don't logout, just return partial data
+      console.error('User details fetch failed:', err);
     }
-    // Fallback: Basic user object for immediate auth
-    return { id: 'temp', email: identifier, name: identifier.split('@')[0] };
+    return data.user;
   };
-
-  const loginWithGoogle = async (idToken) => {
-    const res = await fetch(`${HOST}/accounts/oauth/google`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idToken }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || "Google Authentication failed");
-    }
-
-    const data = await res.json();
-    const accessToken = data.token?.access;
-    const refreshToken = data.token?.refresh;
-
-    if (accessToken) {
-      saveTokens(accessToken, refreshToken);
-      setUser(data.user);
-      return data;
-    }
-  }
 
   const logout = async () => {
     try {
@@ -200,6 +223,62 @@ export function AuthProvider({ children }) {
     }
     clearTokens();
     setUser(null);
+  };
+
+  const loginWithGoogle = async (idToken) => {
+    const res = await fetch(`${HOST}/accounts/oauth/google`, { // Update with your actual Postman endpoint
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken: idToken }), // Your API expectation
+    });
+
+    console.log("Raw Response Status:", res.status);
+
+    const data = await res.json();
+
+    console.log("Full Auth API Data:", data);
+
+    // debug info to help trace why details fetch may fail
+    
+
+    // Extract tokens (support multiple response shapes)
+    const accessToken = data.token?.access || data.access;
+    const refreshToken = data.token?.refresh || data.refresh || null;
+
+    console.log("Extracted Access Token:", accessToken ? "Found" : "NOT FOUND");
+  console.log("Extracted Refresh Token:", refreshToken ? "Found" : "NOT FOUND");
+
+    if (accessToken) {
+      // Save both tokens when present to enable refresh flows
+      saveTokens(accessToken, refreshToken);
+
+      if (data.login_success === false) {
+        const partialUser = {
+          email: data.data?.email,
+          firstName: data.data?.first_name,
+          lastName: data.data?.last_name,
+          isRegistrationIncomplete: true,
+          isGoogleUser: true
+        };
+        setUser(partialUser);
+        return { ...data, needsRegistration: true, partialUser };
+      }
+
+      try {
+        const profile = await getProfile();
+        return { ...data, needsRegistration: false, user: profile };
+      } catch (err) {
+        console.warn("Profile fetch failed, using data from login response:", err);
+        if (data.user) {
+          setUser(data.user);
+          return { ...data, needsRegistration: false };
+        }
+        throw err;
+      }
+      // Fetch user details to sync the state. Pass the refresh token so apiCall can refresh if needed.
+
+    }
+    return data;
   };
 
   // ---- signup step-by-step APIs ----
@@ -213,6 +292,7 @@ export function AuthProvider({ children }) {
       throw new Error("Cannot check email availability");
     }
     const data = await res.json(); // { exists: boolean }
+    console.log("checkEmail response data:", data);
     return data.exists;
   };
 
@@ -256,6 +336,7 @@ export function AuthProvider({ children }) {
       throw new Error(err.message || "Cannot save password");
     }
     const data = await res.json();
+    console.log("create_user/email response data:", data);
     const accessToken = data.access;
     const refreshToken = data.refresh;
 
@@ -287,10 +368,16 @@ export function AuthProvider({ children }) {
 
   // final signup – creates account + logs in
   const signup = async (payload) => {
+    const currentToken = accessToken || loadTokens()?.accessToken || loadSessionTokens()?.accessToken;
+
+    if (!currentToken) {
+      throw new Error("Session expired. Please sign in with Google again.");
+    } 
+
     const res = await apiCall(`/accounts/register_user/email`, {
       method: "POST",
       body: JSON.stringify(payload), // { username, firstName, lastName, mobile, gender, dob }
-    });
+    }, currentToken);
 
     if (!res.ok) {
       const text = await res.text();
@@ -305,10 +392,11 @@ export function AuthProvider({ children }) {
     }
 
     const data = await res.json();
-    const accessToken = data.token?.access;
-    const refreshToken = data.token?.refresh;
-    if (accessToken) {
-      saveTokens(accessToken, refreshToken);
+    console.log("Final signup response data:", data);
+    const finalAccess = data.token?.access; 
+    const finalRefresh = data.token?.refresh;
+    if (finalAccess) {
+      saveTokens(finalAccess, finalRefresh);
     }
     setUser(data.user || { username: payload.username });  // Fallback
     return data;
@@ -383,7 +471,7 @@ export function AuthProvider({ children }) {
   const value = {
     user,
     loading,
-    isAuthenticated: !!user || !!accessToken,
+    isAuthenticated: !!user && !!accessToken,
 
     // core auth
     login,

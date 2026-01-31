@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import Lenis from 'lenis';
 
 import './App.css';
-import { AuthProvider } from "./contexts/AuthContext.jsx";
 
 import ScrollToTop from './components/ScrollToTop';
 import Navbar from './components/Navbar';
@@ -35,7 +34,6 @@ function App() {
   }, []);
 
   return (
-    <AuthProvider> 
     <Router>
       <div className="app-root">
         <ScrollToTop />
@@ -59,7 +57,6 @@ function App() {
         <Footer />
       </div>
     </Router>
-    </AuthProvider>
   );
 }
 

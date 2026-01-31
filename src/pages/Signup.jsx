@@ -29,23 +29,7 @@ export default function Signup() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    setError("");
-    setLoading(true);
-    try {
-      // credentialResponse.credential is the JWT idToken from Google
-      const result = await loginWithGoogle(credentialResponse.credential);
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      if (result) {
-        navigate("/profile");
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   const handleChange = (e) => {
     let value = e.target.value;
@@ -158,6 +142,32 @@ export default function Signup() {
     }
   }; 
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+  setError("");
+  setLoading(true);
+  try {
+    const data = await loginWithGoogle(credentialResponse.credential);
+    if (data?.needsRegistration) {
+      const gUser = data.partialUser || data.data || {};
+      setForm(prev => ({
+        ...prev,
+        email: gUser.email || '',
+        firstName: gUser.firstName || gUser.first_name || '',
+        lastName: gUser.lastName || gUser.last_name || '',
+        isGoogleUser: true,
+        hasGoogleLastName: !!(gUser.lastName || gUser.last_name)
+      }));
+      setStep(4);
+    } else {
+      navigate("/profile");
+    }
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
     <section className={styles.page}>
       <div className={styles.container}>
@@ -209,12 +219,9 @@ export default function Signup() {
 
               <div className={styles.googleWrapper}>
                 <GoogleLogin
-                  onSuccess={handleGoogleSuccess}
-                  onError={() => setError("Google login failed")}
-                  useOneTap={false}
-                  theme="filled_black"
-                  shape="pill"
-                />
+    onSuccess={handleGoogleSuccess}
+    onError={() => setError("Google Signup Failed")}
+  />
               </div>
             </div>
           )}
@@ -356,7 +363,8 @@ export default function Signup() {
                     value={form.firstName}
                     onChange={handleChange}
                     className={styles.input}
-                    disabled={loading}
+                    disabled={loading || form.isGoogleUser}
+                    readOnly={form.isGoogleUser}
                   />
                 </div>
                 <div className={styles.field}>
@@ -366,7 +374,9 @@ export default function Signup() {
                     value={form.lastName}
                     onChange={handleChange}
                     className={styles.input}
-                    disabled={loading}
+                    disabled={loading || (form.isGoogleUser && form.hasGoogleLastName)}
+                    readOnly={form.isGoogleUser && form.hasGoogleLastName}
+                    placeholder={!form.hasGoogleLastName ? "Enter your last name" : ""}
                   />
                 </div>
               </div>
