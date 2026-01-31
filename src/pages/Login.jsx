@@ -34,10 +34,20 @@ export default function Login() {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-  try {
+    setError("");
     setLoading(true);
-    await auth.loginWithGoogle(credentialResponse.credential);
-    navigate('/profile');
+  try {
+    const data = await auth.loginWithGoogle(credentialResponse.credential);
+    if (data?.needsRegistration) {
+      navigate('/signup', {
+        state: {
+          fromGoogleLogin: true,
+          partialUser: data.partialUser
+        }
+      }); 
+    } else {
+      navigate('/profile');
+    }
   } catch (err) {
     setError(err.message);
   } finally {

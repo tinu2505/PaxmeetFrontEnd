@@ -62,12 +62,23 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const loadPartialUser = () => {
+    const raw = sessionStorage.getItem("paxmeet_partial_user");
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }; 
+
   const clearTokens = () => {
     setAccessToken(null);
     setRefreshToken(null);
     localStorage.removeItem("paxmeet_tokens");
     sessionStorage.removeItem("paxmeet_tokens_session");
-  };
+    sessionStorage.removeItem("paxmeet_partial_user");
+  }; 
 
   // ---- token refresh ----
   const refreshAccessToken = useCallback(async (manualRefreshToken = null) => {
@@ -151,24 +162,55 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const init = async () => {
       const saved = loadTokens();
-      if (!saved) {
+      const session = loadSessionTokens();
+      const partial = loadPartialUser();
+
+      // If neither persistent nor session tokens exist, we're unauthenticated
+      if (!saved && !session) {
         setLoading(false);
         return;
       }
 
-      setAccessToken(saved.accessToken);
-      setRefreshToken(saved.refreshToken);
+      // Prefer persistent tokens (with refresh) but accept session-only access tokens
+      if (saved) {
+        setAccessToken(saved.accessToken);
+        setRefreshToken(saved.refreshToken);
+      } else if (session) {
+        setAccessToken(session.accessToken);
+        setRefreshToken(null);
+      }
+
+      // If we have a persisted partial user, restore it so refresh won't drop registration progress
+      if (partial && !saved) {
+        setUser(partial);
+      }
 
       try {
-        const res = await apiCall("/accounts/details", { method: "GET" }, saved.accessToken, saved.refreshToken);
+        const res = await apiCall(
+          "/accounts/details",
+          { method: "GET" },
+          saved?.accessToken || session?.accessToken,
+          saved?.refreshToken || null
+        );
+
         if (res.ok) {
           const data = await res.json();
           setUser(data);
         } else if (res.status === 401) {
-          // Details endpoint refused the token and refresh wasn't possible — clear stored tokens
-          console.warn('Auth init: /accounts/details returned 401; clearing stored tokens');
-          clearTokens();
-          setUser(null);
+          // If we used a session token and have a persisted partial user, keep the partial user and don't clear session token
+          if (session && partial) {
+            console.warn('Auth init: /accounts/details returned 401 for session token, restoring partial user and retaining token');
+            setUser(partial);
+            // do not clear session token so user can continue registration
+          } else {
+            if (saved) {
+              console.warn('Auth init: /accounts/details returned 401 for persistent token; clearing stored tokens');
+            } else {
+              console.warn('Auth init: /accounts/details returned 401 for session token; clearing session token');
+            }
+            clearTokens();
+            setUser(null);
+          }
         }
       } catch (e) {
         console.error("Auth init failed:", e);
@@ -206,6 +248,7 @@ export function AuthProvider({ children }) {
       const userRes = await apiCall('/accounts/details', { method: 'GET' }, accessToken);
       if (userRes.ok) {
         const userData = await userRes.json();
+        console.log('Fetched user details after login:', userData);
         setUser(userData);
         return userData;
       }
@@ -260,6 +303,8 @@ export function AuthProvider({ children }) {
           isRegistrationIncomplete: true,
           isGoogleUser: true
         };
+        // persist partial user so page reload won't log the user out
+        try { sessionStorage.setItem("paxmeet_partial_user", JSON.stringify(partialUser)); } catch (e) { console.warn('Failed to persist partial user', e); }
         setUser(partialUser);
         return { ...data, needsRegistration: true, partialUser };
       }
@@ -398,8 +443,10 @@ export function AuthProvider({ children }) {
     if (finalAccess) {
       saveTokens(finalAccess, finalRefresh);
     }
+    // completed signup -> remove any persisted partial user
+    sessionStorage.removeItem("paxmeet_partial_user");
     setUser(data.user || { username: payload.username });  // Fallback
-    return data;
+    return data; 
   };
 
   // ---- forgot password APIs ----

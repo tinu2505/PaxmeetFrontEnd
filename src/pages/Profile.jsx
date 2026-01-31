@@ -48,7 +48,7 @@ export default function Profile() {
               {user.name?.split(' ').map(n => n[0]).join('').toUpperCase()}
             </div>
             <div className="text-center md:text-left flex-1">
-              <h1 className={styles.title}>{user.name || 'User'}</h1>
+              <h1 className={styles.title}>{user.first_name || 'User'}</h1>
               <p className="text-[var(--text-secondary)] text-lg mb-1">{user.email}</p>
               {user.username && (
                 <p className="text-[var(--primary-light)] font-semibold">@ {user.username}</p>

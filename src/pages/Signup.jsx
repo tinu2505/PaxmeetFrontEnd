@@ -1,6 +1,6 @@
 // src/pages/Signup.jsx
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { GoogleLogin } from '@react-oauth/google';
 import styles from './AuthForms.module.css';  // NEW IMPORT
@@ -12,6 +12,7 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
 export default function Signup() {
   const { signup, checkEmail, sendSignupOtp, verifySignupOtp, setSignupPassword, checkUsername, loginWithGoogle, } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState(1);
   const [checking, setChecking] = useState(false);
   const [form, setForm] = useState({
@@ -29,7 +30,20 @@ export default function Signup() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  
+  useEffect(() => {
+    if (location.state?.fromGoogleLogin && location.state?.partialUser) {
+      const gUser = location.state.partialUser;
+      setForm(prev => ({
+        ...prev,
+        email: gUser.email || '',
+        firstName: gUser.firstName || '',
+        lastName: gUser.lastName || '',
+        isGoogleUser: true,
+        hasGoogleLastName: !!gUser.lastName
+      }));
+      setStep(4);
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     let value = e.target.value;
