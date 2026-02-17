@@ -41,7 +41,9 @@ function App() {
     <Router>
       <div className="app-root">
         <ScrollToTop />
-        <Navbar />
+        {!window.location.pathname.startsWith('/admin') && <Navbar />}
+
+        
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -56,19 +58,15 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/events/:eventId" element={<EventDetail />} />
-            <Route path="/admin" element={
-              
-                <AdminLayout />
-              
-            }
-          >
-            <Route index element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="users" element={<AdminUsers />} />
-          </Route>
+
+            <Route path="/admin" element={<AdminLayout />} >
+              <Route index element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+            </Route>
           </Routes>
         </main>
-        <Footer />
+        {!window.location.pathname.startsWith('/admin') && <Footer />}
       </div>
     </Router>
   );

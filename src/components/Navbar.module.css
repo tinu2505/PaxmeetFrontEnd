@@ -1,295 +1,127 @@
-.container {
-  margin: 0 auto;
-  padding: 0 1rem;
+.navbarContainer {
+  position: fixed;
+  top: 20px;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 40px;
   height: 70px;
-}
-
-.mobileMenuBtn,
-.logo,
-.profileBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mobileMenuBtn,
-.profileBtn {
-  flex: 0 0 40px;          /* fixed width icons on sides */
-}
-
-/* Dark theme background with gradient */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   z-index: 1000;
-  background: rgba(5, 5, 9, 0.96);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
-  border-bottom: 1px solid rgba(124, 63, 224, 0.5);
-  font-family: 'Poppins', sans-serif;
+  background: transparent;
+  transition: transform 0.45s cubic-bezier(.22,.9,.35,1), opacity 0.35s ease, background 0.3s ease, top 0.3s ease;
 }
 
-/* Logo */
-.logo {
+/* Navbar state when page has scrolled past the hero */
+.navbarContainer[data-scrolled="true"] {
+  background: rgba(255,255,255,0.97);
+  top: 0; /* tighten to top when visible after hero */
+  box-shadow: 0 8px 30px rgba(2,6,23,0.08);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* make pill/controls readable on the white background */
+.navbarContainer[data-scrolled="true"] .navLink {
+  color: #111827;
+}
+.navbarContainer[data-scrolled="true"] .menuBtn {
+  background: rgba(0,0,0,0.06);
+  color: #111827;
+  border-color: rgba(0,0,0,0.08);
+} 
+
+.logoSection {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.logo img {
-  height: 36px;
-  width: auto;
-  display: block;
-  object-fit: contain;
+.logo {
+  height: 56px;
 }
 
-/* Navigation Links - Desktop */
-.navLinks {
-  display: none;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 2rem;
+/* The Pill Container */
+.navPill {
+  display: flex;
+  align-items: center;
+  background: #171717;
+  backdrop-filter: blur(15px);
+  border: 2px solid #cbcbcb;
+  padding: 6px;
+  border-radius: 50px;
+  gap: 5px;
+  overflow: hidden; 
+  white-space: nowrap;
 }
 
 .navLink {
-  color: var(--color-text);
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
-  font-weight: 500;
-  font-size: 0.98rem;
-  padding: 0.5rem 0.75rem;
-  position: relative;
-  transition: all 0.25s ease;
-}
-
-.navLink:hover {
-  color: var(--color-highlight); 
-  transform: translateY(-1px);
-}
-
-.navLink::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-highlight));
-  transition: width 0.25s ease;
-}
-
-.navLink:hover::after {
-  width: 100%;
-}
-
-/* Primary Button */
-.primaryBtn, .joinBtn {
-  background: var(--color-primary);
-  color: #ffffff;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.25s ease;
-  box-shadow:  10px 25px rgba(115, 50, 214, 0.55);
-}
-
-.primaryBtn:hover, .joinBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(124, 63, 224, 0.7);
-}
-
-/* Right Section */
-.rightSection {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Profile Button */
-.profileBtn {
-  background: rgba(21, 21, 21, 0.9);
-  width: 35px;
-  height: 30px;
-  padding: 2px;
-  border-radius: 50%;
-  color: var(--color-text);
-  font-size: 1.05rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: flex;
-  justify-content: center;
-  backdrop-filter: blur(15px);
-  align-items: center;
-  background: url("src/assets/images/user.png") center/contain no-repeat;
-}
-
-.profileBtn:hover {
-  transform: scale(1.05);
-}
-
-/* Remove default focus outline on click; provide subtle focus-visible for keyboard users */
-.profileBtn:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.profileBtn:focus-visible {
-  outline: 2px solid rgba(124, 63, 224, 0.18);
-  outline-offset: 2px;
-}
-
-.profileBtn::-moz-focus-inner {
-  border: 0;
-}
-
-/* Profile Dropdown */
-.profileDropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: #111111;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-  min-width: 190px;
-  overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
+  padding: 8px 24px;
+  border-radius: 100px;
+  font-size: 20px;
+  font-weight: 400;
   transition: all 0.3s ease;
 }
 
-.profileDropdown.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+.navLink:hover {
+  color: white;
 }
 
-.dropdownItem {
-  display: block;
-  padding: 0.8rem 1.1rem;
-  color: var(--color-text);
+/* Active State matches the purple pill in image */
+.activeLink {
+  background: #7332D6;
+  color: white;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: background 0.2s ease, color 0.2s ease;
+  padding: 8px 24px;
+  border-radius: 100px;
+  font-size: 20px;
+  font-weight: 400;
+  box-shadow: 0 4px 15px rgba(115, 50, 214, 0.3);
 }
 
-.dropdownItem:hover {
-  background: rgba(124, 63, 224, 0.12);
-  color: var(--color-highlight);
-}
-
-.divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  margin: 0;
-  border: none;
-}
-
-/* Mobile Menu Button */
-.mobileMenuBtn {
+/* Right Menu Button */
+.actionSection {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  padding: 8px;
+  gap: 20px;
+  width: 202px;
+  height: 63px;
+}
+
+.menuBtn {
+  background: #171717;
+  backdrop-filter: blur(15px);
+  border: 1px solid #cbcbcb;
+  color: white;
+  padding: 6px 6px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   cursor: pointer;
-  z-index: 1001;
+  transition: background 0.3s;
 }
 
-.hamburgerLine {
-  width: 24px;
-  height: 2px;
-  background: var(--color-primary);
-  box-shadow: 0 0 10px rgba(115, 50, 214, 0.6);
-  transition: all 0.25s ease;
-  transform-origin: center;
+.menuBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.hamburgerLine.active {
-  box-shadow: 0 0 20px rgba(255, 107, 157, 0.8);
+.menuBtn p {
+  padding: 20px 40px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
 }
 
-.hamburgerLine.active:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
+.dots {
+  padding-right: 20px;
+  gap: 10px;
 }
 
-.hamburgerLine.active:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburgerLine.active:nth-child(3) {
-  transform: rotate(-45deg) translate(2.9px, -4px);
-}
-
-/* Mobile Nav Links */
-.navLinks.mobileOpen {
-  display: flex !important;
-  flex-direction: column;
-  position: fixed;
-  top: 70px;
-  left: 0;
-  right: 0;
-  background: rgba(26, 26, 46, 0.98);
-  backdrop-filter: blur(20px);
-  padding: 2rem 1rem;
-  gap: 1rem;
-  animation: slideDown 0.4s ease;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Desktop Styles */
-@media (min-width: 1024px) {
-  .navLinks {
-    display: flex;
-  }
-  
-  .mobileMenuBtn {
-    display: none;
-  }
-  
-  .rightSection {
-    gap: 1.5rem;
-  }
-  
-  .joinBtn {
-    padding: 0.875rem 2rem;
-    font-size: 1rem;
-  }
-}
-
-/* Large Desktop */
-@media (min-width: 1280px) {
-  .container {
-    padding: 0 2rem;
-  }
-}
-
-@media (max-width: 1023px) {
-  .container { justify-content: space-between; }
-  .logo { flex: 1; text-align: center; }
-  .mobileMenuBtn, .profileBtn { flex: 0 0 40px; }
+.dots img {
+  width: 40px;
+  height: 40px;
 }

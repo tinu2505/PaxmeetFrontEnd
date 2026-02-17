@@ -1,499 +1,281 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { TextPlugin } from 'gsap/TextPlugin';
 import styles from './Home.module.css';
 import EventCard from "./EventCard";
 
-import heroImg1 from '../assets/images/heroImg1.png';
-import heroImg2 from '../assets/images/heroImg2.png';
-import heroImg3 from '../assets/images/heroImg3.png';
-import heroImg4 from '../assets/images/heroImg4.png';
-
-const heroImg = [
-  { image: heroImg1 },
-  { image: heroImg2 },
-  { image: heroImg3 },
-  { image: heroImg4 },
-];
-
-const mockEvents = [
-  {
-    id: 1,
-    title: "Travis Scott",
-    city: "Delhi",
-    location: "Chandni Chowk, Delhi",
-    date: "30 SEP",
-    day: "Friday",
-    price: 200,
-    image: "src/assets/images/--eventcardimage.png",
-    avatar1: "src/assets/images/avatar1.png",
-    avatar2: "src/assets/images/avatar2.png",
-    goingText: "56 going",
-    distance: "200 meters",
-    distanceSub: "from your location",
-    likes: "11k",
-    views: "121k",
-    tags: ["Music Event", "Chill vibe", "Chill vibe"],
-  },
-  {
-    id: 2,
-    title: "Travis Scott",
-    city: "Delhi",
-    location: "Chandni Chowk, Delhi",
-    date: "30 SEP",
-    day: "Friday",
-    price: 200,
-    image: "src/assets/images/--eventcardimage.png",
-    avatar1: "src/assets/images/avatar1.png",
-    avatar2: "src/assets/images/avatar2.png",
-    goingText: "56 going",
-    distance: "200 meters",
-    distanceSub: "from your location",
-    likes: "11k",
-    views: "121k",
-    tags: ["Music Event", "Chill vibe", "Chill vibe"],
-  },
-  {
-    id: 3,
-    title: "Travis Scott",
-    city: "Delhi",
-    location: "Chandni Chowk, Delhi",
-    date: "30 SEP",
-    day: "Friday",
-    price: 200,
-    image: "src/assets/images/--eventcardimage.png",
-    avatar1: "src/assets/images/avatar1.png",
-    avatar2: "src/assets/images/avatar2.png",
-    goingText: "56 going",
-    distance: "200 meters",
-    distanceSub: "from your location",
-    likes: "11k",
-    views: "121k",
-    tags: ["Music Event", "Chill vibe", "Chill vibe"],
-  },
-  {
-    id: 4,
-    title: "Travis Scott",
-    city: "Delhi",
-    location: "Chandni Chowk, Delhi",
-    date: "30 SEP",
-    day: "Friday",
-    price: 200,
-    image: "src/assets/images/--eventcardimage.png",
-    avatar1: "src/assets/images/avatar1.png",
-    avatar2: "src/assets/images/avatar2.png",
-    goingText: "56 going",
-    distance: "200 meters",
-    distanceSub: "from your location",
-    likes: "11k",
-    views: "121k",
-    tags: ["Music Event", "Chill vibe", "Chill vibe"],
-  },
-  {
-    id: 5,
-    title: "Travis Scott",
-    city: "Delhi",
-    location: "Chandni Chowk, Delhi",
-    date: "30 SEP",
-    day: "Friday",
-    price: 200,
-    image: "src/assets/images/--eventcardimage.png",
-    avatar1: "src/assets/images/avatar1.png",
-    avatar2: "src/assets/images/avatar2.png",
-    goingText: "56 going",
-    distance: "200 meters",
-    distanceSub: "from your location",
-    likes: "11k",
-    views: "121k",
-    tags: ["Music Event", "Chill vibe", "Chill vibe"],
-  },
-  {
-    id: 6,
-    title: "Travis Scott",
-    city: "Delhi",
-    location: "Chandni Chowk, Delhi",
-    date: "30 SEP",
-    day: "Friday",
-    price: 200,
-    image: "src/assets/images/--eventcardimage.png",
-    avatar1: "src/assets/images/avatar1.png",
-    avatar2: "src/assets/images/avatar2.png",
-    goingText: "56 going",
-    distance: "200 meters",
-    distanceSub: "from your location",
-    likes: "11k",
-    views: "121k",
-    tags: ["Music Event", "Chill vibe", "Chill vibe"],
-  },
-];
-
-const mockCategories = [
-  { id: 1, title: 'Treks', subtitle: 'Adventure awaits', img: 'src/assets/images/category.png' },
-  { id: 2, title: 'Meetups', subtitle: 'Connect locally', img: 'src/assets/images/category.png' },
-  { id: 3, title: 'Workshops', subtitle: 'Learn skills', img: 'src/assets/images/category.png' },
-  { id: 4, title: 'Concerts', subtitle: 'Live music', img: 'src/assets/images/category.png' },
-  { id: 5, title: 'Sports', subtitle: 'Play together', img: 'src/assets/images/category.png' },
-  { id: 6, title: 'Kids', subtitle: 'Play together', img: 'src/assets/images/category.png' },
-  { id: 7, title: 'Music', subtitle: 'Play together', img: 'src/assets/images/category.png' },
-  { id: 8, title: 'Movies', subtitle: 'Play together', img: 'src/assets/images/category.png' },
-  { id: 9, title: 'Hangout', subtitle: 'Play together', img: 'src/assets/images/category.png' },
-];
-
-const whyChooseUs = [
-  { title: 'Real Connections', desc: 'Meet people who share your passions, not just profiles.', icon: '👥' },
-  { title: 'Local Events', desc: 'Discover events happening in your city this weekend.', icon: '📍' },
-  { title: 'Trusted Hosts', desc: 'Every organizer is verified for quality experiences.', icon: '✅' },
-];
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
 export default function Home() {
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null); // Ref for the h1
+  const subtitleRef = useRef(null); // Ref for the p
+  const phoneRef = useRef(null);
+  const overlayRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    const tl = gsap.timeline();
+
+    // 1. Animate Navbar first (assuming your Navbar has these classes)
+    tl.fromTo("#site-navbar", 
+      { y: -100, opacity: 0 }, 
+      { y: 0, opacity: 1, duration: 1, ease: "power4.out" }
+    );
+
+    tl.fromTo("#navbar-logo", 
+      { x: -30, opacity: 0 }, 
+      { x: 0, opacity: 1, duration: 0.7, ease: "power3.out" }
+    );
+
+    tl.fromTo("#navbar-links",
+      { 
+        clipPath: "inset(0 100% 0 0)", // Fully hidden on the right
+        opacity: 0 
+      },
+      { 
+        clipPath: "inset(0 0% 0 0)",   // Fully revealed
+        opacity: 1, 
+        duration: 1, 
+        ease: "power3.inOut" 
+      },
+      "-=0.4" // Overlap slightly with the logo
+    );
+
+    tl.fromTo("#navbar-links a", 
+      { y: 15, opacity: 0, scale: 0.9 }, 
+      { 
+        y: 0, 
+        opacity: 1, 
+        scale: 1, 
+        duration: 0.5, 
+        stagger: 0.12, // This creates the "one-by-one" effect
+        ease: "back.out(1.7)" 
+      }, 
+      "-=0.6" // Starts while the logo is still animating
+    );
+
+    tl.fromTo("#navbar-action", 
+      { x: 30, opacity: 0 }, 
+      { x: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 
+      "-=0.5"
+    );
+
+    // 2. "Write down" the Title
+    // Note: Start with an empty string in the JSX or clear it here
+    const originalTitle = "Turn your plan into a real-world hangout.";
+    tl.to(titleRef.current, {
+      duration: 1.5,
+      text: originalTitle,
+      ease: "none",
+    }, "-=0.3"); // Start slightly before navbar finishes
+
+    // 3. "Write down" the Subtitle
+    const originalSubtitle = "Looking for people to host & join events? Paxmeet helps you find your vibe & build it together.";
+    tl.to(subtitleRef.current, {
+      duration: 2.5,
+      text: originalSubtitle,
+      ease: "none",
+    }, "-=0.5");
+
+    // 4. Fade in the buttons
+    tl.fromTo(`.${styles.ctaGroup}`, 
+      { opacity: 0, y: 20 }, 
+      { opacity: 1, y: 0, duration: 0.8 }, 
+      "-=1"
+    );
+
+    tl.fromTo(phoneRef.current,
+      {
+        y: 300,        // Start 300px below its final position
+        opacity: 0,    // Start invisible
+        scale: 0.9,  // Start slightly smaller
+      },
+      {
+        y: 0, 
+        opacity: 1, 
+        scale: 1, 
+        duration: 1.5, 
+        ease: "power3.out",
+      },
+      "-=0.8" // Start at the same time as the buttons
+    );
+
+    tl.fromTo(`.${styles.phoneScreen}`,
+      {y: 20, opacity: 0},
+      {y: 0, opacity: 1, duration: 1, ease: "power2.out"},
+      "-=0.5"
+    );
+  }, []);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // ensure floating cards are hidden on first render — they'll animate in when hero becomes white
+      gsap.set(cardsRef.current, { y: 40, opacity: 0, scale: 0.95 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "+=150%", // Longer scroll for smoother transition
+          scrub: 1,      // Adds a slight "catch-up" delay for smoothness
+          pin: true,
+        }
+      });
+
+      tl.to(phoneRef.current, {
+        scale: 1.7,
+        y: "-5vh",         // Slight upward movement
+        transformOrigin: "bottom center",
+        ease: "power2.inOut",
+        duration: 1
+      }, 0);
+
+      tl.to(`.${styles.heroContent}`, {
+        opacity: 0,
+        y: -100,
+        ease: "power2.in",
+        duration: 0.7,
+      }, 0);
+
+      // fade white overlay in behind the phone while text fades out
+      tl.to(overlayRef.current, {
+        y: "-100%",
+        ease: "power1.inOut",
+        duration: 0.9,
+      }, 0); // start with phone/text animation
+
+      cardsRef.current.forEach((card, index) => {
+        if (!card) return;
+        tl.to(card, {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          ease: "back.out(1.7)",
+        }, 0.75 + (index * 0.1));
+      });
+
+      // NAVBAR: slide it away while the hero is active, then restore it (with a solid background)
+      const navEl = document.getElementById('site-navbar');
+      let navHideTween;
+      let navScrollTrigger;
+
+      if (navEl) {
+        // hide navbar progressively while hero is visible (scrubs as you scroll)
+        navHideTween = gsap.to(navEl, {
+          y: -120,
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          }
+        });
+
+        // when the hero fully leaves / re-enters the viewport, toggle the 'scrolled' state
+        navScrollTrigger = ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'bottom top',
+          onEnter: () => {
+            // hero left the viewport -> show navbar (scrolled state)
+            navEl.setAttribute('data-scrolled', 'true');
+            gsap.to(navEl, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
+          },
+          onEnterBack: () => {
+            // user scrolled back up into the hero/top -> restore hero state and ensure navbar is visible again
+            navEl.removeAttribute('data-scrolled');
+            gsap.to(navEl, { y: 0, opacity: 1, duration: 0.25, ease: 'power2.out', overwrite: 'auto' });
+          }
+        });
+
+        // Extra: while inside the hero, show navbar immediately when the user scrolls UP
+        // (fixes cases where a small upward scroll didn't visibly restore the navbar)
+        const navShowOnUp = ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          onUpdate: (self) => {
+            if (self.direction < 0) { // scrolling up
+              navEl.removeAttribute('data-scrolled');
+              gsap.to(navEl, { y: 0, opacity: 1, duration: 0.20, ease: 'power2.out', overwrite: 'auto' });
+            }
+          }
+        });
+      
+        // store for cleanup
+        navScrollTrigger._navShowOnUp = navShowOnUp;
+      }
+
+      // cleanup for any nav tweens/ScrollTriggers so navbar isn't left hidden after leaving Home
+      return () => {
+        if (navHideTween) {
+          navHideTween.scrollTrigger && navHideTween.scrollTrigger.kill();
+          navHideTween.kill();
+        }
+        if (navScrollTrigger) {
+          // also kill the helper trigger created for 'show on up' when present
+          if (navScrollTrigger._navShowOnUp) navScrollTrigger._navShowOnUp.kill();
+          navScrollTrigger.kill();
+        }
+        if (navEl) {
+          // clear inline styles GSAP may have applied so other pages see the navbar normally
+          navEl.style.transform = '';
+          navEl.style.opacity = '';
+          navEl.removeAttribute('data-scrolled');
+        }
+      };
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <>
-      {/* Hero Section - Dark 
-      <section className={`${styles.heroSection} `}>
-        <div className={styles.container}>
-          <motion.div 
-            className={styles.heroContent}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className={styles.heroTitle}>
-              Discover <span className={styles.gradientText}>Amazing</span> Events Near You
-            </h1>
-            <p className={styles.heroSubtitle}>
-              Join thousands exploring treks, workshops, meetups, and unforgettable experiences in their city.
-            </p>
-            <div className={styles.heroCTAs}>
-              <Link to="/events" className={`${styles.primaryBtn} ${styles.heroPrimaryCTA}`}>
-                Explore Events
-              </Link>
-              <Link to="/download" className={`${styles.secondaryBtn} ${styles.heroSecondaryCTA}`}>
-                Get the App
-              </Link>
-            </div>
-          </motion.div>
+    <div ref={sectionRef} className={styles.heroWrapper}>
+      <div className={styles.heroContent}>
+        <h1 ref={titleRef} className={styles.heroTitle}></h1>
+        <p ref={subtitleRef} className={styles.heroSubtitle}></p>
+        <div className={styles.ctaGroup}>
+          <button className={styles.primaryBtn}>Explore Events</button>
+          <button className={styles.secondaryBtn}>Get the App</button>
         </div>
-      </section>*/}
+      </div>
 
-      {/* New Figma hero */}
-      <motion.section className={styles.figmaHeroSection}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.75 }}
-      >
-        <div className={styles.figmaHeroInner}>
-          {/* Left text block */}
-          <motion.div className={styles.figmaHeroTextBlock}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <motion.h1 className={styles.figmaHeroTitleHang}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              Hang <span className={styles.figmaHeroTitleBorder}>out</span>
-            </motion.h1>
+      <div ref={overlayRef} className={styles.whiteOverlay} aria-hidden="true" />
 
-            <motion.h1 className={styles.figmaHeroTitleMore}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
-              MORE
-            </motion.h1>
+      {/* Central Phone App Image */}
+      <div ref={phoneRef} className={styles.phoneContainer}>
+        <img src="src/assets/images/herophone.png" alt="Hand Holding Phone" className={styles.phoneBase} />
+        <img src="src/assets/images/herophonescreen.png" alt="Paxmeet App Screen" className={styles.phoneScreen} />
+      </div>
 
-            <motion.div className={styles.figmaHeroSwipeRow}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.45 }}
-            >
-              <span className={styles.figmaHeroSwipe}>SWIPE</span>
-              <span className={styles.figmaHeroLess}>LESS</span>
-            </motion.div>
+      {/* Floating Components in Home.jsx */}
+      <div ref={el => cardsRef.current[0] = el} className={`${styles.floatCard} ${styles.wildCard}`}>
+        <div className={styles.accentOrange} /> {/* Orange accent for Wild Card */}
+        <img src="src/assets/images/paxmet gallery 10.png" alt="Wild Card" />
+        <span className={styles.cardTag}>Wild Card</span>
+      </div>
 
-            <motion.p className={styles.figmaHeroSubtitle}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              Discover real events, real people, and real memories – not endless profiles.
-            </motion.p>
+      <div ref={el => cardsRef.current[1] = el} className={`${styles.floatCard} ${styles.nightOutTop}`}>
+        <div className={styles.accentGreen} /> {/* Green accent for Night Out */}
+        <img src="src/assets/images/paxmet gallery 4.png" alt="Night Out" />
+        <span className={styles.cardTag}>Night Out</span>
+      </div>
 
-            <motion.div className={styles.figmaHeroCTAGroup}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.75 }}
-            >
-              <motion.button className={styles.figmaHeroPrimaryBtn}
-                whileTap={{ scale: 0.98 }}
-              >
-                Explore events
-              </motion.button>
-              <motion.button className={styles.figmaHeroSecondaryBtn}
-                whileTap={{ scale: 0.98 }}
-              >
-                Become a host
-              </motion.button>
-            </motion.div>
-          </motion.div>
+      <div ref={el => cardsRef.current[2] = el} className={`${styles.floatCard} ${styles.nightOutBottom}`}>
+        <div className={styles.accentPink} /> {/* Pink accent for Night Out */}
+        <img src="src/assets/images/paxmet gallery 5.png" alt="Night Out" />
+        <span className={styles.cardTag}>Night Out</span>
+      </div>
 
-          {/* Right cards column */}
-          <motion.div className={styles.figmaHeroCardsColumn}
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <div className={styles.scrollContainer}>
-              <div className={styles.scrollTrack}>
-                {heroImg.map((item, index) => (
-                  <div className={styles.heroImg} key={`a-${index}`}>
-                    <img src={item.image} alt={`hero-${index}`} className={styles.heroImage} />
-                  </div>
-                ))}
-                {heroImg.map((item, index) => (
-                  <div className={styles.heroImg} key={`b-${index}`}>
-                    <img src={item.image} alt={`hero-copy-${index}`} className={styles.heroImage} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </motion.section>
-
-
-      <section className={`${styles.eventsShowcaseSection} ${styles.lightSection}`}>
-        <div className={styles.container}>
-          <motion.h2
-            className={styles.sectionTitle}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Upcoming Events
-          </motion.h2>
-          <motion.div
-          className={styles.eventsScroll}
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className={styles.eventsList}>
-            {mockEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
-        </motion.div>
-        </div>
-      </section>
-
-      {/* Categories Section - Light */}
-      <section className={`${styles.categoriesSection} ${styles.lightSection}`}>
-        <div className={styles.container}>
-          <motion.h2 
-            className={styles.sectionTitle}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Featured Categories
-          </motion.h2>
-          <motion.div 
-            className={styles.categoriesScroll}
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className={styles.categoriesList}>
-              {mockCategories.map((category, index) => (
-                <motion.div
-                  key={category.id}
-                  className={styles.categoryCard}
-                  initial={{ opacity: 0, x: 50 }}
-                  whileInView={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.08 }}
-                  viewport={{ once: true }}
-                >
-                  <div className={styles.categoryImage} style={{ backgroundImage: `url(${category.img})` }}></div>
-                  <div className={styles.categoryContent}>
-                    <h3>{category.title}</h3>
-                    <p>{category.subtitle}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Why Choose Us - Dark */}
-      <section className={`${styles.story} ${styles.darkSection}`}>
-        <div className={styles["story-wrap"]}>
-          {/* Left image column */}
-          <div className={`${styles["story-col"]} ${styles["story-col--left"]}`}>
-            <div className={styles["story-img-block"]}>
-              <img src="src\assets\images\7-35-4x_BSRGAN.png" alt="Story left 1" />
-              <h3>KYC-Verified Hosts</h3>
-              <p>Every host passes KYC checks so you 
-                join events with verified organizers, not random profiles.</p>
-            </div>
-            <div className={styles["story-img-block"]}>
-              <img src="src\assets\images\14-62-4x_BSRGAN.png" alt="Story left 2" />
-              <h3>Smart Ratings</h3>
-              <p>Ratings blend reviews, attendance history, 
-                and host responsiveness for more honest scores.</p>
-            </div>
-          </div>
-
-          {/* Center sticky text */}
-          <div className={`${styles["story-col"]} ${styles["story-col--center"]}`}>
-            <div className={styles["story-center-inner"]}>
-              <p className={styles["story-kicker"]}>Paxmeet</p>
-              <h2 className={styles["story-title"]}>
-                Why Choose Paxmeet?
-              </h2>
-              <p className={styles["story-text"]}>
-                Founded in 2015, Paxmeet started with a mission to connect travelers
-                with authentic local experiences while promoting sustainable tourism.
-              </p>
-              <p className={styles["story-text"]}>
-                Today, we continue to create immersive experiences that support
-                conservation, communities, and a more thoughtful way of travel.
-              </p>
-              <button className={styles["story-btn"]}>Discover our story</button>
-            </div>
-          </div>
-
-          {/* Right image column */}
-          <div className={`${styles["story-col"]} ${styles["story-col--right"]}`}>
-            <div className={styles["story-img-block"]}>
-              <img src="src\assets\images\7-35-4x_BSRGAN.png" alt="Story right 1" />
-              <h3>Curated For You</h3>
-              <p>Get event suggestions by interest, mood, and budget instead of just distance.</p>
-            </div>
-            <div className={styles["story-img-block"]}>
-              <img src="src\assets\images\traceroute command in linux - Google Search - Google Chrome 13-05-2025 18_00_10.png" alt="Story right 2" />
-              <h3>Safe Group Discovery</h3>
-              <p>Join moderated groups for treks, meets, and hobbies with safety tools built in.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Premium Teaser - Light */}
-      <section className={`${styles.premiumSection} ${styles.lightSection}`}>
-        <div className={styles.container}>
-          <motion.h2 
-            className={styles.sectionTitle}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Go Premium
-          </motion.h2>
-          <div className={styles.premiumGrid}>
-            <motion.div 
-              className={`${styles.premiumCard} ${styles.featured}`}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.05 }}
-              viewport={{ once: true }}
-            >
-              <span className={styles.premiumBadge}>Most popular</span>
-              <h3>Pro Plan</h3>
-              <div className={styles.price}>₹499<span>/month</span></div>
-              <ul>
-                <li>Unlimited events</li>
-                <li>Priority listing</li>
-                <li>Advanced filters</li>
-              </ul>
-              <Link to="/premium" className={styles.primaryBtn}>Choose Pro</Link>
-            </motion.div>
-            <motion.div 
-              className={styles.premiumCard}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.02 }}
-              viewport={{ once: true }}
-            >
-              <h3>Basic</h3>
-              <div className={styles.price}>Free</div>
-              <ul>
-                <li>5 events/month</li>
-                <li>Basic filters</li>
-              </ul>
-              <Link to="/premium" className={styles.primaryBtn}>Get Started</Link>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-      
-      <section className={styles.downloadContactMerge}>
-        {/* Download Promoter - Dark */}
-        <section className={`${styles.downloadSection} ${styles.darkSection}`}>
-          <div className={styles.container}>
-            <motion.div 
-              className={styles.downloadContent}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className={styles.sectionTitle}>Download Paxmeet App</h2>
-              <p className={styles.downloadSubtitle}>Get tickets, notifications, and exclusive events on the go.</p>
-              <div className={styles.downloadButtons}>
-                <Link to="/download" className={`${styles.primaryBtn} ${styles.largeBtn}`}>
-                  📱 Android App
-                </Link>
-                <Link to="/download" className={`${styles.primaryBtn} ${styles.largeBtn} ${styles.iosBtn}`}>
-                  💻 iOS App
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Contact Form - Light */}
-        <section className={`${styles.contactSection} ${styles.darkSection}`}>
-          <div className={styles.container}>
-            <motion.h2 
-              className={styles.sectionTitle}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              Get In Touch
-            </motion.h2>
-            <motion.form 
-              className={styles.contactForm}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <input type="text" placeholder="Your Name" required />
-              <input type="email" placeholder="Your Email" required />
-              <input type="text" placeholder="Topic" required />
-              <textarea placeholder="Your Message" rows="5" required></textarea>
-              <button type="submit" className={styles.primaryBtn}>Send Message</button>
-            </motion.form>
-          </div>
-        </section>
-      </section>
-      
-    </>
+      <div ref={el => cardsRef.current[3] = el} className={`${styles.floatCard} ${styles.fanZone}`}>
+        <div className={styles.accentBlue} /> {/* Blue accent for Fan Zone */}
+        <img src="src/assets/images/paxmet gallery 2.png" alt="Fan Zone" />
+        <span className={styles.cardTag}>Fan Zone</span>
+      </div>
+    </div>
   );
 }
