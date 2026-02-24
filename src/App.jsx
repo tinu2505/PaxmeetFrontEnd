@@ -37,6 +37,14 @@ function App() {
     return () => lenis.destroy();
   }, []);
 
+  useEffect(() => {
+    // Keep `.preload` for Home so its GSAP timeline controls the reveal.
+    // Remove `.preload` immediately for all other routes to avoid blocking UI.
+    if (window.location.pathname !== '/') {
+      document.body.classList.remove('preload');
+    }
+  }, []);
+
   return (
     <Router>
       <div className="app-root">

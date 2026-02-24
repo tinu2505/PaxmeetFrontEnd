@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
 import styles from './Home.module.css';
 import EventCard from "./EventCard";
+import { div } from 'framer-motion/client';
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
@@ -16,9 +17,28 @@ export default function Home() {
   const phoneRef = useRef(null);
   const overlayRef = useRef(null);
   const cardsRef = useRef([]);
+  const [currentImg, setCurrentImg] = useState(0);
+
+  const offeringImages = [
+    "https://media.paxmeet.com/image3.png",
+    "https://media.paxmeet.com/image4.png",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImg((prev) => (prev + 1) % offeringImages.length);
+    }, 3000); // Changes every 3 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  // hero text constants (used for GSAP typing and preload fallback)
+  const ORIGINAL_TITLE = "Turn your plan into a real-world hangout.";
+  const ORIGINAL_SUBTITLE = "Looking for people to host & join events? Paxmeet helps you find your vibe & build it together.";
 
   useEffect(() => {
     const tl = gsap.timeline();
+    // reveal page elements only when timeline starts (prevent initial flash)
+    tl.call(() => document.body.classList.remove('preload'), null, 0);
 
     // 1. Animate Navbar first (assuming your Navbar has these classes)
     tl.fromTo("#site-navbar", 
@@ -65,19 +85,16 @@ export default function Home() {
     );
 
     // 2. "Write down" the Title
-    // Note: Start with an empty string in the JSX or clear it here
-    const originalTitle = "Turn your plan into a real-world hangout.";
     tl.to(titleRef.current, {
       duration: 1.5,
-      text: originalTitle,
+      text: ORIGINAL_TITLE,
       ease: "none",
     }, "-=0.3"); // Start slightly before navbar finishes
 
     // 3. "Write down" the Subtitle
-    const originalSubtitle = "Looking for people to host & join events? Paxmeet helps you find your vibe & build it together.";
     tl.to(subtitleRef.current, {
       duration: 2.5,
-      text: originalSubtitle,
+      text: ORIGINAL_SUBTITLE,
       ease: "none",
     }, "-=0.5");
 
@@ -120,14 +137,14 @@ export default function Home() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=150%", // Longer scroll for smoother transition
+          end: "+=120%", // Longer scroll for smoother transition
           scrub: 1,      // Adds a slight "catch-up" delay for smoothness
           pin: true,
         }
       });
 
       tl.to(phoneRef.current, {
-        scale: 1.7,
+        scale: 1.5,
         y: "-5vh",         // Slight upward movement
         transformOrigin: "bottom center",
         ease: "power2.inOut",
@@ -234,48 +251,84 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={sectionRef} className={styles.heroWrapper}>
-      <div className={styles.heroContent}>
-        <h1 ref={titleRef} className={styles.heroTitle}></h1>
-        <p ref={subtitleRef} className={styles.heroSubtitle}></p>
-        <div className={styles.ctaGroup}>
-          <button className={styles.primaryBtn}>Explore Events</button>
-          <button className={styles.secondaryBtn}>Get the App</button>
+    <div>
+      <div ref={sectionRef} className={styles.heroWrapper}>
+        <div className={styles.heroContent}>
+          <h1 ref={titleRef} className={styles.heroTitle} data-fallback={ORIGINAL_TITLE}></h1>
+          <p ref={subtitleRef} className={styles.heroSubtitle} data-fallback={ORIGINAL_SUBTITLE}></p>
+          <div className={styles.ctaGroup}>
+            <button className={styles.primaryBtn}>Explore Events</button>
+            <button className={styles.secondaryBtn}>Get the App</button>
+          </div>
+        </div>
+
+        <div ref={overlayRef} className={styles.heroOverlay} aria-hidden="true" />
+
+        {/* Central Phone App Image */}
+        <div ref={phoneRef} className={styles.phoneContainer}>
+          <img src="https://media.paxmeet.com/herophone.png" alt="Hand Holding Phone" className={styles.phoneBase} />
+          <img src="https://media.paxmeet.com/herophonescreen.png" alt="Paxmeet App Screen" className={styles.phoneScreen} />
+        </div>
+
+        {/* Floating Components in Home.jsx */}
+        <div ref={el => cardsRef.current[0] = el} className={`${styles.floatCard} ${styles.wildCard}`}>
+          <div className={styles.accentOrange} /> {/* Orange accent for Wild Card */}
+          <img src="https://media.paxmeet.com/paxmet%20gallery%2010.png" alt="Wild Card" />
+          <span className={styles.cardTag}>Wild Card</span>
+        </div>
+
+        <div ref={el => cardsRef.current[1] = el} className={`${styles.floatCard} ${styles.nightOutTop}`}>
+          <div className={styles.accentGreen} /> {/* Green accent for Night Out */}
+          <img src="https://media.paxmeet.com/paxmet%20gallery%204.png" alt="Night Out" />
+          <span className={styles.cardTag}>Night Out</span>
+        </div>
+
+        <div ref={el => cardsRef.current[2] = el} className={`${styles.floatCard} ${styles.nightOutBottom}`}>
+          <div className={styles.accentPink} /> {/* Pink accent for Night Out */}
+          <img src="https://media.paxmeet.com/paxmet%20gallery%205.png" alt="Night Out" />
+          <span className={styles.cardTag}>Night Out</span>
+        </div>
+
+        <div ref={el => cardsRef.current[3] = el} className={`${styles.floatCard} ${styles.fanZone}`}>
+          <div className={styles.accentBlue} /> {/* Blue accent for Fan Zone */}
+          <img src="https://media.paxmeet.com/paxmet%20gallery%202.png" alt="Fan Zone" />
+          <span className={styles.cardTag}>Fan Zone</span>
         </div>
       </div>
 
-      <div ref={overlayRef} className={styles.whiteOverlay} aria-hidden="true" />
+      <section className={styles.offerSection}>
 
-      {/* Central Phone App Image */}
-      <div ref={phoneRef} className={styles.phoneContainer}>
-        <img src="src/assets/images/herophone.png" alt="Hand Holding Phone" className={styles.phoneBase} />
-        <img src="src/assets/images/herophonescreen.png" alt="Paxmeet App Screen" className={styles.phoneScreen} />
-      </div>
+        <div className={styles.offerHeader}>
+          <h2 className={styles.brandBg}>PAXMEET</h2>
+        </div>
 
-      {/* Floating Components in Home.jsx */}
-      <div ref={el => cardsRef.current[0] = el} className={`${styles.floatCard} ${styles.wildCard}`}>
-        <div className={styles.accentOrange} /> {/* Orange accent for Wild Card */}
-        <img src="src/assets/images/paxmet gallery 10.png" alt="Wild Card" />
-        <span className={styles.cardTag}>Wild Card</span>
-      </div>
+        <div className={styles.offerContainer}>
+          <div className={`${styles.messageBubble} ${styles.topLeft}`}>
+            <p>Discover local vibes</p>
+          </div>
 
-      <div ref={el => cardsRef.current[1] = el} className={`${styles.floatCard} ${styles.nightOutTop}`}>
-        <div className={styles.accentGreen} /> {/* Green accent for Night Out */}
-        <img src="src/assets/images/paxmet gallery 4.png" alt="Night Out" />
-        <span className={styles.cardTag}>Night Out</span>
-      </div>
+          {/* Center Platform Name & Fading Images */}
+          <div className={styles.centerContent}>
+            <div className={styles.fadingImageWrapper}>
+              {offeringImages.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt="Offering"
+                  className={`${styles.fadingImg} ${index === currentImg ? styles.active : ''}`}
+                />
+              ))}
+            </div>
+          </div>
 
-      <div ref={el => cardsRef.current[2] = el} className={`${styles.floatCard} ${styles.nightOutBottom}`}>
-        <div className={styles.accentPink} /> {/* Pink accent for Night Out */}
-        <img src="src/assets/images/paxmet gallery 5.png" alt="Night Out" />
-        <span className={styles.cardTag}>Night Out</span>
-      </div>
+          {/* Corner Message 2 */}
+          <div className={`${styles.messageBubble} ${styles.bottomRight}`}>
+            <p>Host your own path</p>
+          </div>
+        </div>
+      </section>
 
-      <div ref={el => cardsRef.current[3] = el} className={`${styles.floatCard} ${styles.fanZone}`}>
-        <div className={styles.accentBlue} /> {/* Blue accent for Fan Zone */}
-        <img src="src/assets/images/paxmet gallery 2.png" alt="Fan Zone" />
-        <span className={styles.cardTag}>Fan Zone</span>
-      </div>
     </div>
+
   );
 }

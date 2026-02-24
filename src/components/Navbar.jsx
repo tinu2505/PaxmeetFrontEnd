@@ -17,7 +17,7 @@ const Navbar = () => {
     <nav id="site-navbar" className={styles.navbarContainer}>
       {/* Left: Logo */}
       <div id="navbar-logo" className={styles.logoSection}>
-        <img src="/src/assets/images/logo.png" alt="Paxmeet" className={styles.logo} />
+        <img src="https://media.paxmeet.com/logo.png" alt="Paxmeet" style={{ width: '150px', height: 'auto' }} className={styles.logo} />
       </div>
 
       {/* Center: Nav Pill */}
@@ -40,7 +40,7 @@ const Navbar = () => {
       <div id="navbar-action" className={styles.actionSection}>
         <button className={styles.menuBtn}>
           <p>Menu</p>
-          <span className={styles.dots}><img src="src\assets\images\filled.png" alt="dots" /></span>
+          <span className={styles.dots}><img src="src/assets/images/dots.svg" alt="dots" /></span>
         </button>
       </div>
     </nav>
