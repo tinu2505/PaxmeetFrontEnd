@@ -40,7 +40,7 @@ const Navbar = () => {
       <div id="navbar-action" className={styles.actionSection}>
         <button className={styles.menuBtn}>
           <p>Menu</p>
-          <span className={styles.dots}><img src="src/assets/images/dots.svg" alt="dots" /></span>
+          <span className={styles.dots}><img src="https://media.paxmeet.com/dots.svg" alt="dots" /></span>
         </button>
       </div>
     </nav>
