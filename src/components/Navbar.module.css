@@ -24,8 +24,7 @@
 
 /* Navbar state when page has scrolled past the hero */
 .navbarContainer[data-scrolled="true"] {
-  
-  top: 0; /* tighten to top when visible after hero */
+   /* tighten to top when visible after hero */
   box-shadow: 0 8px 30px rgba(2,6,23,0.08);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
@@ -55,13 +54,51 @@
   align-items: center;
   background: #171717;
   backdrop-filter: blur(15px);
-  border: 2px solid #cbcbcb;
+  border: 1px solid rgba(115, 50, 214, 0.2);
   padding: 6px;
   border-radius: 50px;
   gap: 5px;
-  overflow: hidden; 
+  overflow: hidden;
   white-space: nowrap;
+  /* allow width animation */
+  will-change: width;
 }
+
+/* before animation begins, keep only home link visible */
+.navPill:not(.animate) .navLink:not(:first-child) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* animation state applied after initial expansion */
+.navPill.animate .navLink {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: fadeIn 0.3s forwards;
+}
+
+.navPill.animate .navLink:nth-child(1) {
+  animation-delay: 0.2s; /* home appears immediately with pill */
+}
+.navPill.animate .navLink:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.navPill.animate .navLink:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.navPill.animate .navLink:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* helper class used by JS to toggle animations */
+.animate {}
 
 .navLink {
   color: rgba(255, 255, 255, 0.7);
@@ -100,8 +137,8 @@
 
 .menuBtn {
   background: #171717;
-  backdrop-filter: blur(15px);
-  border: 1px solid #cbcbcb;
+  backdrop-filter: blur(7.5px);
+  border: 1px solid rgba(115, 50, 214, 1);
   color: white;
   padding: 6px 6px;
   border-radius: 50px;

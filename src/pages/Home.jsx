@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
+import { SplitText } from 'gsap/SplitText';
 import styles from './Home.module.css';
 import EventCard from "./EventCard";
 import { div } from 'framer-motion/client';
 
-gsap.registerPlugin(ScrollTrigger, TextPlugin);
+gsap.registerPlugin(ScrollTrigger, TextPlugin, SplitText);
 
 export default function Home() {
   const sectionRef = useRef(null);
@@ -84,25 +85,44 @@ export default function Home() {
       "-=0.5"
     );
 
-    // 2. "Write down" the Title
-    tl.to(titleRef.current, {
-      duration: 1.5,
-      text: ORIGINAL_TITLE,
-      ease: "none",
-    }, "-=0.3"); // Start slightly before navbar finishes
+    // 2‑3. fade in title and subtitle line‑by‑line instead of typing
+    // set the actual text content up front so SplitText can measure lines
+    titleRef.current.textContent = ORIGINAL_TITLE;
+    subtitleRef.current.textContent = ORIGINAL_SUBTITLE;
 
-    // 3. "Write down" the Subtitle
-    tl.to(subtitleRef.current, {
-      duration: 2.5,
-      text: ORIGINAL_SUBTITLE,
-      ease: "none",
-    }, "-=0.5");
+    const titleSplit = new SplitText(titleRef.current, { type: "lines" });
+    const subtitleSplit = new SplitText(subtitleRef.current, { type: "lines" });
+
+    tl.from(titleSplit.lines, {
+      opacity: 0,
+      y: 20,
+      duration: 0.6,
+      stagger: 0.25,
+      ease: "power2.out",
+    }, "-=0.3");
+
+    tl.from(subtitleSplit.lines, {
+      opacity: 0,
+      y: 20,
+      duration: 0.6,
+      stagger: 0.2,
+      ease: "power2.out",
+    }, "-=0.1");
+
+    // we intentionally do not revert SplitText wrappers; keeping the line spans
+    // ensures the wrapping used during animation remains exactly the same afterward
+    // (avoids words shifting lines when the DOM is rebuilt).
+    // tl.call(() => {
+    //   titleSplit.revert();
+    //   subtitleSplit.revert();
+    // }, null, "+=0");
 
     // 4. Fade in the buttons
+    // start after subtitle animation completes so buttons never appear early
     tl.fromTo(`.${styles.ctaGroup}`, 
       { opacity: 0, y: 20 }, 
       { opacity: 1, y: 0, duration: 0.8 }, 
-      "-=1"
+      "+=0"
     );
 
     tl.fromTo(phoneRef.current,
@@ -118,7 +138,7 @@ export default function Home() {
         duration: 1.5, 
         ease: "power3.out",
       },
-      "-=0.8" // Start at the same time as the buttons
+      "-=0.6" // overlap slightly with button fade but still start after subtitle
     );
 
     tl.fromTo(`.${styles.phoneScreen}`,
@@ -297,19 +317,30 @@ export default function Home() {
       </div>
 
       <section className={styles.offerSection}>
-
-        <div className={styles.offerHeader}>
-          <h2 className={styles.brandBg}>PAXMEET</h2>
+        <div className={styles.bgTitleWrapper}>
+          <h1 className={styles.bgTitle}>Paxmeet</h1>
         </div>
 
-        <div className={styles.offerContainer}>
-          <div className={`${styles.messageBubble} ${styles.topLeft}`}>
-            <p>Discover local vibes</p>
+        <div className={styles.staggeredGrid}>
+          {/* Left Side: Copy */}
+          <div className={styles.leftColumn}>
+            <div className={styles.banIcon}>
+              <img src="https://media.paxmeet.com/ban.png" alt="banIcon" />
+            </div>
+            <hr className={styles.divider} />
+            <div className={styles.mainHeadline}>
+              <h2 className={styles.headline}>
+                Stop Living Online. Chats, Likes, DMs.
+              </h2>
+            </div>
+            <div className={styles.subtext}>
+              <p>Thousands of connections on screen — but no one beside you.</p>
+            </div>
           </div>
 
-          {/* Center Platform Name & Fading Images */}
-          <div className={styles.centerContent}>
-            <div className={styles.fadingImageWrapper}>
+          {/* Center: Image with User Tags */}
+          <div className={styles.imageCardWrapper}>
+            <div className={styles.imageCard}>
               {offeringImages.map((img, index) => (
                 <img
                   key={index}
@@ -318,12 +349,18 @@ export default function Home() {
                   className={`${styles.fadingImg} ${index === currentImg ? styles.active : ''}`}
                 />
               ))}
+              {/* Floating User Tags */}
+              <div className={`${styles.tag} ${styles.tagAli}`}>Ali</div>
+              <div className={`${styles.tag} ${styles.tagVedat}`}>Vedat</div>
             </div>
           </div>
 
-          {/* Corner Message 2 */}
-          <div className={`${styles.messageBubble} ${styles.bottomRight}`}>
-            <p>Host your own path</p>
+          {/* Column 3: Bottom Aligned Message */}
+          <div className={styles.rightColumn}>
+            <div className={styles.messageBubble}>
+              <span className={styles.bubbleIconBolt}>⚡</span>
+              <p>Build real connections <br/> in the real world.</p>
+            </div>
           </div>
         </div>
       </section>

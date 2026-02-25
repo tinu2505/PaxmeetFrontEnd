@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import logoSrc from '../assets/images/logo.png';
@@ -8,10 +8,34 @@ const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [animationStarted, setAnimationStarted] = useState(false);
+  const navPillRef = useRef(null);
+  const homeRef = useRef(null);
   const navigate = useNavigate();
 
   const toggleProfile = () => setProfileOpen(!profileOpen);
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+
+  // when component mounts, shrink pill to home width then grow and trigger link fades
+  useEffect(() => {
+    if (navPillRef.current && homeRef.current) {
+      const homeWidth = homeRef.current.offsetWidth + 10; // a little padding
+      const fullWidth = navPillRef.current.scrollWidth;
+      // set starting width
+      navPillRef.current.style.width = `${homeWidth}px`;
+      // force repaint then animate
+      requestAnimationFrame(() => {
+        navPillRef.current.style.transition = 'width 0.5s ease';
+        navPillRef.current.style.width = `${fullWidth}px`;
+      });
+      // after expansion, set flag which will add the animate class
+      setTimeout(() => {
+        setAnimationStarted(true);
+        // clear inline width so it can resize normally later
+        if (navPillRef.current) navPillRef.current.style.width = '';
+      }, 500);
+    }
+  }, []);
 
   return (
     <nav id="site-navbar" className={styles.navbarContainer}>
@@ -21,17 +45,44 @@ const Navbar = () => {
       </div>
 
       {/* Center: Nav Pill */}
-      <div id="navbar-links" className={styles.navPill}>
-        <NavLink to="/" className={({ isActive }) => isActive ? styles.activeLink : styles.navLink}>
+      <div
+        id="navbar-links"
+        ref={navPillRef}
+        className={
+          styles.navPill + (animationStarted ? ` ${styles.animate}` : '')
+        }
+      >
+        <NavLink
+          to="/"
+          ref={homeRef}
+          className={({ isActive }) =>
+            isActive ? styles.activeLink : styles.navLink
+          }
+        >
           Home
         </NavLink>
-        <NavLink to="/events" className={({ isActive }) => isActive ? styles.activeLink : styles.navLink}>
+        <NavLink
+          to="/events"
+          className={({ isActive }) =>
+            isActive ? styles.activeLink : styles.navLink
+          }
+        >
           Events
         </NavLink>
-        <NavLink to="/about" className={({ isActive }) => isActive ? styles.activeLink : styles.navLink}>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            isActive ? styles.activeLink : styles.navLink
+          }
+        >
           About
         </NavLink>
-        <NavLink to="/contact" className={({ isActive }) => isActive ? styles.activeLink : styles.navLink}>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            isActive ? styles.activeLink : styles.navLink
+          }
+        >
           Contact
         </NavLink>
       </div>
