@@ -19,6 +19,7 @@ export default function Home() {
   const overlayRef = useRef(null);
   const cardsRef = useRef([]);
   const [currentImg, setCurrentImg] = useState(0);
+  const [introComplete, setIntroComplete] = useState(false); // track when hero intro finishes
 
   const offeringImages = [
     "https://media.paxmeet.com/image3.png",
@@ -39,7 +40,11 @@ export default function Home() {
   useEffect(() => {
     const tl = gsap.timeline();
     // reveal page elements only when timeline starts (prevent initial flash)
-    tl.call(() => document.body.classList.remove('preload'), null, 0);
+    tl.call(() => {
+      document.body.classList.remove('preload');
+      // temporarily lock scrolling until intro animation ends
+      document.body.style.overflow = 'hidden';
+    }, null, 0);
 
     // 1. Animate Navbar first (assuming your Navbar has these classes)
     tl.fromTo("#site-navbar", 
@@ -141,6 +146,12 @@ export default function Home() {
       "-=0.6" // overlap slightly with button fade but still start after subtitle
     );
 
+    // when the intro timeline finishes, unlock scrolling and mark complete
+    tl.call(() => {
+      document.body.style.overflow = '';
+      setIntroComplete(true);
+    });
+
     tl.fromTo(`.${styles.phoneScreen}`,
       {y: 20, opacity: 0},
       {y: 0, opacity: 1, duration: 1, ease: "power2.out"},
@@ -149,6 +160,8 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (!introComplete) return; // don't create scroll triggers until intro finishes
+
     const ctx = gsap.context(() => {
       // ensure floating cards are hidden on first render — they'll animate in when hero becomes white
       gsap.set(cardsRef.current, { y: 40, opacity: 0, scale: 0.95 });
@@ -268,7 +281,7 @@ export default function Home() {
       };
     }, sectionRef);
     return () => ctx.revert();
-  }, []);
+  }, [introComplete]);
 
   return (
     <div>
@@ -286,7 +299,7 @@ export default function Home() {
 
         {/* Central Phone App Image */}
         <div ref={phoneRef} className={styles.phoneContainer}>
-          <img src="https://media.paxmeet.com/herophone.png" alt="Hand Holding Phone" className={styles.phoneBase} />
+          <img src="https://media.paxmeet.com/phonebase.png" alt="Hand Holding Phone" className={styles.phoneBase} />
           <img src="https://media.paxmeet.com/herophonescreen.png" alt="Paxmeet App Screen" className={styles.phoneScreen} />
         </div>
 
@@ -339,27 +352,59 @@ export default function Home() {
           </div>
 
           {/* Center: Image with User Tags */}
-          <div className={styles.imageCardWrapper}>
+          <div className={styles.centerColumn}>
             <div className={styles.imageCard}>
               {offeringImages.map((img, index) => (
                 <img
                   key={index}
                   src={img}
-                  alt="Offering"
-                  className={`${styles.fadingImg} ${index === currentImg ? styles.active : ''}`}
+                  alt={`Offering ${index}`}
+                  className={`${styles.offeringImage} ${index === currentImg ? styles.active : ''}`}
                 />
               ))}
-              {/* Floating User Tags */}
-              <div className={`${styles.tag} ${styles.tagAli}`}>Ali</div>
-              <div className={`${styles.tag} ${styles.tagVedat}`}>Vedat</div>
+
+              {/* floating tags - always in DOM for proper transition sync with images */}
+              <div className={`${styles.img1Tag1} ${currentImg === 0 ? styles.activeTag : ''}`}>
+                <img src="src/assets/images/textmessage.svg" alt="" />
+              </div>
+              <div className={`${styles.img1Tag2} ${currentImg === 0 ? styles.activeTag : ''}`}>
+                <img src="src/assets/images/message.svg" alt="message" />
+              </div>
+              <div className={`${styles.img2Tag1} ${currentImg === 1 ? styles.activeTag : ''}`}>
+                {/* Your first tag for image 2 */}
+                <img src="src/assets/images/nisha.svg" alt="nisha" />
+              </div>
+              <div className={`${styles.img2Tag2} ${currentImg === 1 ? styles.activeTag : ''}`}>
+                {/* Your first tag for image 2 */}
+                <img src="src/assets/images/ali.svg" alt="ali" />
+              </div>
+              <div className={`${styles.img2Tag3} ${currentImg === 1 ? styles.activeTag : ''}`}>
+                {/* Your first tag for image 2 */}
+                <img src="src/assets/images/ron.svg" alt="ron" />
+              </div>
+              <div className={`${styles.img2Tag4} ${currentImg === 1 ? styles.activeTag : ''}`}>
+                {/* Your first tag for image 2 */}
+                <img src="src/assets/images/vedant.svg" alt="vedant" />
+              </div>
+
             </div>
           </div>
 
           {/* Column 3: Bottom Aligned Message */}
           <div className={styles.rightColumn}>
-            <div className={styles.messageBubble}>
-              <span className={styles.bubbleIconBolt}>⚡</span>
-              <p>Build real connections <br/> in the real world.</p>
+            <div className={styles.flashIcon}>
+              <img src="https://media.paxmeet.com/flash.png" alt="flashIcon" />
+            </div>
+            <hr className={styles.divider} />
+            <div className={styles.mainHeadline}>
+              <h2 className={styles.headline}>
+                Create & Join Events Make Plans Happen.
+              </h2>
+            </div>
+            <div className={styles.subtext}>
+              <p>Create your own event. Or join one that matches your vibe. 
+                Discover people in your city. Explore what’s happening around you. 
+                No random strangers. Only local, real connections.</p>
             </div>
           </div>
         </div>

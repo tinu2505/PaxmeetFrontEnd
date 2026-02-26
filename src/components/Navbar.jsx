@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Navbar.module.css';
 import logoSrc from '../assets/images/logo.png';
 import { useAuth } from '../contexts/AuthContext.jsx';
@@ -12,6 +13,8 @@ const Navbar = () => {
   const navPillRef = useRef(null);
   const homeRef = useRef(null);
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const toggleProfile = () => setProfileOpen(!profileOpen);
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
@@ -35,6 +38,17 @@ const Navbar = () => {
         if (navPillRef.current) navPillRef.current.style.width = '';
       }, 500);
     }
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -88,11 +102,36 @@ const Navbar = () => {
       </div>
 
       {/* Right: Menu Button */}
-      <div id="navbar-action" className={styles.actionSection}>
-        <button className={styles.menuBtn}>
+      <div id="navbar-action" className={styles.actionSection} ref={dropdownRef}>
+        <button className={styles.menuBtn} onClick={() => setIsOpen(!isOpen)}>
           <p>Menu</p>
-          <span className={styles.dots}><img src="https://media.paxmeet.com/dots.svg" alt="dots" /></span>
+          {/* Animated Dots Wrapper */}
+          <motion.div
+            className={styles.dotsWrapper}
+            animate={{ rotate: isOpen ? 90 : 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className={styles.dots}><img src="https://media.paxmeet.com/dots.svg" alt="dots" /></span>
+          </motion.div>
         </button>
+
+        {/* Dropdown Menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              className={styles.dropdownMenu}
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className={styles.dropdownContent}>
+                <NavLink to="/download" className={styles.dropdownItem}>Download</NavLink>
+                <NavLink to="/premium" className={styles.dropdownItem}>Premium</NavLink>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );
