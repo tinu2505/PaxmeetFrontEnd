@@ -259,6 +259,9 @@ export default function Home() {
       
         // store for cleanup
         navScrollTrigger._navShowOnUp = navShowOnUp;
+        ScrollTrigger.config({ 
+          ignoreMobileResize: true // Prevents jumping when mobile address bar collapses
+        });
       }
 
       // cleanup for any nav tweens/ScrollTriggers so navbar isn't left hidden after leaving Home
@@ -365,26 +368,26 @@ export default function Home() {
 
               {/* floating tags - always in DOM for proper transition sync with images */}
               <div className={`${styles.img1Tag1} ${currentImg === 0 ? styles.activeTag : ''}`}>
-                <img src="src/assets/images/textmessage.svg" alt="" />
+                <img src="https://media.paxmeet.com/textmessage.svg" alt="" />
               </div>
               <div className={`${styles.img1Tag2} ${currentImg === 0 ? styles.activeTag : ''}`}>
-                <img src="src/assets/images/message.svg" alt="message" />
+                <img src="https://media.paxmeet.com/message.svg" alt="message" />
               </div>
               <div className={`${styles.img2Tag1} ${currentImg === 1 ? styles.activeTag : ''}`}>
                 {/* Your first tag for image 2 */}
-                <img src="src/assets/images/nisha.svg" alt="nisha" />
+                <img src="https://media.paxmeet.com/nisha.svg" alt="nisha" />
               </div>
               <div className={`${styles.img2Tag2} ${currentImg === 1 ? styles.activeTag : ''}`}>
                 {/* Your first tag for image 2 */}
-                <img src="src/assets/images/ali.svg" alt="ali" />
+                <img src="https://media.paxmeet.com/ali.svg" alt="ali" />
               </div>
               <div className={`${styles.img2Tag3} ${currentImg === 1 ? styles.activeTag : ''}`}>
                 {/* Your first tag for image 2 */}
-                <img src="src/assets/images/ron.svg" alt="ron" />
+                <img src="https://media.paxmeet.com/ron.svg" alt="ron" />
               </div>
               <div className={`${styles.img2Tag4} ${currentImg === 1 ? styles.activeTag : ''}`}>
                 {/* Your first tag for image 2 */}
-                <img src="src/assets/images/vedant.svg" alt="vedant" />
+                <img src="https://media.paxmeet.com/vedant.svg" alt="vedant" />
               </div>
 
             </div>
