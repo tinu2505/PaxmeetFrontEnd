@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
 import { SplitText } from 'gsap/SplitText';
+import { AnimatePresence } from 'framer-motion';
 import styles from './Home.module.css';
 import EventCard from "./EventCard";
 import { div } from 'framer-motion/client';
@@ -17,7 +18,9 @@ export default function Home() {
   const subtitleRef = useRef(null); // Ref for the p
   const phoneRef = useRef(null);
   const overlayRef = useRef(null);
+  const offerRef = useRef(null);               // reference to offer section for scroll animations
   const cardsRef = useRef([]);
+  
   const [currentImg, setCurrentImg] = useState(0);
   const [introComplete, setIntroComplete] = useState(false); // track when hero intro finishes
 
@@ -32,6 +35,72 @@ export default function Home() {
     }, 3000); // Changes every 3 seconds
     return () => clearInterval(interval);
   }, []);
+
+  const [activeReason, setActiveReason] = useState(0);
+  const intervalRef = useRef(null);
+
+  const reasonsData = [
+    { 
+      id: 0, 
+      title: 'Stop Scrolling Turn your vibe into real Moments', 
+      text: 'Discover connect Show up.', 
+      image: 'src/assets/images/reasons1.png' 
+    },
+    { 
+      id: 1, 
+      title: 'You Deserved Better Plan-Go where the Plan are real', 
+      text: 'Discover people in your city. Explore what’s happening around you. No random strangers. Only local, real connections.', 
+      image: 'src/assets/images/reasons2.png' 
+    },
+    { 
+      id: 2, 
+      title: 'Find  your type- join one that matches your vibe', 
+      text: 'Discover people in your city. Explore what’s happening around you. No random strangers. Only local, real connections.', 
+      image: 'src/assets/images/reasons3.png' 
+    },
+    {
+      id: 3,
+      title: 'Build Your Circle Turn Moments Into Community',
+      text: 'Met amazing people? Start a circle. Stay connected. Grow your own tribe in your own city.',
+      image: 'src/assets/images/reasons4.png'
+    },
+    {
+      id: 4,
+      title: 'Safe & Verified 100% Real. 100% Secure',
+      text: 'Because real connections deserve real safety.',
+      image: 'src/assets/images/reasons5.png'
+    }
+    // Add more reasons here following the same structure
+  ];
+
+  useEffect(() => {
+    // Define the main loop
+    const startInterval = () => {
+      clearInterval(intervalRef.current); // Clear any existing intervals
+      intervalRef.current = setInterval(() => {
+        setActiveReason((prev) => (prev + 1) % reasonsData.length);
+      }, 4000); // Change interval (e.g., 4 seconds)
+    };
+
+    startInterval(); // Start the loop immediately
+
+    // Cleanup function (crucial for setInterval)
+    return () => clearInterval(intervalRef.current);
+  }, [reasonsData.length]);
+
+  const handlePause = (index) => {
+    clearInterval(intervalRef.current); // Stop the auto-switch
+    if (index !== undefined) {
+      setActiveReason(index); // Manually set the reason if hovering a reason
+    }
+  };
+
+  const handleResume = () => {
+    clearInterval(intervalRef.current); // Clear previous to prevent rapid speed-up
+    intervalRef.current = setInterval(() => {
+      setActiveReason((prev) => (prev + 1) % reasonsData.length);
+    }, 4000); // Resume the loop
+  };
 
   // hero text constants (used for GSAP typing and preload fallback)
   const ORIGINAL_TITLE = "Turn your plan into a real-world hangout.";
@@ -176,7 +245,7 @@ export default function Home() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "bottom+=100% top", // extend end to allow extra scroll after hero leaves
+          end: isMobile ? "bottom top" : "bottom+=100% top", // shorter pin on mobile to reduce hard scrolling
           scrub: 1,
           pin: true,
           invalidateOnRefresh: true, // Recalculates if the window is resized
@@ -219,6 +288,29 @@ export default function Home() {
           ease: "back.out(1.7)",
         }, 0.75 + (index * 0.1));
       });
+
+      // fade‑in for offer section elements while user scrolls down
+      if (offerRef.current) {
+        const offerElems = offerRef.current.querySelectorAll(
+          `.${styles.bgTitleWrapper}, .${styles.leftColumn}, .${styles.centerColumn}, .${styles.rightColumn}`
+        );
+        gsap.fromTo(
+          offerElems,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.2,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: offerRef.current,
+              start: "top center",
+              end: "bottom bottom",
+              scrub: true,
+            },
+          }
+        );
+      }
     });
 
       // NAVBAR: slide it away while the hero is active, then restore it (with a solid background)
@@ -345,7 +437,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section className={styles.offerSection}>
+      <section ref={offerRef} className={styles.offerSection}>
         <div className={styles.bgTitleWrapper}>
           <h1 className={styles.bgTitle}>Paxmeet</h1>
         </div>
@@ -425,7 +517,58 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      <section className={styles.reasonsSection}>
+        <div className={styles.reasonsHeader}>
+          <h1 className={styles.headline}>Why Choose Paxmeet?</h1>
+        </div>
 
+        <div className={styles.dualContainer}>
+          {/* Left: Dynamic Image Container */}
+          <div 
+            className={styles.dynamicImageColumn}
+            onMouseEnter={() => handlePause()} // Pause on image hover
+            onMouseLeave={handleResume} // Resume on image leave
+          >
+            <div className={styles.imageWrapper}>
+              <AnimatePresence mode="wait">
+                <motion.img 
+                  key={activeReason}
+                  src={reasonsData[activeReason].image}
+                  alt={reasonsData[activeReason].title}
+                  className={styles.activeImage}
+                  initial={{ opacity: 0, scale: 0.8, z: -100 }}
+                  animate={{ opacity: 1, scale: 1, z: 0 }}
+                  exit={{ opacity: 0, scale: 1.1, z: -100 }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                />
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Right: Interactive Reasons List */}
+          <div className={styles.reasonsListColumn}>
+            {reasonsData.map((reason, index) => (
+              <div 
+                key={reason.id} 
+                className={`${styles.reasonCard} ${activeReason === index ? styles.reasonActive : ''}`}
+                onMouseEnter={() => handlePause(index)} // Pause & Set on reason hover
+                onMouseLeave={handleResume} // Resume on reason leave
+              >
+                <div className={styles.reasonTimeline}>
+                  <div className={styles.timelineCircle}></div>
+                  {index < reasonsData.length - 1 && <div className={styles.timelineLine}></div>}
+                </div>
+          
+                <div className={styles.reasonContent}>
+                  <h3>{reason.title}</h3>
+                  <p>{reason.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+    </section>
     </div>
 
   );

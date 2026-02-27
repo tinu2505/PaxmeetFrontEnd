@@ -696,3 +696,112 @@
   .img1Tag2 { left: 65%; }
   .img2Tag1 { left: -10%; }
 }
+
+/* --- Reasons Section Styles --- */
+.reasonsSection {
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px 10%;
+  background: #0d0d10;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.reasonsHeader {
+  text-align: left;
+}
+.reasonsHeader p { color: rgba(255, 255, 255, 0.6); }
+
+.dualContainer {
+  display: flex;
+  width: 100%;
+  gap: 10%;
+  align-items: center;
+}
+
+/* Left: Image Column */
+.dynamicImageColumn {
+  flex: 1.2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.imageWrapper {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 30px;
+  background: #1a1a20; /* Placeholder while images load */
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.activeImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Right: Reasons List */
+.reasonsListColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  perspective: 1000px; /* For potential 3D hover effects */
+}
+
+.reasonCard {
+  display: flex;
+  gap: 20px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  opacity: 0.4; /* Default inactive state */
+
+  padding: 20px;
+  border-radius: 16px;
+  transform: translateZ(0) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: transparent;
+}
+
+/* --- The Highlight Effect --- */
+.reasonCard:hover,
+.reasonActive {
+  opacity: 1; /* Highlights on hover OR when activeReason matches index */
+
+  transform: translateZ(50px) scale(1.05);
+  background: rgba(115, 50, 214, 0.1);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(115, 50, 214, 0.3);
+}
+
+.reasonContent h3 { 
+  font-size: 18px; 
+  margin-bottom: 5px; 
+  color: #fff; 
+  transition: font-size 0.5s ease, color 0.5s ease;
+}
+.reasonContent p { color: rgba(255, 255, 255, 0.8); line-height: 1.5; font-size: 16px; }
+
+/* Optional: Subtle background color on hover/active */
+.reasonActive, .reasonCard:hover {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px;
+  border-radius: 12px;
+  margin: -10px;
+}
+
+.reasonActive .reasonContent h3,
+.reasonCard:hover .reasonContent h3 {
+  font-size: 24px; /* Growth effect */
+  color: #ffffff;
+}
+
