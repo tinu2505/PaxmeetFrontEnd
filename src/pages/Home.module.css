@@ -89,7 +89,7 @@
 .heroContent {
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 90%;
   max-width: 823px;
   z-index: 5;
   text-align: center;
@@ -139,14 +139,16 @@
 .phoneContainer {
   position: relative;
   transform: none; /* Start partially off-screen */
-  width: 450px;
+  width: 30vw;
+  min-width: 300px;
+  max-width: 450px;
   height: auto;
   z-index: 20;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 10%;
-  margin-top: 50px;
+  margin-left: 12%;
+  margin-top: 5vh;
 }
 
 .phoneBase {
@@ -168,6 +170,68 @@
   object-fit: cover;
   border-radius: 25px;
   z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .heroWrapper {
+    padding-top: 120px; /* Space for the mobile navbar */
+    height: auto;
+    min-height: 100vh;
+    justify-content: center;
+  }
+
+  .heroContent {
+    width: 90%;
+    gap: 24px;
+  }
+
+  .heroTitle {
+    font-size: 2.2rem; /* Adjusted for Screenshot 86 style */
+    line-height: 1.1;
+  }
+
+  .heroSubtitle {
+    font-size: 1.1rem;
+    color: #C7C7C7;
+  }
+
+  /* Stack buttons as seen in Screenshot 86 */
+  .ctaGroup {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .ctaGroup button {
+    width: 100%; /* Full width buttons for mobile */
+    max-width: 320px;
+    margin: 0 auto;
+    height: 60px;
+    font-size: 18px;
+  }
+
+  /* Position the phone lower, sticking out from bottom */
+  .phoneContainer {
+    width: 85%;
+    margin-left: 35%;
+    margin-top: 50px;
+    margin-bottom: -50px; /* Slight bleed off-screen */
+  }
+
+  .phoneBase {
+    width: 100%;
+    height: auto;
+  }
+
+  .phoneScreen {
+    width: 42%;
+    height: auto;
+    border-radius: 20px;
+  }
+
+  .heroOverlay {
+    height: 115vh;
+  }
 }
 
 .floatCard {
@@ -321,6 +385,25 @@
   pointer-events: none;
 }
 
+@media (max-width: 768px) {
+  .floatCard {
+    width: 200px;
+    height: 120px;
+    padding: 6px;
+  }
+
+  .cardTag {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  /* Adjust positions for mobile */
+  .wildCard { left: 2%; top: 5%; width: 180px; }
+  .nightOutTop { right: 2%; top: 8%; width: 180px; }
+  .nightOutBottom { left: 2%; top: 30%; width: 180px; }
+  .fanZone { right: 2%; top: 32%; width: 180px; }
+}
+
 .offerSection {
   background-color: rgba(13, 13, 16, 1);
   color: #ffffff;
@@ -366,6 +449,8 @@
 
 /* Left & Right Columns */
 .leftColumn {
+  flex: 1;
+  max-width: 400px;
   width: 364px;
   height: auto;
   display: flex;
@@ -375,6 +460,8 @@
 }
 
 .rightColumn {
+  flex: 1;
+  max-width: 400px;
   width: 364px;
   height: auto;
   display: flex;
@@ -400,7 +487,8 @@
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 1);
   margin-bottom: 20px;
-  width: 323px;
+  width: 100%;
+  max-width: 320px;
   height: 0px;
 }
 
@@ -446,7 +534,10 @@
 }
 
 .imageCard {
-  width: 350px;
+  width: 25vw;
+  min-width: 300px;
+  max-width: 450px;
+  aspect-ratio: 1/1; /* Maintains a square aspect ratio */
   height: 350px;
   border-radius: 24px;
   overflow: visible; /* Needed for floating tags */
@@ -522,4 +613,86 @@
 
 .activeTag {
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .bgTitleWrapper {
+    margin-top: 5%;
+    padding: 0;
+  }
+
+  .bgTitle {
+    font-size: clamp(4rem, 15vw, 10rem);
+    letter-spacing: 5%;
+  }
+
+  /* 1. Change the grid to a single column stack */
+  .staggeredGrid {
+    grid-template-columns: 1fr; 
+    width: 90%;
+    gap: 40px; /* Space between the stacked sections */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* 2. Left Column: Now at the top */
+  .leftColumn {
+    width: 100%;
+    order: 1; /* First in stack */
+    align-items: center;
+    text-align: center;
+  }
+
+  /* 3. Center Column: The Image Card */
+  .centerColumn {
+    width: 100%;
+    order: 2; /* Second in stack (Middle) */
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .imageCard {
+    width: 300px; /* Scale down slightly for mobile */
+    height: 300px;
+  }
+
+  /* 4. Right Column: Now at the bottom */
+  .rightColumn {
+    width: 100%;
+    order: 3; /* Third in stack */
+    align-items: center;
+    text-align: center;
+    justify-content: flex-start;
+  }
+
+  /* 5. Center text and dividers for mobile aesthetics */
+  .headline, .subtext p {
+    text-align: center;
+    width: 100%;
+  }
+
+  .mainHeadline, .subtext {
+    width: 100%;
+    height: auto; /* Allow text to wrap */
+  }
+
+  .divider {
+    width: 60%;
+    margin: 0 auto 15px auto;
+  }
+
+  .banIcon, .flashIcon {
+    margin: 0 auto 15px auto;
+  }
+
+  /* 6. Adjust Floating Tags so they don't bleed off small screens */
+  .img1Tag1, .img1Tag2, .img2Tag1, .img2Tag2, .img2Tag3, .img2Tag4 {
+    transform: scale(0.8);
+  }
+  
+  .img1Tag1 { left: -25%; }
+  .img1Tag2 { left: 65%; }
+  .img2Tag1 { left: -10%; }
 }

@@ -159,54 +159,67 @@ export default function Home() {
     );
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (!introComplete) return; // don't create scroll triggers until intro finishes
 
     const ctx = gsap.context(() => {
       // ensure floating cards are hidden on first render — they'll animate in when hero becomes white
-      gsap.set(cardsRef.current, { y: 40, opacity: 0, scale: 0.95 });
+      let mm = gsap.matchMedia();
+
+    mm.add({
+      isMobile: "(max-width: 768px)",
+      isDesktop: "(min-width: 769px)"
+    }, (context) => {
+      let { isMobile } = context.conditions;
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "+=120%", // Longer scroll for smoother transition
-          scrub: 1,      // Adds a slight "catch-up" delay for smoothness
+          end: "bottom+=100% top", // extend end to allow extra scroll after hero leaves
+          scrub: 1,
           pin: true,
+          invalidateOnRefresh: true, // Recalculates if the window is resized
         }
       });
 
+      // Phone Scaling
       tl.to(phoneRef.current, {
-        scale: 1.5,
-        y: "-5vh",         // Slight upward movement
+        // Reduced scale for mobile so the device doesn't push off-screen
+        scale: isMobile ? 1.15 : 1.3, 
+        // Adjusted vertical movement for mobile aspect ratios
+        y: isMobile ? "-1vh" : "-25vh", 
         transformOrigin: "bottom center",
         ease: "power2.inOut",
         duration: 1
       }, 0);
 
+      // Hero Text Fade
       tl.to(`.${styles.heroContent}`, {
         opacity: 0,
-        y: -100,
+        y: isMobile ? -50 : -100,
         ease: "power2.in",
         duration: 0.7,
       }, 0);
 
-      // fade white overlay in behind the phone while text fades out
+      // Overlay Transition
       tl.to(overlayRef.current, {
         y: "-100%",
         ease: "power1.inOut",
         duration: 0.9,
-      }, 0); // start with phone/text animation
+      }, 0);
 
+      // Floating Cards (Hidden on mobile if desired, or repositioned)
       cardsRef.current.forEach((card, index) => {
         if (!card) return;
         tl.to(card, {
           y: 0,
-          opacity: 1,
+          opacity: isMobile ? 1 : 1, // Hide cards on mobile to keep it clean
           scale: 1,
           ease: "back.out(1.7)",
         }, 0.75 + (index * 0.1));
       });
+    });
 
       // NAVBAR: slide it away while the hero is active, then restore it (with a solid background)
       const navEl = document.getElementById('site-navbar');

@@ -126,6 +126,14 @@ const Navbar = () => {
               transition={{ duration: 0.2 }}
             >
               <div className={styles.dropdownContent}>
+                {/* Mobile-only links injected here */}
+                <div className={styles.mobileNavLinks}>
+                  <NavLink to="/" className={styles.dropdownItem} onClick={() => setIsOpen(false)}>Home</NavLink>
+                  <NavLink to="/events" className={styles.dropdownItem} onClick={() => setIsOpen(false)}>Events</NavLink>
+                  <NavLink to="/about" className={styles.dropdownItem} onClick={() => setIsOpen(false)}>About</NavLink>
+                  <NavLink to="/contact" className={styles.dropdownItem} onClick={() => setIsOpen(false)}>Contact</NavLink>
+                  <hr className={styles.menuDivider} />
+                </div>
                 <NavLink to="/download" className={styles.dropdownItem}>Download</NavLink>
                 <NavLink to="/premium" className={styles.dropdownItem}>Premium</NavLink>
               </div>

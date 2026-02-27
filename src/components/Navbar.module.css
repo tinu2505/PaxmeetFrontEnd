@@ -136,6 +136,15 @@
   position: relative;
 }
 
+@media (max-width: 768px) {
+  .actionSection {
+    width: 90%;
+    height: auto;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+}
+
 .menuBtn {
   width: 202px;
   height: 63px;
@@ -161,6 +170,20 @@
   margin: 0;
   font-size: 20px;
   font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .menuBtn {
+    width: auto;
+    height: auto;
+    padding: 4px 4px;
+    gap: 8px;
+  }
+
+  .menuBtn p {
+    padding: 12px 16px;
+    font-size: 20px;
+  }
 }
 
 .dotsWrapper {
@@ -208,11 +231,31 @@
   z-index: 1001;
 }
 
+@media (max-width: 768px) {
+  .dropdownMenu {
+    position: fixed;
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+    top: calc(100% + 12px);
+    bottom: auto;
+    padding: 16px 0;
+    border-radius: 8px;
+  }
+}
+
 .dropdownContent {
   padding: 8px 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .dropdownContent {
+    padding: 8px 20px;
+    gap: 16px;
+  }
 }
 
 .dropdownItem {
@@ -225,3 +268,36 @@
   transition: all 0.2s ease;
   font-family: 'poppins', sans-serif;
 }
+
+@media (max-width: 768px) {
+  .navPill {
+    display: none;
+  }
+
+  .navbarContainer {
+    padding: 0 20px; /* Tighter padding for mobile */
+  }
+
+  .logo {
+    height: 40px; /* Scale logo down slightly */
+  }
+}
+
+.mobileNavLinks {
+  display: none; /* Hidden on desktop */
+}
+
+@media (max-width: 768px) {
+  .mobileNavLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .menuDivider {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 5px 0;
+  }
+}
+
