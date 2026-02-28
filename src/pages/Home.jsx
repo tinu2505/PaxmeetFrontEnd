@@ -24,6 +24,22 @@ export default function Home() {
   const [currentImg, setCurrentImg] = useState(0);
   const [introComplete, setIntroComplete] = useState(false); // track when hero intro finishes
 
+  useEffect(() => {
+  const imageUrls = [
+    ...reasonsData.map(r => r.image),
+    ...reasonsData.map(r => r.icon),
+    // Add specific sub-animation images here
+    'https://media.paxmeet.com/circleLeft.png',
+    'https://media.paxmeet.com/circleRight.png',
+    'https://media.paxmeet.com/circleCenter.png'
+  ];
+
+  imageUrls.forEach((url) => {
+    const img = new Image();
+    img.src = url;
+  });
+}, []);
+
   const offeringImages = [
     "https://media.paxmeet.com/image3.png",
     "https://media.paxmeet.com/image4.png",
@@ -44,31 +60,31 @@ export default function Home() {
       id: 0, 
       title: 'Stop Scrolling Turn your vibe into real Moments', 
       text: 'Discover connect Show up.', 
-      image: 'src/assets/images/reasons1.png' 
+      icon: 'https://media.paxmeet.com/ban.svg'
     },
     { 
       id: 1, 
       title: 'You Deserved Better Plan-Go where the Plan are real', 
       text: 'Discover people in your city. Explore what’s happening around you. No random strangers. Only local, real connections.', 
-      image: 'src/assets/images/reasons2.png' 
+      icon: 'https://media.paxmeet.com/location.svg'
     },
     { 
       id: 2, 
       title: 'Find  your type- join one that matches your vibe', 
       text: 'Discover people in your city. Explore what’s happening around you. No random strangers. Only local, real connections.', 
-      image: 'src/assets/images/reasons3.png' 
+      icon: 'https://media.paxmeet.com/flash.svg'
     },
     {
       id: 3,
       title: 'Build Your Circle Turn Moments Into Community',
       text: 'Met amazing people? Start a circle. Stay connected. Grow your own tribe in your own city.',
-      image: 'src/assets/images/reasons4.png'
+      icon: 'https://media.paxmeet.com/circles.svg'
     },
     {
       id: 4,
       title: 'Safe & Verified 100% Real. 100% Secure',
       text: 'Because real connections deserve real safety.',
-      image: 'src/assets/images/reasons5.png'
+      icon: 'https://media.paxmeet.com/verified.svg'
     }
     // Add more reasons here following the same structure
   ];
@@ -100,6 +116,150 @@ export default function Home() {
     intervalRef.current = setInterval(() => {
       setActiveReason((prev) => (prev + 1) % reasonsData.length);
     }, 4000); // Resume the loop
+  };
+
+  const renderStage = (index) => {
+    switch(index) {
+      
+      case 0: // Reason 1: Static Image + Multiple Tags
+      return (
+        <div className={styles.stageOne}>
+          <img src="https://media.paxmeet.com/reason1.png" alt="" className={styles.stageMainImg} />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.3, duration: 0.4 }}
+            src="https://media.paxmeet.com/reason1tag1.svg" 
+            className={styles.absTag1} 
+          />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.4, duration: 0.4 }}
+            src="https://media.paxmeet.com/reason1tag2.svg" 
+            className={styles.absTag2} 
+          />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.5, duration: 0.4 }}
+            src="https://media.paxmeet.com/reason1tag3.svg" 
+            className={styles.absTag3} 
+          />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.6, duration: 0.4 }}
+            src="https://media.paxmeet.com/reason1tag4.svg" 
+            className={styles.absTag4} 
+          />
+        </div>
+      );
+      
+      case 1: // Reason 2: wobble Tag
+      return (
+        <div className={styles.stageTwo}>
+          <img src="https://media.paxmeet.com/reason2.png" alt="" className={styles.stageMainImg} />
+          {/* Tag 1: Fast Wobble */}
+          <motion.img 
+            src="https://media.paxmeet.com/tag_wobble1.svg" 
+            className={`${styles.absTag} ${styles.wobble1}`}
+            nimate={activeReason === 1 ? { x: [-8, 8, -8] } : { x: 0 }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+          />
+          {/* Tag 2: Slower Wobble with Delay */}
+          <motion.img 
+            src="https://media.paxmeet.com/tag_wobble2.svg" 
+            className={`${styles.absTag} ${styles.wobble2}`}
+            animate={activeReason === 1 ? { x: [-5, 5, -5] } : { x: 0 }}
+            transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
+          />
+        </div>
+      );
+      
+      case 2: // Reason 3: 3x4 Matrix + Upward Scroll
+      return (
+        <div className={styles.stageThree}>
+          <div className={styles.matrixGrid}>
+            {[...Array(12)].map((_, i) => (
+              <motion.img
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={activeReason === 2 ? { opacity: 1, y: 0 } : { opacity: 0 }}
+                transition={{ 
+                  duration: 0.4, 
+                  delay: activeReason === 2 ? i * 0.08 : 0, 
+                  ease: "easeOut" 
+                }}
+                src={`https://media.paxmeet.com/matrix${i}.png`}
+              />
+            ))}
+          </div>
+          <div className={styles.verticalScrollContainer}>
+            <div className={styles.scrollingContent}>
+              {/* Duplicate images here for infinite effect */}
+              <img src="https://media.paxmeet.com/scroll1.png" alt="" />
+              <img src="https://media.paxmeet.com/scroll2.png" alt="" />
+              <img src="https://media.paxmeet.com/scroll3.png" alt="" />
+              <img src="https://media.paxmeet.com/scroll1.png" alt="" />
+              <img src="https://media.paxmeet.com/scroll2.png" alt="" />
+              <img src="https://media.paxmeet.com/scroll3.png" alt="" />
+            </div>
+          </div>
+        </div>
+      );
+
+      case 3: // Reason 4: Triple Circular Slide-Out
+      return (
+        <div className={styles.stageFour}>
+          {/* Left Circular Image: Slides out to the left */}
+          <motion.div 
+            className={styles.circleContainerSide}
+            initial={{ x: 0, opacity: 0 }}
+            animate={{ x: -110, opacity: 1 }}
+            transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }} // Bouncy 'spring' feel
+          >
+            <img src="https://media.paxmeet.com/circleLeft.png" alt="Left View" />
+          </motion.div>
+          {/* Right Circular Image: Slides out to the right */}
+          <motion.div 
+            className={styles.circleContainerSide}
+            initial={{ x: 0, opacity: 0 }}
+            animate={{ x: 110, opacity: 1 }}
+            transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
+          >
+            <img src="https://media.paxmeet.com/circleRight.png" alt="Right View" />
+          </motion.div>
+          {/* Central Circular Image: Fades in and stays on top */}
+          <motion.div 
+            className={styles.circleContainerMain}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <img src="https://media.paxmeet.com/circleCenter.png" alt="Main View" />
+          </motion.div>
+        </div>
+      );
+
+      case 4: // Reason 5: Single Image + Single Tag
+      return (
+        <div className={styles.stageFive}>
+          <img src="https://media.paxmeet.com/reason5.png" alt="" className={styles.stageMainImg} />
+          <motion.img 
+            src="https://media.paxmeet.com/tag5.svg" 
+            className={styles.floatTag}
+            // Only float if this reason is active
+            animate={activeReason === 4 ? { y: [0, -12, 0] } : { y: 0 }}
+            transition={{
+              repeat: Infinity,
+              duration: 3,
+              ease: "easeInOut"
+            }}
+          />
+        </div>
+      );
+    }
   };
 
   // hero text constants (used for GSAP typing and preload fallback)
@@ -246,8 +406,9 @@ export default function Home() {
           trigger: sectionRef.current,
           start: "top top",
           end: isMobile ? "bottom top" : "bottom+=100% top", // shorter pin on mobile to reduce hard scrolling
-          scrub: 1,
+          scrub: isMobile ? 0.5 : 1, // Smoother scrub for mobile CPUs
           pin: true,
+          anticipatePin: 1,
           invalidateOnRefresh: true, // Recalculates if the window is resized
         }
       });
@@ -255,18 +416,19 @@ export default function Home() {
       // Phone Scaling
       tl.to(phoneRef.current, {
         // Reduced scale for mobile so the device doesn't push off-screen
-        scale: isMobile ? 1.15 : 1.3, 
+        scale: isMobile ? 1.1 : 1.3, 
         // Adjusted vertical movement for mobile aspect ratios
-        y: isMobile ? "-1vh" : "-25vh", 
+        y: isMobile ? "-0.5dvh" : "-25vh", 
         transformOrigin: "bottom center",
         ease: "power2.inOut",
-        duration: 1
+        duration: 1,
+        force3D: true // Forces GPU acceleration
       }, 0);
 
       // Hero Text Fade
       tl.to(`.${styles.heroContent}`, {
         opacity: 0,
-        y: isMobile ? -50 : -100,
+        y: isMobile ? -30 : -100,
         ease: "power2.in",
         duration: 0.7,
       }, 0);
@@ -283,9 +445,10 @@ export default function Home() {
         if (!card) return;
         tl.to(card, {
           y: 0,
-          opacity: isMobile ? 1 : 1, // Hide cards on mobile to keep it clean
+          opacity: 1, // Hide cards on mobile to keep it clean
           scale: 1,
           ease: "back.out(1.7)",
+          force3D: true,
         }, 0.75 + (index * 0.1));
       });
 
@@ -313,80 +476,7 @@ export default function Home() {
       }
     });
 
-      // NAVBAR: slide it away while the hero is active, then restore it (with a solid background)
-      const navEl = document.getElementById('site-navbar');
-      let navHideTween;
-      let navScrollTrigger;
-
-      if (navEl) {
-        // hide navbar progressively while hero is visible (scrubs as you scroll)
-        navHideTween = gsap.to(navEl, {
-          y: -120,
-          opacity: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-          }
-        });
-
-        // when the hero fully leaves / re-enters the viewport, toggle the 'scrolled' state
-        navScrollTrigger = ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: 'bottom top',
-          onEnter: () => {
-            // hero left the viewport -> show navbar (scrolled state)
-            navEl.setAttribute('data-scrolled', 'true');
-            gsap.to(navEl, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
-          },
-          onEnterBack: () => {
-            // user scrolled back up into the hero/top -> restore hero state and ensure navbar is visible again
-            navEl.removeAttribute('data-scrolled');
-            gsap.to(navEl, { y: 0, opacity: 1, duration: 0.25, ease: 'power2.out', overwrite: 'auto' });
-          }
-        });
-
-        // Extra: while inside the hero, show navbar immediately when the user scrolls UP
-        // (fixes cases where a small upward scroll didn't visibly restore the navbar)
-        const navShowOnUp = ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          onUpdate: (self) => {
-            if (self.direction < 0) { // scrolling up
-              navEl.removeAttribute('data-scrolled');
-              gsap.to(navEl, { y: 0, opacity: 1, duration: 0.20, ease: 'power2.out', overwrite: 'auto' });
-            }
-          }
-        });
-      
-        // store for cleanup
-        navScrollTrigger._navShowOnUp = navShowOnUp;
-        ScrollTrigger.config({ 
-          ignoreMobileResize: true // Prevents jumping when mobile address bar collapses
-        });
-      }
-
-      // cleanup for any nav tweens/ScrollTriggers so navbar isn't left hidden after leaving Home
-      return () => {
-        if (navHideTween) {
-          navHideTween.scrollTrigger && navHideTween.scrollTrigger.kill();
-          navHideTween.kill();
-        }
-        if (navScrollTrigger) {
-          // also kill the helper trigger created for 'show on up' when present
-          if (navScrollTrigger._navShowOnUp) navScrollTrigger._navShowOnUp.kill();
-          navScrollTrigger.kill();
-        }
-        if (navEl) {
-          // clear inline styles GSAP may have applied so other pages see the navbar normally
-          navEl.style.transform = '';
-          navEl.style.opacity = '';
-          navEl.removeAttribute('data-scrolled');
-        }
-      };
+     
     }, sectionRef);
     return () => ctx.revert();
   }, [introComplete]);
@@ -520,7 +610,7 @@ export default function Home() {
       
       <section className={styles.reasonsSection}>
         <div className={styles.reasonsHeader}>
-          <h1 className={styles.headline}>Why Choose Paxmeet?</h1>
+          <h1 className={styles.headline}>Why Choose Paxmeet...!</h1>
         </div>
 
         <div className={styles.dualContainer}>
@@ -532,16 +622,16 @@ export default function Home() {
           >
             <div className={styles.imageWrapper}>
               <AnimatePresence mode="wait">
-                <motion.img 
+                <motion.div
                   key={activeReason}
-                  src={reasonsData[activeReason].image}
-                  alt={reasonsData[activeReason].title}
-                  className={styles.activeImage}
-                  initial={{ opacity: 0, scale: 0.8, z: -100 }}
-                  animate={{ opacity: 1, scale: 1, z: 0 }}
-                  exit={{ opacity: 0, scale: 1.1, z: -100 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                />
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className={styles.stageContainer}
+                >
+                  {renderStage(activeReason)}
+                </motion.div>
               </AnimatePresence>
             </div>
           </div>
@@ -555,6 +645,11 @@ export default function Home() {
                 onMouseEnter={() => handlePause(index)} // Pause & Set on reason hover
                 onMouseLeave={handleResume} // Resume on reason leave
               >
+                {/* New Icon Container */}
+                <div className={styles.reasonIconWrapper}>
+                  <img src={reason.icon} alt="icon" className={styles.reasonIcon} />
+                </div>
+
                 <div className={styles.reasonTimeline}>
                   <div className={styles.timelineCircle}></div>
                   {index < reasonsData.length - 1 && <div className={styles.timelineLine}></div>}

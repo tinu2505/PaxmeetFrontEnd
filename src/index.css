@@ -15,6 +15,10 @@ html, body {
   box-sizing: border-box;
 }
 
+html {
+  overscroll-behavior-y: none; /* Disable smooth scrolling for better control with GSAP */
+}
+
 *, *::before, *::after {
   box-sizing: inherit;
 }
@@ -28,4 +32,6 @@ body {
   min-height: 100vh;
   background: var(--color-bg) !important;
   color: var(--color-text) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
