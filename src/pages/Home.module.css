@@ -114,8 +114,12 @@
   );
   pointer-events: none;
   z-index: 10; /* sits under phone (z-index:5) and under hero text (z-index:10) */
-  /* subtle inner shadow along top to give a soft 3d edge */
-  box-shadow: inset 0 10px 30px rgba(0,0,0,0.2);
+  /* Enhanced 3D effect on top border with multiple shadows */
+  box-shadow: 
+    inset 0 4px 8px rgba(255, 255, 255, 0.15),   /* Top highlight */
+    inset 0 6px 12px rgba(0, 0, 0, 0.25),        /* Top shadow */
+    inset 0 15px 30px rgba(0, 0, 0, 0.15),       /* Soft inner shadow */
+    0 -2px 10px rgba(164, 115, 237, 0.3);        /* Subtle purple glow on edge */
 }
 
 .heroTitle{
@@ -382,7 +386,7 @@
 .nightOutBottom { left: 12%; bottom: 15%; width: 240px; }
 .fanZone { right: 10%; bottom: 10%; width: 240px; }
 
-/* Background spotlight effect */
+/* Background spotlight effect - changed to black */
 .heroWrapper::after {
   content: '';
   position: absolute;
@@ -391,7 +395,7 @@
   transform: translate(-50%, -50%);
   width: 60%;
   height: 60%;
-  background: radial-gradient(circle, rgba(115, 50, 214, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -708,407 +712,376 @@
   .img2Tag1 { left: -10%; }
 }
 
-/* --- Reasons Section Styles --- */
+/* --- Reason Section Layout --- */
+
 .reasonsSection {
+  height: 100vh; /* Strictly lock to viewport height */
   width: 100%;
-  min-height: 100vh;
-  padding: 80px 10%;
-  background: #0d0d10;
   display: flex;
   flex-direction: column;
-  gap: 60px;
-  overflow: hidden;
-  position: relative;
-  z-index: 20;
+  background-color: rgba(13, 13, 16, 1);
+  overflow: hidden; /* Prevent any internal scrolling */
+  padding: 2vh 5%;
+  box-sizing: border-box;
+  /* Ensure the section is ready for fade-in */
+  will-change: opacity, transform;
 }
 
-.reasonsHeader {
+.reasonHeader {
+  flex-shrink: 0; /* Header won't compress */
+  margin-bottom: 2vh;
   text-align: center;
-  align-self: center;
-  font-size: 60px;
+}
+
+.reasonTitle {
+  font-family: 'Dm Sans', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 700;
   color: #ffffff;
-  font-family: 'DM Sans', sans-serif;
+  margin: 0;
 }
 
-.dualContainer {
+/* Container for Dual Column Layout */
+.reasonsMainContainer {
   display: flex;
-  width: 100%;
-  gap: 5%;
+  flex: 1; /* Takes up all remaining space between header and bottom */
+  gap: 40px;
   align-items: center;
+  justify-content: center;
+  min-height: 0; /* Essential for flex-children to not overflow */
 }
 
-/* Left: Image Column */
-.dynamicImageColumn {
+/* --- Left Column: Images --- */
+.reasonsImageSide {
   flex: 1.2;
-  position: relative;
+  height: 100%;
   display: flex;
-  justify-content: center;
-  perspective: 1000px; /* Needed for 3D transform effects */
-}
-
-.imageWrapper {
-  width: 100%;
-  height: clamp(300px, 60dvh, 550px);
-  max-width: 550px;
-  border-radius: 30px;
-   /* Placeholder while images load */
-  overflow: hidden;
-  
-  position: relative;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  
+  justify-content: center;
+  position: relative;
+  perspective: 1000px;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.activeImage {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.stageWrapper {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Right: Reasons List */
-.reasonsListColumn {
+/* Force all stage images to fit without bleeding off */
+.stageMainImg {
+  max-width: 100%;
+  max-height: 60vh; /* Leave room for floating tags */
+  object-fit: contain;
+  border-radius: 24px;
+}
+
+/* --- Right Column: Interactive Reasons --- */
+.reasonsTextSide {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  perspective: 1000px;
-  /* Ensure the column doesn't shift when cards grow */
-  align-self: flex-start; 
+  justify-content: space-between; /* Spreads reasons evenly across height */
+  height: 90%; /* Slight padding from top/bottom */
+  gap: 15px;
+  text-align: left;
+  font-family: 'poppins', sans-serif;
 }
 
 .reasonCard {
   display: flex;
+  align-items: center;
   gap: 20px;
-  cursor: pointer;
-  padding: 24px; /* Increased padding for breathing room */
+  padding: 15px 20px;
   border-radius: 16px;
-  opacity: 0.4;
-  background: transparent;
-  text-align: left;
-  
-  /* FIXED: Use transform for the 3D effect instead of changing layout properties */
-  transform: scale(0.95);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              opacity 0.4s ease, 
-              background-color 0.4s ease;
-  will-change: transform, opacity, background-color; /* Hints for better performance on iOS/Safari */
-  /* Ensure cards don't shrink/grow their container */
-   /* Pre-allocate height so text doesn't 'push' the layout */
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  flex: 1; /* Each card takes equal vertical space */
+  min-height: 0;
 }
 
-.reasonIconWrapper {
-  flex-shrink: 0; /* Prevents icon from squishing */
-  width: 48px;
-  height: 48px;
+.reasonIconBox {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: all 0.5s ease;
 }
 
-.reasonIcon {
-  width: 32px;
-  height: 32px;
+.reasonIconBox img {
+  width: 28px;
+  height: 28px;
 }
 
-/* --- Highlighted Icon Effect --- */
-.reasonActive .reasonIconWrapper,
-.reasonCard:hover .reasonIconWrapper {
-  transform: scale(1.1);
-}
-
-/* --- The Highlight Effect --- */
-.reasonCard:hover,
-.reasonActive {
-  opacity: 1; /* Highlights on hover OR when activeReason matches index */
-
-  transform: translateZ(30px) scale(1.05);
-  background: rgba(115, 50, 214, 0.1);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(115, 50, 214, 0.3);
-}
-
-.reasonContent h3 { 
-  font-size: clamp(18px, 2vw, 22px); /* Set to the 'Final' size immediately */
-  margin-bottom: 4px; 
-  color: #fff;
-  line-height: 1.2;
-}
-
-.reasonContent p { 
-  color: rgba(255, 255, 255, 0.8); 
-  line-height: 1.4; 
-  font-size: 14px; /* Set to the 'Final' size immediately */
-}
-
-/* Optional: Subtle background color on hover/active */
-.reasonActive, 
-.reasonCard:hover {
-  opacity: 1;
-  /* Use scale to 'bring forth' the card without recalculating text wrapping */
-  transform: scale(1.05) translateZ(30px);
-  background: rgba(115, 50, 214, 0.15);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.reasonActive .reasonContent h3,
-.reasonCard:hover .reasonContent h3 {
+.reasonContent h3 {
+  font-size: 1.1rem;
+  margin: 0 0 4px 0;
   color: #ffffff;
+  font-weight: 700;
 }
 
-.reasonActive .reasonContent p,
-.reasonCard:hover .reasonContent p {
-  color: rgba(255, 255, 255, 0.9);
+.reasonContent p {
+  font-size: 0.85rem;
+  margin: 0;
+  color: rgba(199, 199, 199, 0.8);
+  line-height: 1.4;
+}
+
+/* --- Active State: Highlight & Scale --- */
+.activeReasonCard {
+  background: rgba(115, 50, 214, 0.15);
+  border: 1px solid rgba(115, 50, 214, 0.4);
+  transform: scale(1.13) translateX(10px); /* "Coming forth" effect */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+/* Responsive adjustments for smaller desktops */
+@media (max-height: 800px) {
+  .reasonContent p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Truncate text if screen is too short */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .reasonCard {
+    padding: 10px 15px;
+  }
+}
+
+/* --- Stage-Specific Containers --- */
+
+.stageOne, .stageTwo, .stageThree, .stageFour, .stageFive {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Local containment for floating tags */
+}
+
+/* --- Stage 1: Multiple Tags --- */
+.absTag1, .absTag2, .absTag3, .absTag4 {
+  position: absolute;
+  z-index: 10;
+}
+.absTag1 { 
+  top: 15%;
+  left: 20%; 
+  width: clamp(60px, 7%, 120px);
+}
+.absTag2 { 
+  top: 15%; 
+  right: -3%; 
+  width: clamp(100px, 50%, 420px);
+}
+.absTag3 { 
+  bottom: 20%; 
+  right: 10%; 
+  width: clamp(60px, 40%, 220px);
+}
+.absTag4 { 
+  bottom: 5%; 
+  left: -10%; 
+  width: clamp(60px, 60%, 420px);
+}
+
+/* --- Stage 2: Wobble Tags --- */
+.absTag {
+  position: absolute;
+  z-index: 10;
+}
+.wobble1 { 
+  top: 40%; 
+  right: 39%; 
+  width: clamp(100px, 15vw, 160px);
+  z-index: 10;
+}
+
+.pinWrapper {
+  position: absolute;
+  top: 39%; 
+  right: 33%; 
+  width: clamp(80px, 20%, 150px);
+  z-index: 10;
+}
+
+/* The Wobble Animation */
+.pinWobble {
+  /* Use percentages for the origin if pixels feel "stiff" */
+  transform-origin: 46% 94%; 
+  display: inline-block;
+  
+  /* GPU Acceleration - The "Secret Sauce" for smoothness */
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0); 
+}
+
+.isWobbling {
+  /* Using 'linear' can sometimes feel robotic; 
+     'cubic-bezier' creates a more organic, heavy swing */
+  animation: pinPivot 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform;
+}
+
+/* Only wobble when the card is active */
+.activeReasonCard .pinWobble {
+  animation: pinPivot 2s ease-in-out infinite;
+}
+
+@keyframes pinPivot {
+  0% { transform: rotate(0deg) translateZ(0); }
+  25% { transform: rotate(10deg) translateZ(0); }
+  75% { transform: rotate(-10deg) translateZ(0); }
+  100% { transform: rotate(0deg) translateZ(0); }
+}
+
+.wobble2 { 
+  top: 15%; 
+  left: 13%; 
+  width: clamp(50px, 10vw, 130px);
+  height: auto;
+  z-index: 10;
+}
+
+.Tag2_1, .Tag2_2, .Tag2_3, .Tag2_4, .Tag2_5, .Tag2_6 {
+  position: absolute;
+  z-index: 10;
+}
+
+.Tag2_1 {
+  top: 15%; 
+  right: 13%;
+}
+
+.Tag2_2 {
+  top: 38%;
+  left: 35%;
+}
+
+.Tag2_3 {
+  top: 48%; 
+  right: 21%; 
+}
+
+.Tag2_4 {
+  bottom: 20%;
+  right: 30%;
+}
+
+.Tag2_5 {
+  top: 65%;
+  left: 30%;
+}
+
+.Tag2_6 {
+  top: 47%; 
+  right: 40%; 
+  color: #a473ed;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
   font-size: 16px;
 }
 
-.stageContainer {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  box-sizing: border-box;
-  padding: 10px;
-  /* Hardware acceleration for WebKit/iOS performance */
-  will-change: transform, opacity; 
-}
-
-.stageMainImg {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  z-index: 1;
-  padding: 20px;
-}
-
-.stageOne {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* Force GPU rendering for the whole stage */
-  transform: translateZ(0);
-}
-
-.absTag1, .absTag2, .absTag3, .absTag4 {
-  position: absolute;
-  z-index: 5;
-  will-change: transform, opacity; /* Critical: Tells browser to expect movement */
-  pointer-events: none;
-}
-
-.absTag1 {
-  top: -30%;
-  left: -20%;
-  width: clamp(100px, 15vw, 140px);
-}
-
-.absTag2 {
-  top: -10%;
-  right: -30%;
-  width: clamp(300px, 20vw, 200px);
-}
-
-.absTag3 {
-  bottom: -20%;
-  right: -30%;
-  width: clamp(300px, 20vw, 200px);
-}
-
-.absTag4 {
-  bottom: -10%;
-  left: -42%;
-  width: clamp(380px, 18vw, 200px);
-}
-
-.stageTwo {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.stageMainImg {
-  width: 80%; /* Adjust to fit within the wrapper */
-  height: auto;
-  z-index: 1;
-}
-
-.absTag {
-  position: absolute;
-  z-index: 5;
-  pointer-events: none; /* Allows clicks to pass through to the main card */
-  will-change: transform; /* Critical for iOS/Safari performance */
-}
-
-/* Specific positioning for your Reason 2 layout */
-.wobble1 {
-  top: 15%;
-  left: 5%;
-  width: 100px;
-}
-
-.wobble2 {
-  bottom: 15%;
-  right: 5%;
-  width: 90px;
-}
-
-.stageThree {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  gap: 15px;
-}
-
+/* --- Stage 3: Matrix & Scroll --- */
 .matrixGrid {
-  flex: 2;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(4, 1fr);
   gap: 10px;
-  width: 100%;
-  height: 100%;
+  width: 57%;
+  z-index: 1;
+  position: absolute;
+  left: 10%;
 }
-
 .matrixGrid img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-  background: #25252a; /* Placeholder while loading */
-  transition: opacity 0.3s ease;
+  height: auto;
+  border-radius: 8px;
 }
-
 .verticalScrollContainer {
-  flex: 1;
-  width: 120px; /* Adjust based on your design */
-  height: 100%; /* Matches the imageWrapper height */
+  position: absolute;
+  right: 5%;
+  height: 80%;
+  width: 25%;
   overflow: hidden;
-  position: relative;
-  mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent); /* Softens edges */
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.02);
+  /* Ensures children are clipped correctly on the GPU layer */
+  isolation: isolate;
 }
-
 .scrollingContent {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  animation: scrollUp 12s linear infinite;
-  will-change: transform; /* Boosts performance on Mac/iOS */
+  gap: 15px;
+  padding: 15px;
+  /* GPU Acceleration */
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  animation: seamlessScroll 12s linear infinite;
 }
-
-.reasonCard:not(.reasonActive) + .dualContainer .scrollingContent {
-  animation-play-state: paused;
-}
-
-.dynamicImageColumn:hover .scrollingContent {
-  animation-play-state: paused;
-}
-
 .scrollingContent img {
   width: 100%;
   border-radius: 12px;
+  object-fit: cover;
+  /* Prevents image flickering during the loop */
+  backface-visibility: hidden;
 }
 
-@keyframes scrollUp {
-  0% {
-    transform: translateY(0);
+@keyframes seamlessScroll {
+  from {
+    transform: translate3d(0, 0, 0);
   }
-  100% {
-    /* Moves up exactly half of the total doubled height */
-    transform: translateY(-50%);
+  to {
+    /* Moving to -50% because of the duplicated list */
+    transform: translate3d(0, -50%, 0);
   }
 }
 
-/* Pause animation on hover as requested */
-.reasonsSection:hover .scrollingContent {
+
+.scrollingContent:hover {
   animation-play-state: paused;
 }
 
-.stageFour {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform: scale(0.9);
-}
-
+/* --- Stage 4: Triple Circular Slide-Out --- */
 .circleContainerMain {
-  position: relative;
   width: 200px;
   height: 200px;
   border-radius: 50%;
   overflow: hidden;
-  z-index: 10; /* Stays on top */
-  border: 4px solid rgba(115, 50, 214, 0.4);
+  border: 4px solid #a473ed;
+  z-index: 5;
+  background: #000;
 }
-
 .circleContainerSide {
   position: absolute;
-  width: 150px;
-  height: 150px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   overflow: hidden;
-  z-index: 5; /* Behind the main circle */
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  filter: brightness(0.7); /* Slightly darker to emphasize depth */
+  opacity: 0.6;
+  z-index: 3;
 }
-
-.circleContainerMain img, 
-.circleContainerSide img {
+.circleContainerMain img, .circleContainerSide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.stageFive {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+/* --- Stage 5: Floating Tag --- */
 .floatTag {
   position: absolute;
-  top: 20%;
-  right: 10%;
-  width: 130px;
-  z-index: 5;
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
-  will-change: transform;
-}
-
-@media (max-width: 768px) {
-  .dualContainer {
-    flex-direction: column;
-    gap: 40px;
-  }
-  .reasonsSection { padding: 40px 5%; }
-  .imageWrapper { max-width: 350px; }
-  .reasonCard { padding: 15px; }
+  bottom: 25%;
+  right: 15%;
+  width: clamp(100px, 40%, 280px);
+  z-index: 10;
 }

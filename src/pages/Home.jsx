@@ -161,27 +161,78 @@ export default function Home() {
         <div className={styles.stageTwo}>
           <img src="https://media.paxmeet.com/reason2.png" alt="" className={styles.stageMainImg} />
           {/* Tag 1: Fast Wobble */}
-          <motion.img 
-            src="https://media.paxmeet.com/tag_wobble1.svg" 
-            className={`${styles.absTag} ${styles.wobble1}`}
-            nimate={activeReason === 1 ? { x: [-8, 8, -8] } : { x: 0 }}
-            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-          />
+          <div className={styles.pinWrapper}>
+            <svg width="70" height="50" viewBox="0 0 60 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Shadow: Stays completely still on the ground */}
+              <ellipse cx="26" cy="47" rx="8" ry="3" fill="black" fill-opacity="0.7"/>
+
+              {/* Pin: Wobbles around the bottom origin point */}
+              <g className={`${styles.pinWobble} ${activeReason === 1 ? styles.isWobbling : ""}`}>
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M28.2523 46.7385C29.4877 47.1025 30.7989 46.7512 31.6868 45.8183C37.2773 39.9443 44.6741 24.7917 41.9952 14.7939C39.0721 3.88459 28.6978 -2.10502 17.7885 0.818111C6.87923 3.74124 0.889617 14.1156 3.81275 25.0248C6.49165 35.0226 20.4738 44.4468 28.2523 46.7385ZM24.8527 27.1822C28.8694 26.1059 31.2531 21.9773 30.1768 17.9606C29.1006 13.9439 24.9719 11.5602 20.9552 12.6365C16.9385 13.7128 14.5549 17.8414 15.6311 21.8581C16.7074 25.8748 20.8361 28.2585 24.8527 27.1822Z"
+                  fill="#7332D6"
+                />
+              </g>
+            </svg>
+          </div>
           {/* Tag 2: Slower Wobble with Delay */}
           <motion.img 
-            src="https://media.paxmeet.com/tag_wobble2.svg" 
+            src="https://media.paxmeet.com/reason2tag2.svg" 
             className={`${styles.absTag} ${styles.wobble2}`}
             animate={activeReason === 1 ? { x: [-5, 5, -5] } : { x: 0 }}
             transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
           />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.3, duration: 0.4 }}
+            src="https://media.paxmeet.com/reason2tag3.svg" 
+            className={styles.Tag2_1} 
+          />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.3, duration: 0.4 }}
+            src="https://media.paxmeet.com/ali.svg" 
+            className={styles.Tag2_2} 
+          />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.3, duration: 0.4 }}
+            src="https://media.paxmeet.com/vedant.svg" 
+            className={styles.Tag2_3} 
+          />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.3, duration: 0.4 }}
+            src="https://media.paxmeet.com/ron.svg" 
+            className={styles.Tag2_4} 
+          />
+          <motion.img 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.3, duration: 0.4 }}
+            src="https://media.paxmeet.com/nisha.svg" 
+            className={styles.Tag2_5} 
+          />
+          <motion.p
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ delay: 0.3, duration: 0.4 }} 
+            className={styles.Tag2_6} 
+          >HOST</motion.p>
         </div>
       );
       
-      case 2: // Reason 3: 3x4 Matrix + Upward Scroll
+      case 2: // Reason 3: 3x3 Matrix + Upward Scroll
       return (
         <div className={styles.stageThree}>
           <div className={styles.matrixGrid}>
-            {[...Array(12)].map((_, i) => (
+            {[...Array(9)].map((_, i) => (
               <motion.img
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
@@ -191,19 +242,25 @@ export default function Home() {
                   delay: activeReason === 2 ? i * 0.08 : 0, 
                   ease: "easeOut" 
                 }}
-                src={`https://media.paxmeet.com/matrix${i}.png`}
+                src={`https://media.paxmeet.com/reason3${i}.png`}
               />
             ))}
           </div>
           <div className={styles.verticalScrollContainer}>
             <div className={styles.scrollingContent}>
               {/* Duplicate images here for infinite effect */}
-              <img src="https://media.paxmeet.com/scroll1.png" alt="" />
-              <img src="https://media.paxmeet.com/scroll2.png" alt="" />
-              <img src="https://media.paxmeet.com/scroll3.png" alt="" />
-              <img src="https://media.paxmeet.com/scroll1.png" alt="" />
-              <img src="https://media.paxmeet.com/scroll2.png" alt="" />
-              <img src="https://media.paxmeet.com/scroll3.png" alt="" />
+              <img src="https://media.paxmeet.com/reason310.png" alt="" />
+              <img src="https://media.paxmeet.com/reason311.png" alt="" />
+              <img src="https://media.paxmeet.com/reason312.png" alt="" />
+              <img src="https://media.paxmeet.com/reason313.png" alt="" />
+              <img src="https://media.paxmeet.com/reason314.png" alt="" />
+              <img src="https://media.paxmeet.com/reason315.png" alt="" />
+              <img src="https://media.paxmeet.com/reason310.png" alt="" />
+              <img src="https://media.paxmeet.com/reason311.png" alt="" />
+              <img src="https://media.paxmeet.com/reason312.png" alt="" />
+              <img src="https://media.paxmeet.com/reason313.png" alt="" />
+              <img src="https://media.paxmeet.com/reason314.png" alt="" />
+              <img src="https://media.paxmeet.com/reason315.png" alt="" />
             </div>
           </div>
         </div>
@@ -217,27 +274,27 @@ export default function Home() {
             className={styles.circleContainerSide}
             initial={{ x: 0, opacity: 0 }}
             animate={{ x: -110, opacity: 1 }}
-            transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }} // Bouncy 'spring' feel
+            transition={{ duration: 1.5, ease: [0.34, 1.56, 0.64, 1] }} // Bouncy 'spring' feel
           >
-            <img src="https://media.paxmeet.com/circleLeft.png" alt="Left View" />
+            <img src="https://media.paxmeet.com/reason43.png" alt="Left View" />
           </motion.div>
           {/* Right Circular Image: Slides out to the right */}
           <motion.div 
             className={styles.circleContainerSide}
             initial={{ x: 0, opacity: 0 }}
             animate={{ x: 110, opacity: 1 }}
-            transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ duration: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            <img src="https://media.paxmeet.com/circleRight.png" alt="Right View" />
+            <img src="https://media.paxmeet.com/reason42.png" alt="Right View" />
           </motion.div>
           {/* Central Circular Image: Fades in and stays on top */}
           <motion.div 
             className={styles.circleContainerMain}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 1 }}
           >
-            <img src="https://media.paxmeet.com/circleCenter.png" alt="Main View" />
+            <img src="https://media.paxmeet.com/reason41.png" alt="Main View" />
           </motion.div>
         </div>
       );
@@ -247,10 +304,10 @@ export default function Home() {
         <div className={styles.stageFive}>
           <img src="https://media.paxmeet.com/reason5.png" alt="" className={styles.stageMainImg} />
           <motion.img 
-            src="https://media.paxmeet.com/tag5.svg" 
+            src="https://media.paxmeet.com/reason5tag1.svg" 
             className={styles.floatTag}
             // Only float if this reason is active
-            animate={activeReason === 4 ? { y: [0, -12, 0] } : { y: 0 }}
+            animate={activeReason === 4 ? { y: [0, 0, 0] } : { y: 0 }}
             transition={{
               repeat: Infinity,
               duration: 3,
@@ -319,29 +376,22 @@ export default function Home() {
       "-=0.5"
     );
 
-    // 2‑3. fade in title and subtitle line‑by‑line instead of typing
-    // set the actual text content up front so SplitText can measure lines
+    // 2‑3. fade in title and subtitle 
     titleRef.current.textContent = ORIGINAL_TITLE;
     subtitleRef.current.textContent = ORIGINAL_SUBTITLE;
 
-    const titleSplit = new SplitText(titleRef.current, { type: "lines" });
-    const subtitleSplit = new SplitText(subtitleRef.current, { type: "lines" });
+    // Simple fade-in animation for title and subtitle (no SplitText required)
+    tl.fromTo(titleRef.current, 
+      { opacity: 0, y: 20 }, 
+      { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 
+      "-=0.3"
+    );
 
-    tl.from(titleSplit.lines, {
-      opacity: 0,
-      y: 20,
-      duration: 0.6,
-      stagger: 0.25,
-      ease: "power2.out",
-    }, "-=0.3");
-
-    tl.from(subtitleSplit.lines, {
-      opacity: 0,
-      y: 20,
-      duration: 0.6,
-      stagger: 0.2,
-      ease: "power2.out",
-    }, "-=0.1");
+    tl.fromTo(subtitleRef.current, 
+      { opacity: 0, y: 20 }, 
+      { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 
+      "-=0.4"
+    );
 
     // we intentionally do not revert SplitText wrappers; keeping the line spans
     // ensures the wrapping used during animation remains exactly the same afterward
@@ -609,52 +659,44 @@ export default function Home() {
       </section>
       
       <section className={styles.reasonsSection}>
-        <div className={styles.reasonsHeader}>
-          <h1 className={styles.headline}>Why Choose Paxmeet...!</h1>
+        <div className={styles.reasonHeader}>
+          <h1 className={styles.reasonTitle}>Why Choose Paxmeet...!</h1>
         </div>
-
-        <div className={styles.dualContainer}>
-          {/* Left: Dynamic Image Container */}
-          <div 
-            className={styles.dynamicImageColumn}
-            onMouseEnter={() => handlePause()} // Pause on image hover
-            onMouseLeave={handleResume} // Resume on image leave
-          >
-            <div className={styles.imageWrapper}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeReason}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  className={styles.stageContainer}
-                >
-                  {renderStage(activeReason)}
-                </motion.div>
-              </AnimatePresence>
-            </div>
+        
+        <div className={styles.reasonsMainContainer}>
+          {/* Left Column: Animated Stages */}
+          <div className={styles.reasonsImageSide}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeReason}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.5 }}
+                className={styles.stageWrapper}
+              >
+                {renderStage(activeReason)}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          {/* Right: Interactive Reasons List */}
-          <div className={styles.reasonsListColumn}>
+          {/* Right Column: Interactive Text List */}
+          <div
+            className={styles.reasonsTextSide}
+            onMouseEnter={() => handlePause()}
+            onMouseLeave={handleResume}
+          >
             {reasonsData.map((reason, index) => (
-              <div 
-                key={reason.id} 
-                className={`${styles.reasonCard} ${activeReason === index ? styles.reasonActive : ''}`}
-                onMouseEnter={() => handlePause(index)} // Pause & Set on reason hover
-                onMouseLeave={handleResume} // Resume on reason leave
+              <div
+                key={reason.id}
+                className={`${styles.reasonCard} ${
+                  activeReason === index ? styles.activeReasonCard : ""
+                }`}
+                onMouseEnter={() => setActiveReason(index)}
               >
-                {/* New Icon Container */}
-                <div className={styles.reasonIconWrapper}>
-                  <img src={reason.icon} alt="icon" className={styles.reasonIcon} />
+                <div className={styles.reasonIconBox}>
+                  <img src={reason.icon} alt="" />
                 </div>
-
-                <div className={styles.reasonTimeline}>
-                  <div className={styles.timelineCircle}></div>
-                  {index < reasonsData.length - 1 && <div className={styles.timelineLine}></div>}
-                </div>
-          
                 <div className={styles.reasonContent}>
                   <h3>{reason.title}</h3>
                   <p>{reason.text}</p>
@@ -663,7 +705,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-    </section>
+      </section>
     </div>
 
   );
