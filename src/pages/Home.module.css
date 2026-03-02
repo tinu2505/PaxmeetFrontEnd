@@ -244,7 +244,7 @@
   }
 
   .heroOverlay {
-    height: 115vh;
+    height: 145dvh;
   }
 }
 
@@ -416,6 +416,20 @@
   .nightOutTop { right: 2%; top: 8%; width: 180px; }
   .nightOutBottom { left: 2%; top: 30%; width: 180px; }
   .fanZone { right: 2%; top: 32%; width: 180px; }
+
+  .floatCard img {
+    height: 150px;
+  }
+
+  .nightOutBottom img {
+    position: absolute;
+    bottom: 8px;
+  }
+
+  .fanZone img {
+    position: absolute;
+    bottom: 8px;
+  }
 }
 
 .offerSection {
@@ -684,7 +698,7 @@
 
   /* 5. Center text and dividers for mobile aesthetics */
   .headline, .subtext p {
-    text-align: center;
+    text-align: left;
     width: 100%;
   }
 
@@ -694,12 +708,13 @@
   }
 
   .divider {
-    width: 60%;
+    width: 100%;
     margin: 0 auto 15px auto;
   }
 
   .banIcon, .flashIcon {
-    margin: 0 auto 15px auto;
+    margin-bottom: 15px;
+    align-self: flex-start;
   }
 
   /* 6. Adjust Floating Tags so they don't bleed off small screens */

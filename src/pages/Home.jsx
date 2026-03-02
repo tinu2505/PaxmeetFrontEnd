@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
 import { SplitText } from 'gsap/SplitText';
-import { AnimatePresence } from 'framer-motion';
 import styles from './Home.module.css';
 import EventCard from "./EventCard";
 import { div } from 'framer-motion/client';
@@ -18,9 +17,11 @@ export default function Home() {
   const subtitleRef = useRef(null); // Ref for the p
   const phoneRef = useRef(null);
   const overlayRef = useRef(null);
-  const offerRef = useRef(null);               // reference to offer section for scroll animations
+  const offerRef = useRef(null); // reference to offer section for scroll animations
+  const reasonsRef = useRef(null);
   const cardsRef = useRef([]);
-  
+
+  const [isPaused, setIsPaused] = useState(true);
   const [currentImg, setCurrentImg] = useState(0);
   const [introComplete, setIntroComplete] = useState(false); // track when hero intro finishes
 
@@ -455,7 +456,7 @@ export default function Home() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: isMobile ? "bottom top" : "bottom+=100% top", // shorter pin on mobile to reduce hard scrolling
+          end: isMobile ? "bottom top" : "bottom top", // shorter pin on mobile to reduce hard scrolling
           scrub: isMobile ? 0.5 : 1, // Smoother scrub for mobile CPUs
           pin: true,
           anticipatePin: 1,
@@ -524,9 +525,30 @@ export default function Home() {
           }
         );
       }
+
+      if (reasonsRef.current) {
+        const reasonsElems = reasonsRef.current.querySelectorAll(
+          `.${styles.reasonTitle}, .${styles.reasonsImageSide}, .${styles.reasonsTextSide}, .${styles.reasonContent}, .${styles.reasonIconBox}`
+        );
+        gsap.fromTo(
+          reasonsElems,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.2,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: reasonsRef.current,
+              start: "top center",
+              end: "bottom bottom",
+              scrub: true,
+            },
+          }
+        );
+      }
     });
 
-     
     }, sectionRef);
     return () => ctx.revert();
   }, [introComplete]);
@@ -658,7 +680,10 @@ export default function Home() {
         </div>
       </section>
       
-      <section className={styles.reasonsSection}>
+      <section 
+        ref={reasonsRef}
+        className={styles.reasonsSection}
+      >
         <div className={styles.reasonHeader}>
           <h1 className={styles.reasonTitle}>Why Choose Paxmeet...!</h1>
         </div>
