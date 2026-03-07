@@ -1,8 +1,7 @@
 {
-  "buildCommand": "npm run build --workspace=@paxmeet/web",
+  "buildCommand": "npm run build --workspace=apps/web",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "npm install && chmod -R +x node_modules/.bin",
-  "framework": "vite",
+  "installCommand": "npm install",
   "rewrites": [
     {
       "source": "/(.*)",
