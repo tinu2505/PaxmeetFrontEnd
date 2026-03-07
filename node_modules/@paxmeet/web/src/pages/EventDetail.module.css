@@ -1,0 +1,158 @@
+.page {
+    min-height: 100vh;
+    padding: 100px 1rem 60px;
+    background: #0f0f12;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.backBtn {
+    background: none;
+    border: none;
+    color: var(--color-primary, #7c3fe0);
+    cursor: pointer;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.header {
+    margin-bottom: 3rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(124, 63, 224, 0.2);
+    color: #7c3fe0;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.meta {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.hostAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+}
+
+.creatorInfo {
+    display: flex;
+    align-items: center;
+}
+
+.mainLayout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 4rem;
+}
+
+@media (max-width: 900px) {
+    .mainLayout { grid-template-columns: 1fr; }
+}
+
+.infoGrid {
+    display: grid;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #2a2a31;
+    margin-bottom: 2rem;
+}
+
+.infoItem {
+    display: flex;
+    gap: 1rem;
+}
+
+.infoLabel {
+    font-size: 0.8rem;
+    color: #8D8D8D;
+    margin: 0;
+}
+
+.infoValue {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.descriptionSection h3 {
+    margin-bottom: 1rem;
+}
+
+.description {
+    color: #c7c7c7;
+    line-height: 1.8;
+}
+
+/* Sidebar Styling */
+.actionCard {
+    background: #1a1a1e;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid #2a2a31;
+    position: sticky;
+    top: 120px;
+}
+
+.priceRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.price {
+    font-weight: 800;
+    color: #7c3fe0;
+}
+
+.joinBtn {
+    width: 100%;
+    padding: 1rem;
+    background: #7c3fe0;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1.5rem;
+}
+
+.shareCard {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.urlInput {
+    width: 100%;
+    background: #000;
+    border: 1px solid #333;
+    padding: 8px;
+    color: #888;
+    font-size: 0.75rem;
+    margin-top: 8px;
+}
