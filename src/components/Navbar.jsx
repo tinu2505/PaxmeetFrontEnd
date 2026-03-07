@@ -56,6 +56,7 @@ const Navbar = () => {
       {/* Left: Logo */}
       <div id="navbar-logo" className={styles.logoSection}>
         <img src="https://media.paxmeet.com/logo.png" alt="Paxmeet" style={{ width: '150px', height: 'auto' }} className={styles.logo} />
+        <img src="https://media.paxmeet.com/P_logo.svg" alt="mobileLogo" className={styles.mobileLogo} />
       </div>
 
       {/* Center: Nav Pill */}

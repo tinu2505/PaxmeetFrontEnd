@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px;
+  padding: 0 clamp(20px, 3vw, 40px);
   height: 70px;
   z-index: 1000;
   background: transparent;
@@ -46,6 +46,10 @@
 
 .logo {
   height: 56px;
+}
+
+.mobileLogo {
+  display: none;
 }
 
 /* The Pill Container */
@@ -103,9 +107,9 @@
 .navLink {
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
-  padding: 8px 24px;
+  padding: 8px clamp(12px, 1.6vw, 24px);
   border-radius: 100px;
-  font-size: 20px;
+  font-size: clamp(14px, 1.4vw, 20px);
   font-weight: 400;
   transition: all 0.3s ease;
 }
@@ -119,9 +123,9 @@
   background: #7332D6;
   color: white;
   text-decoration: none;
-  padding: 8px 24px;
+  padding: 8px clamp(12px, 1.6vw, 24px);
   border-radius: 100px;
-  font-size: 20px;
+  font-size: clamp(14px, 1.4vw, 20px);
   font-weight: 400;
   box-shadow: 0 4px 15px rgba(115, 50, 214, 0.3);
 }
@@ -131,7 +135,7 @@
   display: flex;
   justify-content: center;
   gap: 20px;
-  width: 202px;
+  width: clamp(140px, 18vw, 202px);
   height: 63px;
   position: relative;
 }
@@ -143,14 +147,24 @@
     gap: 12px;
     justify-content: flex-end;
   }
+
+  .logo {
+    display: none;
+  }
+
+  .mobileLogo {
+    display: block;
+    width: 52px;
+    height: 62px;
+  }
 }
 
 .menuBtn {
-  width: 202px;
+  width: clamp(140px, 15vw, 202px);
   height: 63px;
   background: #171717;
   backdrop-filter: blur(7.5px);
-  border: 1px solid rgba(115, 50, 214, 1);
+  border: 1px solid #7332D6;
   color: white;
   padding: 6px 6px;
   border-radius: 50px;
@@ -166,23 +180,27 @@
 }
 
 .menuBtn p {
-  padding: 20px 40px;
+  padding: 20px clamp(14px, 2vw, 40px);
   margin: 0;
-  font-size: 20px;
+  font-size: clamp(14px, 1.4vw, 20px);
   font-weight: 400;
+  flex: 1;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
   .menuBtn {
-    width: auto;
-    height: auto;
-    padding: 4px 4px;
-    gap: 8px;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    gap: 0;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
   }
 
   .menuBtn p {
-    padding: 12px 16px;
-    font-size: 20px;
+    display: none;
   }
 }
 
@@ -198,9 +216,21 @@
 
   /* keep rotation centered so icon itself stays in place */
   transform-origin: center center;
+  padding-top: 5px;
+  margin-right: 12px;
+  flex-shrink: 0;
+  margin-left: auto;
+  
+}
 
-  /* separate from text to the right */
-  margin-right: 20px;
+@media (max-width: 768px) {
+  .dotsWrapper {
+    margin-right: 0;
+    margin-left: 0;
+    width: 52px;
+    height: 52px;
+    padding-right: 0;
+  }
 }
 
 .dots {

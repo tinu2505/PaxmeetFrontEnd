@@ -21,7 +21,6 @@ export default function Home() {
   const reasonsRef = useRef(null);
   const cardsRef = useRef([]);
 
-  const [isPaused, setIsPaused] = useState(true);
   const [currentImg, setCurrentImg] = useState(0);
   const [introComplete, setIntroComplete] = useState(false); // track when hero intro finishes
 
@@ -55,6 +54,7 @@ export default function Home() {
 
   const [activeReason, setActiveReason] = useState(0);
   const intervalRef = useRef(null);
+  const reasonsInViewRef = useRef(false); // tracks whether the reasons section is visible
 
   const reasonsData = [
     { 
@@ -93,16 +93,87 @@ export default function Home() {
   useEffect(() => {
     // Define the main loop
     const startInterval = () => {
-      clearInterval(intervalRef.current); // Clear any existing intervals
+      clearInterval(intervalRef.current);
       intervalRef.current = setInterval(() => {
-        setActiveReason((prev) => (prev + 1) % reasonsData.length);
-      }, 4000); // Change interval (e.g., 4 seconds)
+        setActiveReason((prev) => {
+          const next = (prev + 1) % reasonsData.length;
+          // On mobile: also scroll the strip container to match
+          if (stripScrollRef.current && window.innerWidth <= 768) {
+            const sw = stripScrollRef.current.offsetWidth * 0.78;
+            stripScrollRef.current.scrollTo({ left: next * sw, behavior: 'smooth' });
+          }
+          return next;
+        });
+      }, 4000);
     };
 
-    startInterval(); // Start the loop immediately
+    const stopInterval = () => {
+      clearInterval(intervalRef.current);
+    };
 
-    // Cleanup function (crucial for setInterval)
-    return () => clearInterval(intervalRef.current);
+    // Start cycling when either desktop or mobile section enters viewport
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        reasonsInViewRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          startInterval();
+        } else {
+          stopInterval();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    // Also observe mobile section
+    const mobileSection = document.querySelector('[data-mobile-reasons]');
+
+    if (reasonsRef.current) observer.observe(reasonsRef.current);
+    if (mobileSection) observer.observe(mobileSection);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(intervalRef.current);
+    };
+  }, [reasonsData.length]);
+
+  // Ref for the mobile strip scroll container
+  const stripScrollRef = useRef(null);
+
+  // Ref for the mobile strip scroll container
+  // On mobile: sync activeReason when user scrolls the strip
+  useEffect(() => {
+    const container = stripScrollRef.current;
+    if (!container) return;
+
+    let scrollTimer = null;
+
+    const handleStripScroll = () => {
+      // Debounce — wait until scrolling settles before snapping index
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        const stripWidth = container.offsetWidth * 0.78;
+        const index = Math.round(container.scrollLeft / stripWidth);
+        const clamped = Math.max(0, Math.min(index, reasonsData.length - 1));
+        setActiveReason(clamped);
+
+        // Restart auto-timer that LOOPS back to 0 after last strip
+        clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(() => {
+          setActiveReason(prev => {
+            const next = (prev + 1) % reasonsData.length; // ← loops to 0
+            const sw = container.offsetWidth * 0.78;
+            container.scrollTo({ left: next * sw, behavior: 'smooth' });
+            return next;
+          });
+        }, 4000);
+      }, 150);
+    };
+
+    container.addEventListener('scroll', handleStripScroll, { passive: true });
+    return () => {
+      container.removeEventListener('scroll', handleStripScroll);
+      clearTimeout(scrollTimer);
+    };
   }, [reasonsData.length]);
 
   const handlePause = (index) => {
@@ -113,13 +184,15 @@ export default function Home() {
   };
 
   const handleResume = () => {
+    // Only restart the auto-cycle if the section is still visible
+    if (!reasonsInViewRef.current) return;
     clearInterval(intervalRef.current); // Clear previous to prevent rapid speed-up
     intervalRef.current = setInterval(() => {
       setActiveReason((prev) => (prev + 1) % reasonsData.length);
     }, 4000); // Resume the loop
   };
 
-  const renderStage = (index) => {
+  const renderStage = (index, alwaysActive = false) => {
     switch(index) {
       
       case 0: // Reason 1: Static Image + Multiple Tags
@@ -458,6 +531,8 @@ export default function Home() {
           start: "top top",
           end: isMobile ? "bottom top" : "bottom top", // shorter pin on mobile to reduce hard scrolling
           scrub: isMobile ? 0.5 : 1, // Smoother scrub for mobile CPUs
+          // CRITICAL: Never pin on mobile — GSAP pin breaks position:sticky
+          // on the mobileCardStack that follows in the DOM.
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true, // Recalculates if the window is resized
@@ -680,6 +755,7 @@ export default function Home() {
         </div>
       </section>
       
+      {/* Desktop only: two-column reasons layout */}
       <section 
         ref={reasonsRef}
         className={styles.reasonsSection}
@@ -690,7 +766,11 @@ export default function Home() {
         
         <div className={styles.reasonsMainContainer}>
           {/* Left Column: Animated Stages */}
-          <div className={styles.reasonsImageSide}>
+          <div 
+            className={styles.reasonsImageSide}
+            onMouseEnter={() => handlePause()}
+            onMouseLeave={handleResume}
+          >
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeReason}
@@ -731,6 +811,78 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Mobile only: image + horizontal strip scroller ── */}
+      <div className={styles.mobileReasonsSection} data-mobile-reasons>
+
+        {/* 10% — heading */}
+        <div className={styles.mobileReasonsHeader}>
+          <h1 className={styles.reasonTitle}>Why Choose Paxmeet...!</h1>
+        </div>
+
+        {/* 60-70% — stage visual. AnimatePresence unmounts/remounts on change
+             so every stage's internal Framer Motion animations replay fresh */}
+        <div className={styles.mobileStageArea}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeReason}
+              className={styles.mobileStageSlot}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              {renderStage(activeReason, true)}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* 20% — horizontal strip scroller + dots */}
+        <div className={styles.mobileStripsWrapper}>
+          <div
+            ref={stripScrollRef}
+            className={styles.mobileStripsScroller}
+            onScroll={() => {}} /* handled in useEffect */
+          >
+            {reasonsData.map((reason, index) => (
+              <div
+                key={reason.id}
+                className={`${styles.mobileStrip} ${activeReason === index ? styles.mobileStripActive : ''}`}
+                onClick={() => {
+                  setActiveReason(index);
+                  const sw = stripScrollRef.current.offsetWidth * 0.78;
+                  stripScrollRef.current.scrollTo({ left: index * sw, behavior: 'smooth' });
+                }}
+              >
+                <div className={styles.mobileStripIcon}>
+                  <img src={reason.icon} alt="" />
+                </div>
+                <div className={styles.mobileStripText}>
+                  <h3 className={styles.mobileStripTitle}>{reason.title}</h3>
+                  <p className={styles.mobileStripSubtext}>{reason.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Dots */}
+          <div className={styles.mobileStripDots}>
+            {reasonsData.map((_, di) => (
+              <span
+                key={di}
+                className={`${styles.stripDot} ${activeReason === di ? styles.stripDotActive : ''}`}
+                onClick={() => {
+                  setActiveReason(di);
+                  const sw = stripScrollRef.current.offsetWidth * 0.78;
+                  stripScrollRef.current.scrollTo({ left: di * sw, behavior: 'smooth' });
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
   );

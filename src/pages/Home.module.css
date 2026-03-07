@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
@@ -114,12 +114,16 @@
   );
   pointer-events: none;
   z-index: 10; /* sits under phone (z-index:5) and under hero text (z-index:10) */
-  /* Enhanced 3D effect on top border with multiple shadows */
+/* Enhanced 3D effect on top border with multiple shadows */
   box-shadow: 
     inset 0 4px 8px rgba(255, 255, 255, 0.15),   /* Top highlight */
     inset 0 6px 12px rgba(0, 0, 0, 0.25),        /* Top shadow */
     inset 0 15px 30px rgba(0, 0, 0, 0.15),       /* Soft inner shadow */
-    0 -2px 10px rgba(164, 115, 237, 0.3);        /* Subtle purple glow on edge */
+    0 -2px 10px rgba(164, 115, 237, 0.3),        /* Subtle purple glow on top edge */
+    inset 0 -4px 8px rgba(255, 255, 255, 0.15),  /* Bottom highlight */
+    inset 0 -6px 12px rgba(0, 0, 0, 0.25),       /* Bottom shadow */
+    inset 0 -15px 30px rgba(0, 0, 0, 0.15),      /* Soft inner shadow bottom */
+    0 2px 10px rgba(164, 115, 237, 0.3);         /* Subtle purple glow on bottom edge */
 }
 
 .heroTitle{
@@ -136,25 +140,26 @@
 
 .ctaGroup{
   display: flex;
-  gap: 57px;
+  gap: clamp(16px, 4vw, 57px);
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .ctaGroup button {
-  width: 330px;
+  width: clamp(200px, 30vw, 330px);
   height: 76px;
   border-radius: 47px;
-  padding: 20px 74px 20px 74px;
+  padding: 20px clamp(20px, 4vw, 74px);
   text-align: center;
   justify-content: center;
+  font-size: clamp(16px, 1.5vw, 24px);
 }
 
 .phoneContainer {
   position: relative;
   transform: none; /* Start partially off-screen */
-  width: 30vw;
-  min-width: 300px;
-  max-width: 450px;
+  width: clamp(260px, 28vw, 450px);
+  
   height: auto;
   z-index: 20;
   display: flex;
@@ -381,10 +386,10 @@
 }
 
 /* Exact Positioning based on your Screenshot 73 */
-.wildCard { left: 8%; top: 10%; width: 240px; }
-.nightOutTop { right: 15%; top: 15%; width: 240px; }
-.nightOutBottom { left: 12%; bottom: 15%; width: 240px; }
-.fanZone { right: 10%; bottom: 10%; width: 240px; }
+.wildCard { left: 5%; top: 10%; width: clamp(160px, 17vw, 240px); }
+.nightOutTop { right: 5%; top: 15%; width: clamp(160px, 17vw, 240px); }
+.nightOutBottom { left: 5%; bottom: 15%; width: clamp(160px, 17vw, 240px); }
+.fanZone { right: 5%; bottom: 10%; width: clamp(160px, 17vw, 240px); }
 
 /* Background spotlight effect - changed to black */
 .heroWrapper::after {
@@ -436,6 +441,7 @@
   background-color: rgba(13, 13, 16, 1);
   color: #ffffff;
   min-height: 110vh;
+  padding-bottom: 6vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -521,15 +527,16 @@
 }
 
 .mainHeadline {
-  width: 364px;
-  height: 72px;
+  width: 100%;
+  max-width: 364px;
+  height: auto;
   margin-top: 10px;
 }
 
 .headline {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
-  font-size: 24px;
+  font-size: clamp(20px, 1.8vw, 24px);
   line-height: 150%;
   letter-spacing: 0%;
   color: #ffffff;
@@ -538,8 +545,9 @@
 }
 
 .subtext {
-  width: 332px;
-  height: 36px;
+  width: 100%;
+  max-width: 332px;
+  height: auto;
   margin-top: 10px;
 }
 
@@ -735,8 +743,8 @@
   display: flex;
   flex-direction: column;
   background-color: rgba(13, 13, 16, 1);
-  overflow: hidden; /* Prevent any internal scrolling */
-  padding: 2vh 5%;
+  overflow: visible; /* clip stops scrollbar without breaking position:sticky children */
+  padding: 4vh 5%;
   box-sizing: border-box;
   /* Ensure the section is ready for fade-in */
   will-change: opacity, transform;
@@ -775,6 +783,7 @@
   justify-content: center;
   position: relative;
   perspective: 1000px;
+  cursor: pointer;
 }
 
 .stageWrapper {
@@ -1069,8 +1078,8 @@
 
 /* --- Stage 4: Triple Circular Slide-Out --- */
 .circleContainerMain {
-  width: 200px;
-  height: 200px;
+  width: clamp(120px, 14vw, 200px);
+  height: clamp(120px, 14vw, 200px);
   border-radius: 50%;
   overflow: hidden;
   border: 4px solid #a473ed;
@@ -1079,8 +1088,8 @@
 }
 .circleContainerSide {
   position: absolute;
-  width: 160px;
-  height: 160px;
+  width: clamp(90px, 11vw, 160px);
+  height: clamp(90px, 11vw, 160px);
   border-radius: 50%;
   overflow: hidden;
   opacity: 0.6;
@@ -1099,4 +1108,324 @@
   right: 15%;
   width: clamp(100px, 40%, 280px);
   z-index: 10;
+}
+
+/* =====================================================
+   TABLET BREAKPOINT (769px – 1024px)
+   ===================================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Hero */
+  .heroTitle {
+    font-size: 2.6rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .phoneContainer {
+    width: clamp(320px, 50vw, 420px);
+    margin-top: 5vh;
+    margin-left: 17%;
+  }
+
+  .phoneScreen {
+    width: 42%;
+    height: auto;
+    border-radius: 18px;
+  }
+
+  /* Offer section */
+  .staggeredGrid {
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 16px;
+    width: 95%;
+  }
+
+  .mainHeadline {
+    max-width: 100%;
+  }
+
+  .subtext {
+    max-width: 100%;
+  }
+
+  /* Reasons section */
+  .reasonsMainContainer {
+    gap: 20px;
+  }
+
+  .reasonContent h3 {
+    font-size: 0.95rem;
+  }
+
+  .reasonContent p {
+    font-size: 0.78rem;
+  }
+
+  .circleContainerMain {
+    width: clamp(100px, 12vw, 160px);
+    height: clamp(100px, 12vw, 160px);
+  }
+
+  .circleContainerSide {
+    width: clamp(80px, 9vw, 130px);
+    height: clamp(80px, 9vw, 130px);
+  }
+}
+
+/* =====================================================
+   MOBILE STICKY CARD STACK
+   ===================================================== */
+
+/* Hide mobile stack on desktop */
+.mobileReasonsSection {
+  display: none; /* hidden on desktop */
+}
+
+/* =====================================================
+   MOBILE REASONS — image stage + horizontal strip scroller
+   ===================================================== */
+@media (max-width: 768px) {
+
+  .reasonsSection { display: none; }
+
+  .mobileReasonsSection {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(13, 13, 16, 1);
+    height: 80vh;
+    overflow: hidden;
+  }
+
+  /* ── 10% heading ── */
+  .mobileReasonsHeader {
+    flex: 0 0 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5%;
+  }
+
+  /* ── 65% stage area ── */
+  .mobileStageArea {
+    flex: 0 0 65%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Stage slot — fills the stage area, opacity managed by Framer Motion AnimatePresence */
+  .mobileStageSlot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Stage containers fill the slot */
+  .mobileStageSlot .stageOne,
+  .mobileStageSlot .stageTwo,
+  .mobileStageSlot .stageThree,
+  .mobileStageSlot .stageFour,
+  .mobileStageSlot .stageFive {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .mobileStageSlot .stageMainImg {
+    max-height: 60%;
+    max-width: 82%;
+    object-fit: contain;
+  }
+
+  .absTag1 {
+    height: 50px;
+    left: 10%;
+  }
+
+  .absTag2 {
+    right: -5%;
+  }
+
+  .absTag3 {
+    right: 1%;
+  }
+
+  .absTag {
+    width: 80px;
+    left: 10%;
+  }
+
+  .Tag2_1 {
+    height: 120px;
+    right: 10%;
+  }
+
+  .Tag2_2 {
+    height: 50px;
+    left: 20%;
+  }
+
+  .Tag2_3 {
+    height: 50px;
+    right: 15%;
+  }
+
+  .Tag2_4 {
+    height: 50px;
+    right: 25%;
+  }
+
+  .Tag2_5 {
+    height: 50px;
+    left: 25%;
+  }
+
+  .pinWrapper svg {
+    height: 40px;
+  }
+
+  .circleContainerMain {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* Stage 3 grid — no side strip on mobile */
+  .mobileStageSlot .matrixGrid {
+    position: relative;
+    left: auto;
+    width: 88%;
+    margin: 10px auto 0;
+    gap: 5px;
+  }
+  .mobileStageSlot .verticalScrollContainer { display: none; }
+  .mobileStageSlot .stageThree {
+    align-items: flex-start;
+    padding-top: 6px;
+    overflow: hidden;
+  }
+
+  /* Stage 4 circles */
+  .mobileStageSlot .circleContainerMain { width: 90px; height: 90px; }
+  .mobileStageSlot .circleContainerSide { width: 70px; height: 70px; }
+
+  /* ── 25% strips + dots ── */
+  .mobileStripsWrapper {
+    flex: 0 0 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding-bottom: 8px;
+  }
+
+  /* Horizontal scroller — shows partial cards on sides to hint scroll */
+  .mobileStripsScroller {
+    display: flex;
+    gap: 12px;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Padding: half of (100% - stripWidth) to center active strip
+       and show partial cards on both sides */
+    padding: 0 11vw;
+    scroll-padding: 0 11vw;
+  }
+  .mobileStripsScroller::-webkit-scrollbar { display: none; }
+
+  /* Each strip */
+  .mobileStrip {
+    scroll-snap-align: center;
+    flex: 0 0 78vw;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 12px 14px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .mobileStripActive {
+    background: rgba(115, 50, 214, 0.18);
+    border-color: rgba(115, 50, 214, 0.5);
+  }
+
+  .mobileStripIcon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(115, 50, 214, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mobileStripIcon img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mobileStripText {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobileStripTitle {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 3px;
+    line-height: 1.3;
+    font-family: 'Poppins', sans-serif;
+    /* Clamp to 2 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .mobileStripSubtext {
+    font-size: 0.7rem;
+    color: rgba(199, 199, 199, 0.7);
+    margin: 0;
+    line-height: 1.4;
+    font-family: 'Poppins', sans-serif;
+    /* Clamp to 2 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Dots */
+  .mobileStripDots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .stripDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: background 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .stripDotActive {
+    background: #a473ed;
+    transform: scale(1.5);
+    border-radius: 4px;
+    width: 14px;
+  }
 }
