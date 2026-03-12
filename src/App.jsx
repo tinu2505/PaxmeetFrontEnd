@@ -21,6 +21,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import EventDetail from './pages/EventDetail';
+import Quiz from './pages/Quiz';
 
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -66,6 +67,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/events/:eventId" element={<EventDetail />} />
+            <Route path="/quiz" element={<Quiz />} />
 
             <Route path="/admin" element={<AdminLayout />} >
               <Route index element={<Navigate to="/admin/dashboard" replace />} />

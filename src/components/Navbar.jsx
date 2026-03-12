@@ -52,7 +52,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav id="site-navbar" className={styles.navbarContainer}>
+    <nav id="site-navbar" className={styles.navbarContainer} data-menu-open={isOpen}>
       {/* Left: Logo */}
       <div id="navbar-logo" className={styles.logoSection}>
         <img src="https://media.paxmeet.com/logo.png" alt="Paxmeet" style={{ width: '150px', height: 'auto' }} className={styles.logo} />
@@ -121,10 +121,10 @@ const Navbar = () => {
           {isOpen && (
             <motion.div
               className={styles.dropdownMenu}
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, scaleY: 0.85, originY: 0 }}
+              animate={{ opacity: 1, scaleY: 1, originY: 0 }}
+              exit={{ opacity: 0, scaleY: 0.85, originY: 0 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className={styles.dropdownContent}>
                 {/* Mobile-only links injected here */}

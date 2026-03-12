@@ -263,14 +263,39 @@
 
 @media (max-width: 768px) {
   .dropdownMenu {
+    /* Starts from top-0 so it sits behind the navbar and shares its background —
+       together they look like one block expanding downward */
     position: fixed;
-    width: calc(100% - 40px);
-    left: 20px;
-    right: 20px;
-    top: calc(100% + 12px);
-    bottom: auto;
-    padding: 16px 0;
-    border-radius: 8px;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    /* Push content below the navbar (top:0 + height:70px + 20px padding) */
+    padding-top: 90px;
+    padding-bottom: 28px;
+    background: rgba(12, 12, 15, 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: none;
+    border-bottom: 1px solid rgba(115, 50, 214, 0.2);
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    /* sit behind the navbar bar itself so navbar controls stay on top */
+    z-index: 999;
+    transform-origin: top center;
+  }
+}
+
+/* Mobile: glassmorphic navbar when menu is open — MUST match dropdown bg exactly */
+@media (max-width: 768px) {
+  .navbarContainer[data-menu-open="true"] {
+    
+    background: rgba(12, 12, 15, 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    /* no bottom border — dropdown is flush below */
+    border-bottom: none;
+    z-index: 1000;
   }
 }
 
@@ -283,8 +308,10 @@
 
 @media (max-width: 768px) {
   .dropdownContent {
-    padding: 8px 20px;
-    gap: 16px;
+    padding: 0 32px;
+    gap: 22px;
+    align-items: center;
+    text-align: center;
   }
 }
 
@@ -322,12 +349,14 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    align-items: center;
+    width: 100%;
   }
 
   .menuDivider {
     border: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     margin: 5px 0;
+    width: 100%;
   }
 }
-

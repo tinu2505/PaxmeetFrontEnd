@@ -21,6 +21,13 @@ export default function Home() {
   const reasonsRef = useRef(null);
   const cardsRef = useRef([]);
 
+  // Section 2 — Rolling Sphere
+  const section2Ref     = useRef(null);
+  const sphereRef       = useRef(null);
+  const sphereTextRef   = useRef(null);
+  const collageCardsRef = useRef([]);
+  const phoneScreensRef = useRef([]);
+
   const [currentImg, setCurrentImg] = useState(0);
   const [introComplete, setIntroComplete] = useState(false); // track when hero intro finishes
 
@@ -310,7 +317,7 @@ export default function Home() {
               <motion.img
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
-                animate={activeReason === 2 ? { opacity: 1, y: 0 } : { opacity: 0 }}
+                animate={alwaysActive || activeReason === 2 ? { opacity: 1, y: 0 } : { opacity: 0 }}
                 transition={{ 
                   duration: 0.4, 
                   delay: activeReason === 2 ? i * 0.08 : 0, 
@@ -628,6 +635,92 @@ export default function Home() {
     return () => ctx.revert();
   }, [introComplete]);
 
+  // ── Section 2: Rolling Sphere ScrollTrigger ────────────────
+  useEffect(() => {
+    if (!introComplete) return;
+    if (!section2Ref.current || !sphereRef.current) return;
+
+    const SPHERE_RADIUS = 375;
+
+    const ctx = gsap.context(() => {
+      const vw = window.innerWidth;
+      const startX = vw;
+      const endX = -SPHERE_RADIUS;
+      const totalRotationDeg = ((startX - endX) / SPHERE_RADIUS) * (180 / Math.PI);
+
+      gsap.set(sphereRef.current, { x: startX });
+      gsap.set(sphereTextRef.current, { opacity: 0, scale: 0.85 });
+      phoneScreensRef.current.slice(1).forEach(s => { if (s) gsap.set(s, { opacity: 0 }); });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section2Ref.current,
+          start: 'top top',
+          end: '+=2500',
+          scrub: 1.5,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // Sphere: roll left + rotate
+      tl.to(sphereRef.current, {
+        x: endX,
+        rotation: totalRotationDeg,
+        ease: 'none',
+        duration: 8,
+      }, 0);
+
+      // Text: counter-rotate so it stays upright
+      tl.to(sphereTextRef.current, {
+        rotation: -totalRotationDeg,
+        ease: 'none',
+        duration: 8,
+      }, 0);
+
+      // Collage cards: stagger in at section start
+      const cards = collageCardsRef.current.filter(Boolean);
+      if (cards.length > 0) {
+        tl.fromTo(
+          cards,
+          { opacity: 0, y: 55 },
+          { opacity: 1, y: 0, stagger: 0.18, duration: 2.2, ease: 'power3.out' },
+          0
+        );
+        // Alternating parallax depth
+        cards.forEach((card, i) => {
+          tl.to(card, {
+            y: i % 2 === 0 ? -22 : 22,
+            ease: 'none',
+            duration: 7,
+          }, 1);
+        });
+      }
+
+      // CTA text fades in once sphere has settled
+      tl.to(sphereTextRef.current, {
+        opacity: 1,
+        scale: 1,
+        ease: 'power2.out',
+        duration: 1.2,
+      }, 7);
+
+      // Phone screen swaps
+      const screens = phoneScreensRef.current;
+      if (screens[1]) {
+        tl.to(screens[0], { opacity: 0, duration: 0.4 }, 3);
+        tl.to(screens[1], { opacity: 1, duration: 0.4 }, 3);
+      }
+      if (screens[2]) {
+        tl.to(screens[1], { opacity: 0, duration: 0.4 }, 5.5);
+        tl.to(screens[2], { opacity: 1, duration: 0.4 }, 5.5);
+      }
+    }, section2Ref);
+
+    return () => ctx.revert();
+  }, [introComplete]);
+
   return (
     <div>
       <div ref={sectionRef} className={styles.heroWrapper}>
@@ -673,6 +766,66 @@ export default function Home() {
           <span className={styles.cardTag}>Fan Zone</span>
         </div>
       </div>
+
+      {/* ── Section 2: Rolling Sphere ─────────────────────── */}
+      <section ref={section2Ref} className={styles.section2}>
+        {/* White background */}
+        <div className={styles.s2Bg} />
+
+        {/* Image collage — behind sphere */}
+        <div className={styles.collageGrid}>
+          {[
+            { src: 'https://media.paxmeet.com/paxmet%20gallery%2010.png', label: 'Wild Card' },
+            { src: 'https://media.paxmeet.com/paxmet%20gallery%204.png',  label: 'Night Out' },
+            { src: 'https://media.paxmeet.com/paxmet%20gallery%205.png',  label: 'Night Out' },
+            { src: 'https://media.paxmeet.com/paxmet%20gallery%202.png',  label: 'Fan Zone'  },
+          ].map((item, i) => (
+            <div
+              key={i}
+              ref={el => collageCardsRef.current[i] = el}
+              className={`${styles.collageCard} ${styles['collageCard' + i]}`}
+            >
+              <img src={item.src} alt={item.label} />
+              <span className={styles.collageLabel}>{item.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Glassmorphic rolling sphere */}
+        <div ref={sphereRef} className={styles.sphere}>
+          {/* CTA text — counter-rotated, fades in once settled */}
+          <div ref={sphereTextRef} className={styles.sphereText}>
+            <p className={styles.sphereTagline}>Your next adventure awaits</p>
+            <a href="#" className={styles.sphereCtaPrimary}>Download App</a>
+            <button className={styles.sphereCtaSecondary}>Continue on web →</button>
+          </div>
+        </div>
+
+        {/* Mobile mockup — right side, screen swaps on scroll */}
+        <div className={styles.s2Phone}>
+          <img src="https://media.paxmeet.com/phonebase.png" alt="" className={styles.s2PhoneBase} />
+          <div className={styles.s2ScreenStack}>
+            <img
+              ref={el => phoneScreensRef.current[0] = el}
+              src="https://media.paxmeet.com/herophonescreen.png"
+              alt="App Screen 1"
+              className={styles.s2Screen}
+            />
+            <img
+              ref={el => phoneScreensRef.current[1] = el}
+              src="https://media.paxmeet.com/herophonescreen.png"
+              alt="App Screen 2"
+              className={styles.s2Screen}
+            />
+            <img
+              ref={el => phoneScreensRef.current[2] = el}
+              src="https://media.paxmeet.com/herophonescreen.png"
+              alt="App Screen 3"
+              className={styles.s2Screen}
+            />
+          </div>
+        </div>
+      </section>
 
       <section ref={offerRef} className={styles.offerSection}>
         <div className={styles.bgTitleWrapper}>
@@ -812,76 +965,63 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Mobile only: image + horizontal strip scroller ── */}
-      <div className={styles.mobileReasonsSection} data-mobile-reasons>
-
-        {/* 10% — heading */}
-        <div className={styles.mobileReasonsHeader}>
+      {/* ── New Mobile Stacked Layout (YOUM Style) ── */}
+      <div className={styles.mobileStackedWrapper}>
+        <div className={styles.mobileStackHeader}>
           <h1 className={styles.reasonTitle}>Why Choose Paxmeet...!</h1>
         </div>
 
-        {/* 60-70% — stage visual. AnimatePresence unmounts/remounts on change
-             so every stage's internal Framer Motion animations replay fresh */}
-        <div className={styles.mobileStageArea}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeReason}
-              className={styles.mobileStageSlot}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              {renderStage(activeReason, true)}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+        {reasonsData.map((reason, index) => (
+          <div key={reason.id} className={styles.mobileFeatureCard}>
+            {/* 1. Header Info */}
+            <div className={styles.cardHeader}>
+              <span className={styles.cardIndex}>0{index + 1}</span>
+              <h2 className={styles.cardTitle}>{reason.title}</h2>
+              <p className={styles.cardDescription}>{reason.text}</p>
+            </div>
 
-        {/* 20% — horizontal strip scroller + dots */}
-        <div className={styles.mobileStripsWrapper}>
-          <div
-            ref={stripScrollRef}
-            className={styles.mobileStripsScroller}
-            onScroll={() => {}} /* handled in useEffect */
-          >
-            {reasonsData.map((reason, index) => (
-              <div
-                key={reason.id}
-                className={`${styles.mobileStrip} ${activeReason === index ? styles.mobileStripActive : ''}`}
-                onClick={() => {
-                  setActiveReason(index);
-                  const sw = stripScrollRef.current.offsetWidth * 0.78;
-                  stripScrollRef.current.scrollTo({ left: index * sw, behavior: 'smooth' });
-                }}
-              >
-                <div className={styles.mobileStripIcon}>
-                  <img src={reason.icon} alt="" />
-                </div>
-                <div className={styles.mobileStripText}>
-                  <h3 className={styles.mobileStripTitle}>{reason.title}</h3>
-                  <p className={styles.mobileStripSubtext}>{reason.text}</p>
-                </div>
-              </div>
-            ))}
+            {/* 2. The Visual Stage (Reusing your existing renderStage function) */}
+            <div className={styles.cardVisualArea}>
+              {renderStage(index, true)}
+            </div>
           </div>
-
-          {/* Dots */}
-          <div className={styles.mobileStripDots}>
-            {reasonsData.map((_, di) => (
-              <span
-                key={di}
-                className={`${styles.stripDot} ${activeReason === di ? styles.stripDotActive : ''}`}
-                onClick={() => {
-                  setActiveReason(di);
-                  const sw = stripScrollRef.current.offsetWidth * 0.78;
-                  stripScrollRef.current.scrollTo({ left: di * sw, behavior: 'smooth' });
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
+        ))}
       </div>
+
+      {/* ── Quiz CTA Section ── */}
+<section className={styles.quizSection}>
+  <div className={styles.quizCard}>
+    <div className={styles.quizContent}>
+      <span className={styles.quizBadge}>Discover Your Vibe</span>
+      <h2 className={styles.quizTitle}>
+        Not sure where you fit in? <br /> 
+        <span className={styles.purpleText}>Take the Pax-Quiz.</span>
+      </h2>
+      <p className={styles.quizDescription}>
+        Answer 5 quick questions and we'll tell you if you're a "Wild Card" explorer 
+        or a "Night Out" legend.
+      </p>
+      
+      <Link to="/quiz" className={styles.quizBtn}>
+        Start the Quiz
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </Link>
+    </div>
+
+    {/* Optional: Add a floating decorative element like your other sections */}
+    <div className={styles.quizVisual}>
+      <motion.img 
+        src="https://media.paxmeet.com/flash.png" 
+        alt="Quiz Icon"
+        animate={{ y: [0, -15, 0] }}
+        transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+      />
+    </div>
+  </div>
+</section>
 
     </div>
 
